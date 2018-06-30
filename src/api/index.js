@@ -21,7 +21,7 @@ export function saveCashierShifSetting(data) {
   return request({
     url: '/SellerAdmin/CashierShift/SaveCashierShifSetting',
     method: 'post',
-    params: data,
+    data: data,
     headers: { 'X-Requested-With': 'XMLHttpRequest' }
   })
 }
