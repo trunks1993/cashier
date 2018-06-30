@@ -1,0 +1,132 @@
+/* 弹框 */
+.m-dialog .mu-dialog-body {
+    min-width: 390px;
+}
+.m-dialog .mu-dialog-title{
+  height: 45px;
+  line-height: 45px;
+  font-size: 16px!important;
+  color: #212121;
+  text-align: left;
+  display: block;
+  padding: 0;
+  font-weight: 500!important;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0 24px;
+}
+.m-dialog .mu-flat-button{
+   width: 146px;
+   height: 36px;
+   border: 2px solid #baa57b;
+   border-radius: 5px;
+   margin:  0 6px;
+}
+.m-dialog .mu-flat-button-primary{
+   background: #baa57b;
+   border-color: #baa57b;
+}
+.m-dialog .mu-flat-button-label{
+   font-size: 16px;
+}
+.m-dialog .mu-dialog-actions{
+   padding-bottom: 20px;
+}
+.m-dialog .mu-flat-button-primary  .mu-flat-button-label{
+   color: #fff;
+}
+.mu-raised-button.button{
+	height: 46px;
+	min-width: 120px;
+	border: 1px solid #818181;
+	color: #515151;
+	border-radius: 5px;
+}
+.mu-raised-button.button .mu-raised-button-label{
+	font-size: 18px;
+	color: #212121!important;
+}
+.mu-raised-button.button.yellow{
+	background: #baa57b;
+	border-color: #baa57b;
+}
+.mu-raised-button.button.yellow  .mu-raised-button-label{
+	color: #fff !important;
+}
+.mu-raised-button.button.lineYellow{
+	background: #fff;
+	border-color: #baa57b;
+}
+.mu-raised-button.button.lineYellow  .mu-raised-button-label{
+	color: #baa57b !important;
+}
+.mu-raised-button.button.yellow.disabled{
+    background: #e8e8e8;
+    border-color:#e8e8e8;
+}
+.mu-raised-button.button.yellow.disabled span{
+	color: #212121 !important;
+}
+.changePage .mu-pagination-item.active{
+	background: #c7b187;
+}
+.changePage .mu-pagination-item.active span{
+	color: #fff;
+}
+.yswitch .mu-switch-thumb{
+  top: 5px;
+  left: 3px;
+  width: 23px;
+  height: 23px;
+}
+.yswitch .mu-switch-track{
+  height: 25px;
+}
+.yswitch .mu-switch-container{
+  width: 54px;
+}
+.yswitch.mu-switch input[type=checkbox]:checked+.mu-switch-wrapper .mu-switch-thumb {
+    background-color: #ffffff;
+    color: #ffffff;
+    -webkit-transform: translate3d(18px,0,0);
+    transform: translate3d(26px,0,0);
+}
+.yswitch.mu-switch input[type=checkbox]:checked+.mu-switch-wrapper .mu-switch-track {
+    background-color: #baa57b;
+}
+.shiftSetting ul li{
+    display: table;
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #e6e6e6;
+}
+.shiftSetting ul li i{
+   display: table-cell;
+   vertical-align: middle;
+   width: 64px;
+   font-size: 25px;
+   text-align: center;
+}
+.shiftSetting ul li span{
+   display: table-cell;
+   width: 288px;
+   vertical-align: middle;
+   font-size: 14px;
+   color: #212121;
+}
+.shiftSetting ul li div{
+   display: table-cell;
+   vertical-align: middle;
+   width: 64px;
+}
+/* .shiftSetting ul{
+   margin-top: 54px;
+} */
+.shiftSetting ul li.back{
+   display: block;
+   height: 54px;
+}
+.shiftSetting ul li.back i{
+   display: block;
+   height: 54px;
+   line-height: 54px;
+}

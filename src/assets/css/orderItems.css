@@ -1,0 +1,565 @@
+.orderItem{
+	/*position: absolute;*/
+	width: 100%;
+	height: 100%;
+	/*overflow: hidden;*/
+	background: #f5f7fa;
+}
+.orderItem .header{
+	padding: 12px 0;
+	width:100%;
+	background:#fff;
+	/*position:fixed;
+	top:54px;*/
+	border-bottom: 1px solid #e0e0e0;
+	z-index: 999;
+	position: relative;
+ }
+.orderItem .header .iconfont{
+	position: absolute;
+	width: 64px;
+	top:0;
+	display: block;
+	text-align: center;
+	line-height: 72px;
+	height: 100%;
+	font-size: 30px;
+}
+.orderItem .header .iconfont.filter{
+	right: 0;
+}
+.orderItem .header>div{
+	margin:0 24px 0 64px;
+	height:48px;
+	border-radius: 5px;
+	background:#f0f0f0;
+}
+.seach-Input .mu-text-field-line{
+	background: none;
+}
+.seach-Input .mu-text-field-focus-line{
+	background: #c7b187;
+}
+.seach-Input .mu-text-field-content{
+	padding:0;
+}
+.seach-Input .mu-text-field-input{
+	height: 48px;
+}
+.seach-Input .mu-text-field-hint{
+	line-height: 48px;
+	text-align: center;
+}
+.seach-Input .mu-text-field-input{
+	text-align: center;
+}
+.orderList{
+	width: 100%;
+	top:140px;
+	bottom:82px;
+	position: absolute;
+	background: #f5f7fa;
+	overflow: auto;
+}
+.orderListBox{
+	position: absolute;
+	left:350px;
+	right: 0;
+	top: 0;
+	height: 100%;
+}
+.filterBox{
+	position: absolute;
+	top:127px;
+	left:0;
+  bottom:0;
+	background: #fff;
+	width: 336px;
+	z-index: 99;
+	border-right: 1px solid #e0e0e0;
+	overflow: hidden;
+}
+.orderList ul li{
+	 width: 100%;
+	 background: #fff;
+	 margin-bottom: 16px;
+}
+.orderList ul li:last-child{
+	margin: 0;
+}
+.orderList ul li .listIn{
+	margin: 0 24px;
+}
+.orderList ul li .listIn>div{
+		width: 100%;border-bottom: 1px solid #f0f0f0;
+}
+.orderList ul li .listIn .head{
+	 font-size: 18px;
+	 color: #212121;
+   padding: 13px 0;
+}
+.orderDetails-top i{
+	color: #c7b187;font-size: 18px;padding-right: 10px;
+}
+.orderList ul li .listIn .head span.status{
+	float: right;color: #747474;
+}
+.orderList ul li .listIn .head span.status.light{
+	color: #c7b187;
+}
+.orderList ul li .listIn .head .icon-yonghu{
+	 color: #c7b187; font-size: 20px;margin-right: 10px;
+}
+.orderPorductlist{
+	 display: table;	width: 100%; min-height: 110px;
+}
+.orderPorductlist>div{
+	 display: table-cell;
+	 border-bottom: 1px solid #f0f0f0;
+	 vertical-align: middle;
+	 font-size: 18px;
+	 color: #212121;
+}
+.orderPorductlist .listCheckBox{
+	 width:54px;
+}
+.orderPorductlist .listCheckBox i{
+	display: block;
+	font-size: 40px;
+	color: #b8995f;
+	border:1px solid #b7b7b7;
+	width: 36px;
+	height: 36px;
+	border-radius: 40px;
+	line-height: 40px;
+}
+.orderPorductlist .listCheckBox i.iconfont{
+	border: none;
+	font-size: 40px;
+	width: auto;
+	height: auto;
+}
+.orderPorductlist .img{
+	 width: 92px;text-align: left;
+}
+.orderPorductlist .img img{
+	 width: 76px;height: 76px;
+	 vertical-align: middle;
+}
+.orderPorductlist .proName{
+	 text-align: left;
+}
+.orderPorductlist .spec{
+   width: 200px;
+	 text-align: center;
+}
+.orderPorductlist .spec span{
+   color: #747474;
+}
+.orderPorductlist .price,
+.orderPorductlist .count{
+	 text-align: right;
+	 width: 100px;
+	 position: relative;
+}
+.orderPorductlist .count .tips{
+	 position: absolute;
+	 display: block;
+	 right: 0;
+	 bottom:20px;
+	 font-size: 14px;
+	 color: #f44336;
+}
+.orderList ul li .listIn .foot{
+	 padding: 10px 0;
+	 font-size: 18px;
+	 overflow: hidden;
+}
+.orderList ul li .listIn .foot span{
+	vertical-align: middle;
+	line-height: 46px;
+}
+.orderList ul li .listIn .foot .button{
+	float: right;
+	vertical-align: middle;
+	margin-left: 20px;
+}
+.orderItem .footer{
+	position: absolute;
+	z-index: 999;
+	left:0;
+	bottom:0;
+	width: 100%;
+	height: 72px;
+	background: #fff;
+  display: flex;
+  justify-content: center;
+	border-top:1px solid #f5f7fa;
+}
+.orderItem .footer .button{
+	margin-top: 14px;
+	border-color: #c7b187;
+}
+.orderItem .footer .button.prev{
+ 	background:#c7b187 url(../images/arrow-l.png) no-repeat center center;
+	margin-left: 24px;
+}
+.orderItem .footer .button.prev.default{
+ 	background:#fff url(../images/arrow-l.png) no-repeat center center;
+	border-color: #e0e0e0;
+}
+.orderItem .footer .button.next.default{
+ 	background:#fff url(../images/arrow-r.png) no-repeat center center;
+	border-color: #e0e0e0;
+}
+.orderItem .footer .button.next{
+	float: right;
+	margin-right: 24px;
+ 	background:#c7b187 url(../images/arrow-r.png) no-repeat center center;
+}
+.orderItem .mu-pagination-svg-icon{
+	width: 35px;
+	height: 45px;
+}
+.orderItem .mu-pagination-item{
+	font-size: 16px;
+  height: 30px;
+  min-width: 30px;
+  padding-left: 8px;
+}
+
+.orderFilterBox{
+	width: 320px;
+	height: 500px;
+	background: #fff;
+}
+.mu-popover{
+	-webkit-transform: translateX(-10px);
+  -moz-transform: translateX(-10px);
+	-o-transform: translateX(-10px);
+	transform: translateX(-10px);
+}
+
+.orderDetails{
+	 position: absolute;
+	 width: 100%;
+	 top:54px;
+	 bottom:0;
+	 overflow: auto;
+	 background: #f5f7fa;
+}
+.orderDetailsIn{
+	 margin: 20px;
+}
+.orderDetailsType{
+	width: 100%;
+	height: 110px;
+	border:1px solid #bbdc96;
+	border-radius: 5px;
+	background: #f1f8e9;
+	display: flex;
+	justify-content:flex-start;
+	align-items: center;
+}
+.orderDetailsType.closeOrder{
+	background: #ffebed;
+	border-color: #ee534f;
+}
+.orderDetailsType.infOrder{
+	background: #e1f5fe;
+	border-color: #28b6f6;
+}
+.orderDetailsType .iconfont{
+	font-size: 70px;
+	margin-left: 25px;
+}
+.orderDetailsType span{
+	font-size: 18px;
+	margin-left: 15px;
+}
+.orderDetailsType em{
+	font-size: 14px;
+	margin-right: 10px;
+}
+.orderDetailsType.infOrder *{
+	color: #28b6f6;
+}
+.orderDetailsType.closeOrder *{
+	color: #ee534f;
+}
+.orderDetailsType.success *{
+	color: #558b2f;
+}
+.orderDetailsItem{
+	width: 100%;
+	min-height: 100px;
+	background: #fff;
+	margin-top: 20px;
+}
+.orderDetails-top{
+	height: 50px;
+	line-height: 50px;
+	overflow: hidden;
+	font-size: 18px;
+	border-bottom: 1px solid #e0e0e0;
+}
+.orderDetails-top .ot-left{
+	float: left;
+}
+.orderDetails-top .ot-right{
+	float: right;
+}
+.orderDetails-footer{
+	padding: 25px 0;
+}
+.orderDetails-footer p{
+	width: 100%;
+	text-align: right;
+	color:#747474;
+	line-height: 28px;
+}
+.orderDetails-footer p span{
+  color:#747474;
+	margin: 0 5px;
+}
+.orderDetails-footer p span:last-child{
+	margin-right: 0;
+}
+.orderDetails-footer p em{
+	color: #212121;
+}
+.orderDetails-footer p em.red{
+	color: #f44336;
+}
+.orderMsg {
+	padding: 25px 0;
+	overflow: hidden;
+}
+.orderMsg .msgCol{
+	width: 50%;
+	line-height: 28px;
+	color: #747474;
+	float: left;
+}
+.orderMsg .msgCol.full{
+	width: 100%;
+}
+.orderMsg .msgCol span{
+	display: inline-block;
+	width: 100px;
+  color: #747474;
+}
+.orderDetailsBtn{
+	padding: 40px 0;
+	overflow: hidden;
+}
+.orderDetailsBtn .button{
+	float: right;
+	margin-left: 20px;
+}
+.refundTypetab{
+	width: 100%;
+	height: 50px;
+	border:1px solid #c7b187;
+	overflow: hidden;
+	border-radius: 5px;
+}
+.refundTypetab  .tabs-btn{
+	width: 50%;
+	height: 48px;
+	float: left;
+	font-size: 18px;
+	color: #212121;
+	background: #ede7db;
+}
+.refundTypetab  .tabs-btn.full{
+	width: 100%;
+}
+.refundTypetab > .tabs-btn.active{
+	background: #c7b187;
+}
+.changeBox{
+	margin: 0 0 0 36px;
+}
+.table-two.h74{
+	 padding:0;
+}
+.table-two.h74 .title,
+.table-two.h74 .cnt{
+	 height: 74px;
+	 vertical-align: middle;
+}
+.table-two{
+	width: 100%;
+	display: table;
+	padding: 20px 0;
+	border-bottom: 1px solid #f0f0f0;
+}
+.table-two .title{
+	display: table-cell;
+	/* vertical-align: top; */
+	/* line-height: 36px; */
+	font-size: 18px;
+}
+.table-two .cnt{
+	display: table-cell;
+	/* vertical-align: top; */
+	text-align: right;
+}
+.table-two .cnt p em{
+	color: #f65f53;
+}
+.changeNum{
+	display: inline-block;
+	width: 190px;
+	height: 36px;
+	border: 1px solid #d3d3d3;
+	background: #f0f0f0;
+	margin-bottom: 12px;
+	border-radius: 5px;
+}
+.changeNum i,
+.iconInput i{
+	display: inline-block;
+	width: 36px;
+	height: 34px;
+	text-align: center;
+	line-height: 34px;
+	font-size:20px;
+	color: #747474;
+	float: left;
+}
+.changeNum i.disabled{
+	color: #ccc;
+}
+.changeNum input,
+.iconInput input{
+	display: inline-block;
+	width: 116px;
+	height: 34px;
+	text-align: center;
+	border-left: 1px solid #d3d3d3;
+	border-right: 1px solid #d3d3d3;
+	vertical-align: top;
+	background: #fff;
+	float: left;
+}
+.iconInput{
+	display: inline-block;
+	width: 190px;
+	height: 36px;
+	border: 1px solid #d3d3d3;
+	margin-bottom: 12px;
+	border-radius: 5px;
+}
+.iconInput input{
+	text-align: left;
+	border:none;
+	width: 147px;
+	border-radius: 5px;
+}
+.refund-remarks{
+	border:1px solid #d3d3d3;
+	width: 500px;
+	height: 100px;
+	padding: 5px;
+	border-radius: 5px;
+	resize: none;
+}
+.refundFoot .table-two:last-child .title{
+	vertical-align: top;
+}
+.refundFoot select{
+	height: 38px;
+	width: 380px;
+	border: 1px solid #d3d3d3;
+	color: #515151;
+	border-radius: 5px;
+}
+.filterItem{
+	margin: 0 20px;
+	padding: 24px 0;
+	border-bottom:1px solid #e6e6e6;
+}
+.filterItem h2{
+	font-size: 16px;
+	color: #212121;
+}
+.filterItem .item>span{
+	display: inline-block;
+	height: 38px;
+	min-width: 82px;
+	color: #747474;
+	background: #eeeeee;
+	text-align: center;
+	line-height: 38px;
+	font-size: 14px;
+	border-radius: 5px;
+	margin-right: 12px;
+	margin-top: 12px;
+	vertical-align: bottom;
+}
+.filterItem .item>span.active{
+	background: #c7b187;
+	color: #212121;
+}
+.refundTipsOk{
+	line-height: 42px;
+	line-height: 42px;
+	font-size: 14px;
+	border-bottom: 1px solid #f2f2f2;
+	overflow: hidden;
+}
+.refundTipsOk span:last-child{
+	float: right;
+	color: #c71a29;
+}
+.refundSuccess{
+	 /*position: absolute;*/
+	 width: 100%;
+	 height: 100%;
+	 background: #f5f7fa;
+}
+.refundSuccessBox{
+	 position: absolute;
+	 top:74px;left:24px;bottom:24px;right: 24px;
+	 background: #fff;
+	 display: flex;
+	 justify-content: center;
+	 align-items: center;
+	 flex-direction: column;
+}
+.refundSuccess i{
+	 font-size: 96px;
+	 color: #8fc536;
+	 margin-top: 5%;
+}
+.refundSuccess i.icon-guanbix{
+	 color: #ea6c72;
+}
+.refundSuccess span.refundText{
+	 display: block;
+	 font-size: 28px;
+	 margin-bottom: 150px;
+}
+.refundSuccess .button{
+	 width: 640px;
+	 margin-bottom: 20px;
+}
+.bigRed{
+	 color: #f44336;
+	 font-size: 18px;
+}
+.orderList .noData{
+	 position: absolute;
+	 width: 100%;
+	 height: 100%;
+	 display: flex;
+	 justify-content: center;
+	 align-items: center;
+	 flex-direction: column;
+}
+.orderList .noData p{
+	    margin-top: 10px;
+			font-size: 18px;
+}

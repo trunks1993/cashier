@@ -1,0 +1,200 @@
+body{
+   background-color: #f5f7fa!important;
+}
+.cacherShiftBegin,.signOut{
+   position: absolute;
+   top:54px;left:0;right: 0;bottom:0;
+   background: #f5f7fa;
+}
+.cacherShiftBegin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.cacherShiftBegin input{
+   width: 650px;
+   height: 48px;
+   border: 1px solid #e6e6e6;
+   border-radius: 5px;
+   font-size: 16px;
+   padding: 0 15px;
+}
+.cacherShiftBegin .button{
+   width: 650px;
+   margin-top: 50px;
+}
+.cacherShiftBegin h1{
+   font-size: 28px;
+   margin-bottom: 72px;
+   margin-top: -80px;
+}
+.confirmBegin{
+   font-size: 16px;
+   margin-top: 20px;
+}
+.confirmBegin em{
+   font-size: 28px;
+   color: #cd1f2f;
+   font-weight: bold;
+}
+.confirmBegin span{
+   color: #cd1f2f;
+}
+/**交班详情**/
+.workData{
+   position: absolute;
+   top: 50px;
+   left: 62px;
+   right: 62px;
+   bottom: 180px;
+}
+.workData > div{
+   position: absolute;
+   width: 32%;
+   border: 1px solid #f5f7fa;
+   height: 100%;
+   top:0;
+   background: #fff;
+   border-radius: 6.4px;
+   box-shadow: 0 0 12px rgba(204,204,204,.3);
+}
+.workData > div.income{
+   left: 0;
+}
+.workData > div.refund{
+   left: 0;right:0;margin: auto;
+}
+.workData > div.total{
+   right:0;
+   background:none;
+   box-shadow: none;
+}
+.workData > div.total > div{
+   width: 100%;
+   position: absolute;
+   height: 48.7%;
+   background: #fff;
+   top:0;
+   border-radius: 6.4px;
+   box-shadow: 0 0 12px rgba(204,204,204,.3);
+   padding-left: 20%;
+   padding-top: 20%;
+}
+.workData > div.total .totalEnd{
+   top:auto;
+   bottom:0;
+}
+.workData > div.total p{
+   font-size: 24px;
+   color: #737373;
+}
+.workData > div.total p span{
+   font-size: 16px;
+}
+.workData > div.total h2{
+   font-size: 42px;
+   color: #212121;
+}
+.workData .rectImg{
+   position:absolute;
+   width: 100%;
+   top:30px;
+   bottom:112px;
+}
+.workData .dataTable{
+   position: absolute;
+   bottom:0;
+   border-top: 1px solid #e6e6e6;
+   height: 111px;
+   width: 100%;
+   display: table;
+}
+.dataRow{
+   display:table-row;
+}
+.dataRow > div{
+   display:table-cell;
+   width: 25%;
+   color: #212121;
+}
+.dataRow > div.col2{
+   border-right: 1px solid #e6e6e6;
+}
+.dataRow > div.col1,
+.dataRow > div.col3{
+   padding-left: 10%;
+}
+.dataRow.row1 > div{
+  vertical-align: bottom;
+  padding-bottom: 10px;
+}
+.dataRow.row2 > div{
+  vertical-align: top;
+  padding-top: 10px;
+}
+.signOutBottom{
+  position: absolute;
+  bottom:0;
+  width: 100%;
+  height: 128px;
+  background: #fff;
+}
+.signOutBottom .button{
+  width: 270px;
+  height: 64px;
+  margin-right: 20px;
+  margin-top: 32px;
+  float: right;
+}
+.signOutBottom .button span{
+  font-size: 24px;
+}
+.shiftList{
+   position: absolute;
+   top:70px;
+   left:16px;
+   right: 16px;
+   bottom:82px;
+   background: #fff;
+   overflow: auto;
+}
+.shiftList table{
+  width: 100%;
+}
+.shiftList table th{
+  height: 56px;
+  border-left: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 16px;
+  color: #808080;
+  padding: 0 10px;
+}
+.shiftList table td{
+  padding: 0 10px;
+  color: #4c4c4c;
+  font-size: 14px;
+  height: 70px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.shiftList table td span.working{
+  color: #4caf50;
+}
+.shiftFoot{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 72px;
+    background: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-top: 1px solid #f5f7fa;
+}
+.shiftList a{
+    color: #baa57b;
+}

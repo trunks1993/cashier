@@ -1,0 +1,322 @@
+<template>
+  <div class="add-container">
+    <div class="add-container-addBox" v-if="!showQrScanPage">
+      <div class="add-container-addBox-closeBox">
+        <div class="add-container-addBox-closeBox-close" @click="close">
+          <img src="../../assets/images/menuIcons/x.png">
+        </div>
+      </div>
+      <div class="add-container-addBox-wrapper">
+        <div class="add-container-addBox-wrapper-header">
+          <div class="add-container-addBox-wrapper-header-wall"></div>
+          <span>请输入办理会员的手机号</span>
+        </div>
+        <input type="text" placeholder="输入手机号" readonly="readonly" v-model="inputVal">
+        <div style="margin-top: 14px;">
+          <div style="color: #999999; font-size: 12px;">注：最大优惠金额不得超过10000元</div>
+        </div>
+        <div class="add-container-addBox-wrapper-keyboard">
+          <div class="add-container-addBox-wrapper-keyboard-itembox">
+            <div @click="inputValue('1')">1</div>
+            <div @click="inputValue('2')">2</div>
+            <div @click="inputValue('3')">3</div>
+            <div @click="inputValue('clear')">清空</div>
+          </div>
+          <div class="add-container-addBox-wrapper-keyboard-itembox">
+            <div @click="inputValue('4')">4</div>
+            <div @click="inputValue('5')">5</div>
+            <div @click="inputValue('6')">6</div>
+            <div @click="inputValue('delete')">删除</div>
+          </div>
+          <div class="add-container-addBox-wrapper-keyboard-itembox1">
+            <div>
+              <div class="add-container-addBox-wrapper-keyboard-itembox1-left">
+                <div @click="inputValue('7')">7</div>
+                <div @click="inputValue('8')">8</div>
+                <div @click="inputValue('9')">9</div>
+              </div>
+              <div class="add-container-addBox-wrapper-keyboard-itembox1-left">
+                <div style="width: 147px;" @click="inputValue('00')">00</div>
+                <div @click="inputValue('0')">0</div>
+              </div>
+            </div>
+            <div class="add-container-addBox-wrapper-keyboard-itembox1-submit" @click="submitDiscount">
+              <span>确定</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="add-container-qrBox" v-else>
+      <div class="add-container-qrBox-header">
+        <div>{{inputVal}}</div>
+        <div>还不是会员，快速办理，享<img style="margin: 0 10px;" src="../../assets/images/vipManager/vip.png">等级权益</div>
+      </div>
+      <img style="margin: auto;display: block;margin-top: 40px;" src="../../assets/images/vipManager/line.png">
+      <div style="margin-top: 89px;text-align: center;font-size:18px;">扫码绑定微信开通</div>
+      <div class="add-container-qrBox-qrWrappper">
+        <img :src="'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' + qrCodeImg">
+      </div>
+    </div>
+    <div class="add-container-dailog" v-show="hasRegist">
+      <div class="add-container-dailog-mainBox">
+        <img src="../../assets/images/vipManager/warning.png">
+        <div class="add-container-dailog-mainBox-msg">手机号已被注册</div>
+        <div class="add-container-dailog-mainBox-btn" @click="hasRegist = false">我知道了</div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import { checkMemberPhone, qrCode, polling } from '@/api'
+
+export default {
+  data() {
+    return {
+      inputVal: '',
+      showQrScanPage: false,
+      qrCodeImg: '',
+      interval: '',
+      hasRegist: false
+    }
+  },
+  methods: {
+    inputValue(val) {
+      if (val === 'clear') {
+        this.inputVal = ''
+      } else if (val === 'delete') {
+        this.inputVal = this.inputVal.substring(0, this.inputVal.length - 1)
+      } else {
+        const temp = this.inputVal + val
+        if (this.inputVal.length >= 11 || (val === '00' && temp.length > 11)) {
+          this.$toast('手机号长度不能超过11位数')
+          return
+        }
+        this.inputVal += val
+      }
+    },
+    submitDiscount() {
+      if (this.inputVal.length === 11) {
+        checkMemberPhone(this.inputVal).then(res => {
+          const data = res.data
+          if (data.success) {
+            this.showQrScanPage = true
+            qrCode(this.inputVal).then(res => {
+              const data = res.data
+              if (data.success) {
+                this.qrCodeImg = data.data.ticket
+                this.interval = setInterval(() => {
+                  const promise = this.polling()
+                  promise.then(res => {
+                    if (res == 0) {
+                      window.clearInterval(this.interval)
+                      this.$emit('supplementEditor', this.inputVal)
+                    }
+                  })
+                }, 2000)
+              }
+            })
+          } else {
+            this.hasRegist = true
+          }
+        })
+      } else {
+        this.$toast('请输入正确手机号')
+      }
+    },
+    polling() {
+      return new Promise((resolve, reject) => {
+        polling(this.inputVal).then(res => {
+          const data = res.data
+          if (data.success) {
+
+            resolve(data.data.status)
+          } else {
+            resolve(0)
+          }
+        }).catch(error => {
+          reject(0)
+        })
+      })
+    },
+    close() {
+      this.$emit('closeAdd')
+    }
+  }
+}
+
+</script>
+<style lang="scss" scoped>
+.add-container {
+  height: 100%;
+  position: relative;
+  &-addBox {
+    &-closeBox {
+      padding: 24px 29px 85px 0;
+      position: relative;
+      &-close {
+        width: 35px;
+        height: 35px;
+        border-radius: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 29px;
+      }
+    }
+    &-wrapper {
+      width: 330px;
+      margin: auto;
+      &-header {
+        display: flex;
+        align-items: center;
+        span {
+          font-weight: bold;
+          font-size: 16px;
+          margin-left: 12px;
+        }
+        &-wall {
+          width: 8px;
+          height: 16px;
+          background: rgba(199, 177, 135, 1);
+          border-radius: 4px;
+        }
+      }
+      input {
+        width: 244px;
+        height: 48px;
+        border: 1px solid rgba(199, 178, 135, 0.7);
+        padding: 0 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        margin-top: 20px;
+      }
+      &-keyboard {
+        margin-top: 50px;
+        &-itembox {
+          display: flex;
+          margin-top: 3px;
+          & div:not(:last-child) {
+            width: 72px;
+            height: 67px;
+            background: #fff;
+            border-radius: 4px;
+            margin-right: 3px;
+            color: #C7B187;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+          }
+          & div:last-child {
+            width: 90px;
+            height: 67px;
+            background: #fff;
+            border-radius: 4px;
+            margin-right: 3px;
+            color: #C7B187;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+          }
+        }
+        &-itembox1 {
+          display: flex;
+          margin-top: 3px;
+          &-left {
+            display: flex;
+            margin-bottom: 3px;
+            div {
+              width: 72px;
+              height: 67px;
+              background: #fff;
+              border-radius: 4px;
+              margin-right: 3px;
+              color: #C7B187;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 32px;
+            }
+          }
+          &-submit {
+            width: 90px;
+            height: 136px;
+            background: rgba(199, 177, 135, 1);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            span {
+              font-size: 24px;
+              color: #fff;
+              width: 25px;
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+  &-qrBox {
+    &-header {
+      width: 346px;
+      margin: auto;
+      text-align: center;
+      margin-top: 50px;
+      & div:nth-child(1) {
+        color: #C7B187;
+        font-size: 18px;
+      }
+      & div:nth-child(2) {
+        color: #333333;
+        font-size: 18px;
+      }
+    }
+    &-qrWrappper {
+      width: 245px;
+      height: 245px;
+      margin: auto;
+      border: 1px solid #C7B187;
+      padding: 5px;
+      margin-top: 23px;
+      img {
+        width: 100%;
+      }
+    }
+  }
+  &-dailog {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &-mainBox {
+      width: 363px;
+      height: 187px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      &-msg {
+        margin-top: 18px;
+        line-height: 16px;
+      }
+      &-btn {
+        margin-top: 58px;
+        color: #C7B187;
+        border-bottom: 1px solid #C7B187;
+      }
+    }
+  }
+}
+
+</style>
