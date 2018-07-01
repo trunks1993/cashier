@@ -5,8 +5,55 @@
       <span>补充会员信息</span>
     </div>
     <div class="mainBox">
-      <div class="mainBox-left"></div>
-      <div class="mainBox-right"></div>
+      <div class="mainBox-left">
+        <div class="mainBox-left-header">
+          <div class="mainBox-left-header-shape"></div>
+          <span>基本信息</span>
+        </div>
+        <div class="mainBox-left-item">
+          <span>头像</span>
+          <img src="">
+        </div>
+        <div class="mainBox-left-item">
+          <span>手机号</span>
+          <span>18108231234</span>
+        </div>
+        <div class="mainBox-left-item">
+          <span>姓名</span>
+          <el-input v-model="supplementData.realName" clearable size="mini" style="width: 130px"></el-input>
+        </div>
+        <div class="mainBox-left-item">
+          <span>微信名</span>
+          <span>逆风如解意</span>
+        </div>
+        <div class="mainBox-left-item">
+          <span>性别</span>
+          <div>
+            <el-radio v-model="supplementData.sex" :label="1">男</el-radio>
+            <el-radio v-model="supplementData.sex" :label="2">女</el-radio>
+          </div>
+        </div>
+        <div class="mainBox-left-item">
+          <span>生日日期</span>
+          <el-date-picker size="mini" style="width: 130px;" v-model="supplementData.birthDay" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+          </el-date-picker>
+        </div>
+      </div>
+      <div class="mainBox-right">
+        <div class="mainBox-right-header">
+          <div class="mainBox-right-header-title">
+            <div class="mainBox-right-header-title-shape"></div>
+            <span>会员卡</span>  
+          </div>
+          <div class="mainBox-right-header-add">
+            <span>+</span>
+            <span>添加</span>
+          </div>
+        </div>
+        <div class="mainBox-right-detail">
+          （默认已选择等级卡，可选择无门槛卡）
+        </div>
+      </div>
     </div>
     <div class="bottomLine">
     </div>
@@ -60,15 +107,73 @@ export default {
 .mainBox {
   display: flex;
   justify-content: space-between;
+  margin-top: 100px;
+  padding: 0 100px;
   &-left {
-    width: 200px;
-    height: 500px;
-    background: red;
+    width: 270px;
+    // height: 500px;
+    // background: red;
+    &-header {
+      display: flex;
+      align-items: center;
+      span {
+        margin-left: 6px;
+        color: #333333;
+        font-weight: bolder;
+        font-size: 14px;
+      }
+      &-shape {
+        width:6px;
+        height:13px;
+        background: rgba(199,177,135,1);
+        border-radius:3px;
+      }
+    }
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 39px;
+      padding-left: 10px;
+    }
   }
   &-right {
-    width: 200px;
-    height: 500px;
-    background: black;
+    width: 284px;
+    // height: 500px;
+    // background: black;
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &-title {
+        display: flex;
+        align-items: center;
+        span {
+          margin-left: 6px;
+          color: #333333;
+          font-weight: bolder;
+          font-size: 14px;
+        }
+        &-shape {
+          width:6px;
+          height:13px;
+          background: rgba(199,177,135,1);
+          border-radius:3px;
+        }  
+      }
+      &-add {
+        span {
+          color: #c7b187;
+          font-size: 14px;
+        }
+      }
+    }
+    &-detail {
+      color: #999999;
+      font-size: 12px;
+      line-height: 12px;
+      margin-top: 8px;
+    }
   }
 }
 
