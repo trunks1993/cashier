@@ -27,7 +27,7 @@
       <Editor :vipDetail="vipDetail" @toCardAndTrade="toCardAndTrade" v-if="componentStatus === 1"></Editor>
       <CardAndTrade :cardAndTradeInfo="cardAndTradeInfo" @goBack='goBack' v-if="componentStatus === 2"></CardAndTrade>
       <AddVip @closeAdd="closeAdd" @supplementEditor="supplementEditor" v-if="componentStatus === 3"></AddVip>
-      <SupplementEditor :supplementData="supplementData" @goBack='goBack' v-if="componentStatus === 4"></SupplementEditor>
+      <SupplementEditor :supplementData="supplementData" @goBack='goBack' @success='addSuccess' v-if="componentStatus === 4"></SupplementEditor>
     </div>
   </div>
 </template>
@@ -138,15 +138,34 @@ export default {
     closeAdd() {
       this.componentStatus = 0
     },
-    supplementEditor(phone) {
-      getUserInfo(phone).then(res => {
-        const data = res.data
-        if (data.success) {
-          this.supplementData = data.data
+    supplementEditor(phone, isWechatWay) {
+      if (isWechatWay) {
+        getUserInfo(phone).then(res => {
+          const data = res.data
+          if (data.success) {
+            this.supplementData = data.data
+            this.supplementData.isWechatWay = isWechatWay
+            this.supplementData.phone = phone
+            this.supplementData.realname = ''
+            this.supplementData.birthday = ''
+            this.componentStatus = 4
+          }
           this.componentStatus = 4
+        })
+      } else {
+        this.supplementData = {
+          isWechatWay: isWechatWay,
+          phone: phone,
+          realName: '',
+          birthDay: '',
+          sex: 1
         }
         this.componentStatus = 4
-      }) 
+      }
+    },
+    addSuccess() {
+      this.componentStatus = 0
+      this.getVipList()
     }
   }
 }

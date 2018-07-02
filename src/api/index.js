@@ -438,3 +438,17 @@ export function getUserInfo(phone) {
     method: 'post'
   })
 }
+export function getCardList() {
+  return request({
+    url: '/SellerAdmin/CashierMemberCard/GetCardList',
+    method: 'get'
+  })
+}
+
+export function cashierRegister(data) {
+  return request({
+    url: '/SellerAdmin/CashierMemberCard/CashierRegister',
+    method: 'post',
+    data: data
+  })
+}

@@ -57,6 +57,9 @@
       <div class="add-container-qrBox-qrWrappper">
         <img :src="'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' + qrCodeImg">
       </div>
+      <div class="add-container-qrBox-aClick" @click="toSupplement(false)">
+        仅手机号开通 >
+      </div>
     </div>
     <div class="add-container-dailog" v-show="hasRegist">
       <div class="add-container-dailog-mainBox">
@@ -108,9 +111,8 @@ export default {
                 this.interval = setInterval(() => {
                   const promise = this.polling()
                   promise.then(res => {
-                    if (res == 0) {
-                      window.clearInterval(this.interval)
-                      this.$emit('supplementEditor', this.inputVal)
+                    if (res == 1) {
+                      this.toSupplement(true)
                     }
                   })
                 }, 2000)
@@ -141,6 +143,10 @@ export default {
     },
     close() {
       this.$emit('closeAdd')
+    },
+    toSupplement(isWechatWay) {
+      window.clearInterval(this.interval)
+      this.$emit('supplementEditor', this.inputVal, isWechatWay)
     }
   }
 }
@@ -286,6 +292,12 @@ export default {
       img {
         width: 100%;
       }
+    }
+    &-aClick {
+      font-size: 16px;
+      color: #C7B187;
+      text-align: center;
+      margin-top: 100px;
     }
   }
   &-dailog {
