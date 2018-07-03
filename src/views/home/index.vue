@@ -76,7 +76,7 @@
             <span style="font-size:16px;color: rgba(190, 37, 37, 1)">{{totalAll().total | rmb}}</span>
           </div>
         </div>
-        <div class="main-container-carWrapper-carBox-discountBox">
+        <div class="main-container-carWrapper-carBox-discountBox" :style="hasDiscount ? '' : 'padding: 0 50px'">
           <div class="main-container-carWrapper-carBox-discountBox-item">
             <div>会员卡</div>
             <div class="main-container-carWrapper-carBox-discountBox-item-btnSel" :class="{disabled: !member}">
@@ -91,15 +91,12 @@
               <i class="iconfont icon-guanbi" @click="clearDiscount(2)" v-if="selCoupon"></i>
             </div>
           </div>
-          <div class="main-container-carWrapper-carBox-discountBox-item">
-            <template v-if="hasDiscount">
-              <div>整单优惠</div>
-              <div class="main-container-carWrapper-carBox-discountBox-item-btnSel">
-                <div @click="selVipDiscount" :style="selDiscount ? '' : 'border-right: none;'">{{formatSelDt(selDiscount)}}</div>
-                <i class="iconfont icon-guanbi" @click="clearDiscount(3)" v-if="selDiscount"></i>
-              </div>
-            </template>
-            <div v-else style="width: 138px;height: 55px;"></div>
+          <div class="main-container-carWrapper-carBox-discountBox-item" v-if="hasDiscount">
+            <div>整单优惠</div>
+            <div class="main-container-carWrapper-carBox-discountBox-item-btnSel">
+              <div @click="selVipDiscount" :style="selDiscount ? '' : 'border-right: none;'">{{formatSelDt(selDiscount)}}</div>
+              <i class="iconfont icon-guanbi" @click="clearDiscount(3)" v-if="selDiscount"></i>
+            </div>
           </div>
         </div>
         <div class="main-container-carWrapper-carBox-footer">
@@ -1498,9 +1495,11 @@ export default {
     },
     submitDiscount() {
       if (!this.inputVal) {
+        this.$toast('输入不能为空')
         return
       }
       if (this.inputVal[this.inputVal.length - 1] === '.' || this.inputVal * 1 === 0) {
+        this.$toast('输入格式有误')
         return
       }
       this.$store.dispatch('SetSelDiscount', {
