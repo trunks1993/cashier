@@ -13,7 +13,7 @@ function sendTosecondaryDisplay(cart,member,payment,status,w){
 					shopName:w.$store.getters.userInfo.shopName,
   	  }
 			
-			SaveCashierViceScreen({data:JSON.stringify(data),deviceId:1}).then(function(response) {
+			SaveCashierViceScreen({data:JSON.stringify(data),deviceId:222}).then(function(response) {
 					
 			});
 			function plusReady(){

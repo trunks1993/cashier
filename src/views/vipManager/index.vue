@@ -14,13 +14,15 @@
       </div>
       <div class="vipWrapper-mainbox">
         <div class="vipWrapper-mainbox-item" v-for="item in vipList" :class="{active: item.id === selectVipId}" @click="selectVip(item)">
-          <img :src="item.photo" alt="">
+          <img v-if="item.photo" :src="item.photo">
+          <img v-else src="../../assets/images/vipManager/noImg.png">
           <div class="vipWrapper-mainbox-item-content">
             <span>{{item.showName}}</span>
             <span :style="!item.cellPhone ? 'color: #C7B187;' : ''">{{item.cellPhone || '未登记手机号'}}</span>
             <span>预存款：￥{{item.balance || 0}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可用积分：{{item.availableIntegrals || 0}}</span>
           </div>
         </div>
+        <div class="vipWrapper-mainbox-footer" v-if="isLast">已经到底了，共{{vipList.length}}位会员</div>
       </div>
     </div>
     <div class="rightWrapper">
@@ -51,7 +53,7 @@ export default {
       queryFilterForm: {
         key: '',
         pageNo: 1,
-        pageSize: 10
+        pageSize: 8
       },
       total: 0,
       selectVipId: -1,
@@ -81,8 +83,11 @@ export default {
           if (offsetHeight + scrollTop === scrollHeight) {
             this.queryFilterForm.pageNo++
               queryMember(this.queryFilterForm).then(res => {
+                const data = res.data
                 if (data.success) {
-                  this.vipList.push(data.data.models)
+                  data.data.models.forEach(item => {
+                    this.vipList.push(item)
+                  })
                 }
               })
           }
@@ -146,8 +151,6 @@ export default {
             this.supplementData = data.data
             this.supplementData.isWechatWay = isWechatWay
             this.supplementData.phone = phone
-            this.supplementData.realname = ''
-            this.supplementData.birthday = ''
             this.componentStatus = 4
           }
           this.componentStatus = 4
@@ -250,6 +253,12 @@ export default {
     overflow-y: scroll;
     &::-webkit-scrollbar {
       display: none;
+    }
+    &-footer {
+      height: 53px;
+      text-align: center;
+      line-height: 53px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
     &-item {
       padding: 17px 26px;

@@ -224,15 +224,15 @@ export default {
     if (document.getElementById("menu-nav")) document.getElementById("menu-nav").style.display = "none"
     this.GetPayList()
     var self = this
-    document.body.addEventListener("keyup", function(e) {
-      if (e.keyCode == 32) {
-        self.subOrder()
-      }
-      if (e.keyCode == 27) {
-        self.scan = false
-        document.getElementById('chargeMoneyInput').blur()
-      }
-    })
+    // document.body.addEventListener("keyup", function(e) {
+    //   if (e.keyCode == 32) {
+    //     self.subOrder()
+    //   }
+    //   if (e.keyCode == 27) {
+    //     self.scan = false
+    //     document.getElementById('chargeMoneyInput').blur()
+    //   }
+    // })
   },
   methods: {
     inputKeyUp() {

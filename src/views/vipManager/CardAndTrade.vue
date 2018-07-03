@@ -13,7 +13,7 @@
         </div>
         <div class="card-cardBox" v-for="(item, index) in cardAndTradeInfo.data">
           <div class="card-cardBox-item1" v-if="item.CardType === 1">
-            <div class="card-cardBox-item1-cardContent">
+            <div class="card-cardBox-item1-cardContent" :style="backgroundLevel">
               <div>等级卡</div>
               <div>{{item.CardName}}</div>
             </div>
@@ -58,7 +58,7 @@
         </div>
         <div class="card-cardBox" v-for="(item, index) in cardAndTradeInfo.data">
           <div class="card-cardBox-item2" v-if="item.CardType === 2">
-            <div class="card-cardBox-item2-cardContent">
+            <div class="card-cardBox-item2-cardContent" :style="backgroundWmkk">
               <div>{{item.CardName}}</div>
             </div>
             <div class="card-cardBox-item2-cardDetail">
@@ -119,7 +119,13 @@ export default {
   props: ['cardAndTradeInfo'],
   data() {
     return {
-      indexArr: []
+      indexArr: [],
+      backgroundLevel: {
+        background: `url(${require('@/assets/images/vipManager/levelcard.png')}) no-repeat`
+      },
+      backgroundWmkk: {
+        background: `url(${require('@/assets/images/vipManager/wumenkan.png')}) no-repeat`
+      }
     }
   },
   methods: {
@@ -198,7 +204,7 @@ export default {
         padding: 20px 23px;
         width: 277px;
         height: 146px;
-        background: url(../../assets/images/vipManager/levelcard.png) no-repeat;
+        // background: url(../../assets/images/vipManager/levelcard.png) no-repeat;
         & div:nth-child(1) {
           color: #fff;
           font-size: 20px;
@@ -239,25 +245,13 @@ export default {
         }
       }
     }
-
-    // &-item2 {
-    //   padding: 20px 23px;
-    //   width: 277px;
-    //   height: 146px;
-    //   background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
-    //   & div:nth-child(1) {
-    //     color: #fff;
-    //     font-size: 20px
-    //   }
-    // }
-
     &-item2 {
       display: inline-block;
       &-cardContent {
         padding: 20px 23px;
         width: 277px;
         height: 146px;
-        background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
+        // background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
         & div:nth-child(1) {
           color: #fff;
           font-size: 20px;

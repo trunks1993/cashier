@@ -2,7 +2,8 @@
   <div class="editor-container">
     <div class="editor-container-header">
       <div class="editor-container-header-leftBox">
-        <img :src="vipDetail.photo">
+        <img v-if="vipDetail.photo" :src="vipDetail.photo">
+        <img v-else src="../../assets/images/vipManager/noImg.png">
         <div class="editor-container-header-leftBox-baseInfo">
           <div>{{vipDetail.showName}}</div>
           <div>{{vipDetail.gradeName}}</div>

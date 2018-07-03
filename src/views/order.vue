@@ -1,31 +1,5 @@
 <template>
   <div class="main-container">
-    <!-- <div class="left order">
-      <div class="left_cont">
-        <mu-list>
-          <mu-list-item class="list nojt line-solid yicon" title="导购" @click="getGuide" :afterText="focusGuide.name==''?'暂不关联':focusGuide.name">
-            <i class="mu-item-left iconfont icon-daogou"></i>
-            <i class="mu-item-right iconfont icon-jiantou"></i>
-          </mu-list-item>
-          <mu-list-item class="list nojt line-dashed" title="详情" @click="showDetail">
-            <i class="mu-item-right iconfont icon-jiantou"></i>
-          </mu-list-item>
-          <div class="integralOnoff  line-dashed" v-if="integral>=0.01">
-            <span>{{orderIntefral}}积分抵扣{{integral | rmb}}</span>
-            <mu-switch v-model="isIntegral" class="switch" />
-          </div>
-          <mu-list-item class="list sm" title="商品合计" :afterText="totalAll.moneyTotal | rmb"></mu-list-item>
-          <mu-list-item class="list sm" v-show="totalAll.activities!=0" title="活动优惠" :afterText="totalAll.activities | frmb"></mu-list-item>
-          <mu-list-item class="list sm" v-show="totalAll.coupon!=0" title="优惠券" :afterText="totalAll.coupon | frmb"></mu-list-item>
-          <mu-list-item class="list sm allTotle line-dashed" title="总金额" :afterText="this.startMoney | rmb"></mu-list-item>
-          <mu-list-item class="list nojt" title="会员信息"></mu-list-item>
-          <mu-list-item class="list sm" title="姓名:" :afterText="orderModel.memberName || ''"></mu-list-item>
-          <mu-list-item class="list sm" title="手机号码:" :afterText="orderModel.memberCellPhone || '未绑定'"></mu-list-item>
-          <mu-list-item class="list sm" title="预存款余额:" :afterText="orderModel.capital | rmb"></mu-list-item>
-          <mu-list-item class="list sm" title="剩余积分:" :afterText="orderModel.orderIntegralExchange.userIntegral || '0'"></mu-list-item>
-        </mu-list>
-      </div>
-    </div> -->
     <div class="orderInfo">
       <div class="orderInfo-header" @click="getGuide">
         <div class="orderInfo-header-left">
@@ -59,9 +33,9 @@
           <div>活动优惠</div>
           <span>{{totalAll.activities | frmb}}</span>
         </div>
-        <div class="orderInfo-center-item">
+        <div class="orderInfo-center-item" v-if="selCard">
           <div>会员卡</div>
-          <span>20</span>
+          <span>{{selCard.discount}}折</span>
         </div>
         <div class="orderInfo-center-item" v-if="this.$store.getters.userInfo.openDiscounts">
           <div>{{!discountObj? '整单优惠' : discountObj.Type === 1 ? '整单折扣' : '整单减价'}}</div>
@@ -241,6 +215,8 @@
 <script>
 import { sendTosecondaryDisplay } from '@/public/sendToSecondaryDisplay.js';
 import { orderSubmitByCart, getShopSales, submitOrderAndPay } from '@/api'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'order',
   data() {
@@ -282,7 +258,7 @@ export default {
       errorImg: 'this.src="' + require('../assets/images/imgerror.png') + '"'
     }
   },
-  created: function() {
+  created() {
     this.discountObj = this.$route.query.item
     this.$emit("changeTitle", "确认订单");
     this.$emit("isBack", true);
@@ -291,11 +267,11 @@ export default {
     var self = this;
     // document.body.addEventListener("keyup", this.bodyKeyUp, false);
   },
-  destroyed: function() {
-    // document.body.removeEventListener("keyup", this.bodyKeyUp, false);
-  },
   computed: {
-    realCash: function() {
+    ...mapGetters([
+      'selCard'
+    ]),
+    realCash() {
       var returnStr = "";
       if (subdata.orderModel.removeSmallChange == 2) {
         this.maxRealCash = this.math(this.startMoney, this.capital).toFixed(1);
@@ -319,7 +295,7 @@ export default {
 	    const { cash, capital,isIntegral,payType } = this
 			var endMoney = this.payType == "xj"?(this.capital*100+this.cash*100)/100:this.startMoney;
 	    return {
-	      startMoney:this.startMoney,
+	      startMoney:this.startMoney.toFixed(2),
 	      activities:((this.totalAll.moneyTotal)*1-(this.startMoney)*1).toFixed(2),
 	      giveChange:this.payType == "xj"?this.giveChange:0,
 	      endMoney:endMoney.toFixed(2)

@@ -60,6 +60,7 @@ const menu = {
     GenerateRoutes({ commit }) {
       return new Promise((resolve, reject) => {
         getSellerManager().then(res => {
+					
           const data = res.data
           if (data.success) {
             const newAsyncRouterMap = getRouterMap(data.rights)
@@ -76,7 +77,11 @@ const menu = {
             SHOP_NAME = res.data.shopName
             CASH_ER = res.data.userName
             rundId = res.data.managerId
-          }
+          }else{
+						alert("您已在其他收银台登录，请先退出");
+					  window.location.href = "/sellerAdmin/Cashier/LogOut";
+						return;
+					}
         }).catch(error => {
           reject(error)
         })

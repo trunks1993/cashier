@@ -449,6 +449,14 @@ export function cashierRegister(data) {
   return request({
     url: '/SellerAdmin/CashierMemberCard/CashierRegister',
     method: 'post',
-    data: data
+    data: data,
+    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+  })
+}
+
+export function cancelRegister(phone) {
+  return request({
+    url: '/SellerAdmin/CashierMemberCard/Cancel?phone=' + phone,
+    method: 'get'
   })
 }

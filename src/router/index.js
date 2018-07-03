@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Index from '@/views'
+import Index from '@/views/home'
 import Layout from '@/views/layout'
 import order from '@/views/order'
 import success from '@/views/success'

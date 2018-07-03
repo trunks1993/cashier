@@ -19,7 +19,7 @@
           <span>{{supplementData.phone}}</span>
         </div>
         <div class="mainBox-left-item">
-          <span>姓名</span>
+          <span class="realName">姓名</span>
           <el-input v-model="supplementData.realName" clearable size="mini" style="width: 130px"></el-input>
         </div>
         <div class="mainBox-left-item" v-if="supplementData.isWechatWay">
@@ -54,11 +54,11 @@
           （默认已选择等级卡，可选择无门槛卡）
         </div>
         <div class="mainBox-right-selBox">
-          <div class="mainBox-right-selBox-item2">
+          <div class="mainBox-right-selBox-item2" :style="backgroundLevel">
             <div>等级卡</div>
             <div>一级卡</div>
           </div>
-          <div v-for="item in selCardList" class="mainBox-right-selBox-item">
+          <div v-for="item in selCardList" class="mainBox-right-selBox-item" :style="backgroundWmkk">
             <div>{{item.CardName}}</div>
           </div>
         </div>
@@ -74,7 +74,7 @@
         <div class="card">
           <div class="card-nav">
             <span>请选择</span>
-            <img src="../../assets/images/vipManager/xh.png">
+            <img src="../../assets/images/vipManager/xh.png" @click="showDailog = false">
           </div>
           <div class="card-header">
             <span></span>
@@ -82,7 +82,7 @@
           </div>
           <div class="card-cardBox">
             <div class="card-cardBox-item1" v-for="(item, index) in cardList.ratingCard" v-if="item.IsJuniorCard">
-              <div class="card-cardBox-item1-cardContent">
+              <div class="card-cardBox-item1-cardContent" :style="backgroundLevel">
                 <div>等级卡</div>
                 <div>{{item.CardName}}</div>
                 <img src="../../assets/images/vipManager/sel.png" v-if="item.IsJuniorCard">
@@ -126,7 +126,7 @@
           </div>
           <div class="card-cardBox">
             <div class="card-cardBox-item2" v-for="(item, index) in cardList.noThreshold">
-              <div class="card-cardBox-item2-cardContent" @click="selectCard(item)">
+              <div class="card-cardBox-item2-cardContent" @click="selectCard(item)" :style="backgroundWmkk">
                 <div>{{item.CardName}}</div>
                 <div></div>
                 <img src="../../assets/images/vipManager/sel2.png" v-if="selCardListTemp.indexOf(item) >= 0">
@@ -184,7 +184,13 @@ export default {
       indexArr1: [],
       indexArr2: [],
       selCardListTemp: [],
-      showDailog: false
+      showDailog: false,
+      backgroundLevel: {
+        background: `url(${require('@/assets/images/vipManager/levelcard.png')}) no-repeat`
+      },
+      backgroundWmkk: {
+        background: `url(${require('@/assets/images/vipManager/wumenkan.png')}) no-repeat`
+      }
     }
   },
   created() {
@@ -255,6 +261,15 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.realName {
+  position: relative;
+  &:before {
+    content: '*';
+    color: red;
+    position: absolute;
+    left: -10px;
+  }
+}
 .supplement-container {
   height: 100%;
   padding: 30px;
@@ -370,7 +385,7 @@ export default {
         padding: 20px 23px;
         width: 272px;
         height: 146px;
-        background: url(../../assets/images/vipManager/levelcard.png) no-repeat;
+        // background: url(../../assets/images/vipManager/levelcard.png) no-repeat;
         img {
           position: absolute;
           right: 10px;
@@ -424,7 +439,7 @@ export default {
         padding: 20px 23px;
         width: 272px;
         height: 146px;
-        background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
+        // background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
         & div:nth-child(1) {
           color: #fff;
           font-size: 20px;

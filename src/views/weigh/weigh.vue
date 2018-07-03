@@ -54,7 +54,7 @@
                    </div>
 								 	 <div>
 										 <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuPro" /> 
-										 <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清皮':'去皮'" />
+										 <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
 								    </div>
               </div>
           </mu-dialog>
@@ -85,8 +85,8 @@
                         </div>
                    </div>
 								 	 <div>
-										 <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuCodePro" /> 
-										 <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清皮':'去皮'" />
+										 <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuCodePro" />  
+										 <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
 								    </div>
               </div>
           </mu-dialog>
@@ -639,6 +639,7 @@ export default {
             this.skudialog=false;
        },
        addCart:function(idx,addnum,proId,isAddCart){
+				      if(addnum == 0) return;
               proId=proId || this.skuSelect.proid;
               var data=this.productObject[proId];
               addnum=addnum || 1;

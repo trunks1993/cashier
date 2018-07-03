@@ -5,7 +5,7 @@
         <div class="main-container-carWrapper-carBox-header" :style="backgroundObj">
           <template v-if="member">
             <div class="main-container-carWrapper-carBox-header-showVip">
-              <div class="main-container-carWrapper-carBox-header-showVip-left">
+              <div class="main-container-carWrapper-carBox-header-showVip-left" @click="showVipComponet">
                 <span>{{member.nick&&member.nick!=""?member.nick:member.userName}}</span><span>{{member.cellPhone || ''}}</span>
               </div>
               <i class="iconfont icon-shanchu" @click="clearMember"></i>
@@ -13,12 +13,12 @@
           </template>
           <template v-else>
             <div class="main-container-carWrapper-carBox-header-faceVip" @click="toFace">
-              <img src="../assets/images/facevip.png">
+              <img src="../../assets/images/facevip.png">
               <span>人脸识别会员</span>
             </div>
             <div class="main-container-carWrapper-carBox-header-wall"></div>
             <div class="main-container-carWrapper-carBox-header-scanVip">
-              <img src="../assets/images/scanvip.png">
+              <img src="../../assets/images/scanvip.png">
               <!-- <span>输入/扫码会员</span> -->
               <input type="text" placeholder="输入/扫码会员" v-model="memberCode" @keydown.enter="GetMemberByCode()">
             </div>
@@ -51,7 +51,7 @@
             <!-- 无库存 -->
             <div class="main-container-carWrapper-carBox-center-productWrapper-productItem" v-for="(item, i) in cart" v-if="!item.isStock">
               <div class="model">
-                <img src="../assets/images/nosell.png" style="position: absolute;right: 0;">
+                <img src="../../assets/images/nosell.png" style="position: absolute;right: 0;">
               </div>
               <img height="100%" width="64px" :src="item.img">
               <div class="main-container-carWrapper-carBox-center-productWrapper-productItem-sizeBox">
@@ -79,18 +79,24 @@
         <div class="main-container-carWrapper-carBox-discountBox">
           <div class="main-container-carWrapper-carBox-discountBox-item">
             <div>会员卡</div>
-            <div>9.9折</div>
+            <div class="main-container-carWrapper-carBox-discountBox-item-btnSel" :class="{disabled: !member}">
+              <div @click="selVipCard" :style="selCard ? '' : 'border-right: none;'">{{selCard.discount || '请选择'}}{{selCard ? '折' : ''}}</div>
+              <i class="iconfont icon-guanbi" @click="clearDiscount(1)" v-if="selCard"></i>
+            </div>
           </div>
           <div class="main-container-carWrapper-carBox-discountBox-item">
             <div>优惠券</div>
-            <div>-￥100.00</div>
+            <div class="main-container-carWrapper-carBox-discountBox-item-btnSel" :class="{disabled: !member}">
+              <div @click="selmoney" :style="selCoupon?'' : 'border-right: none;'">{{selCoupon ? '-￥' : ''}}{{selCoupon.price || '请选择'}}</div>
+              <i class="iconfont icon-guanbi" @click="clearDiscount(2)" v-if="selCoupon"></i>
+            </div>
           </div>
           <div class="main-container-carWrapper-carBox-discountBox-item">
             <template v-if="hasDiscount">
               <div>整单优惠</div>
               <div class="main-container-carWrapper-carBox-discountBox-item-btnSel">
-                <div @click="selDiscount">{{selBtnValue}}</div>
-                <i class="iconfont icon-guanbi" @click="selBtnValue = '请选择',selDiscountItem = ''"></i>
+                <div @click="selVipDiscount" :style="selDiscount ? '' : 'border-right: none;'">{{formatSelDt(selDiscount)}}</div>
+                <i class="iconfont icon-guanbi" @click="clearDiscount(3)" v-if="selDiscount"></i>
               </div>
             </template>
             <div v-else style="width: 138px;height: 55px;"></div>
@@ -111,9 +117,9 @@
         </div>
       </div>
     </div>
-    <div class="main-container-productWrapper" v-show="!isShowShopDiscounts">
+    <div class="main-container-productWrapper" v-show="!isShowShopDiscounts && !showVipInfo && !showAddVip">
       <div class="main-container-productWrapper-qrInput">
-        <img src="../assets/images/scanvip.png">
+        <img src="../../assets/images/scanvip.png">
         <input type="text" placeholder="请输入或扫描商品条形码" @keydown.enter="GetOncePor" v-model="productCode">
       </div>
       <div style="margin-top: 33px;width: 100%;height: 64px;"></div>
@@ -131,26 +137,29 @@
       <div class="main-container-productWrapper-productBox" ref="productBox">
         <div class="main-container-productWrapper-productBox-item" v-for="item in productList" @click="open(item.id,item.isSellOut)">
           <div class="model" v-if="item.isSellOut">
-            <img src="../assets/images/nosell.png" style="position: absolute;right: 0;">
+            <img src="../../assets/images/nosell.png" style="position: absolute;right: 0;">
           </div>
           <img :src="item.imageUrl" width="100%" height="100%">
           <div class="limit">
             <span v-if="item.joinFixedPrice">一口价</span><span v-if="item.joinFixedPrice&&item.limitBuy>0">{{' 限' + item.limitBuy + '件'}}</span>
           </div>
-          <!-- <div class="main-container-productWrapper-productBox-item-content">
+          <div class="main-container-productWrapper-productBox-item-content">
             <span>{{item.name}}</span>
             <span>{{item.joinFixedPrice?item.marketPrice:item.salePrice | rmb}}{{item.measureUnit&&item.measureUnit!='' ? '/'+item.measureUnit : ''}}</span>
-          </div> -->
+            <div style="position: absolute;right: 4px;bottom: 8px;font-size: 12px;">
+              可售库存: {{item.storeStock}}
+            </div>
+          </div>
         </div>
       </div>
       <div class="main-container-productWrapper-paginationBox">
         <el-pagination background :total="total" layout="prev, pager, next" :page-size="pageSize" @current-change="handleCurrentChange"></el-pagination>
       </div>
     </div>
-    <div class="sideBar-container-preferentialBox" v-if="isShowShopDiscounts">
+    <div class="sideBar-container-preferentialBox" v-if="isShowShopDiscounts && hasDiscount">
       <div class="sideBar-container-preferentialBox-closeBox">
         <div class="sideBar-container-preferentialBox-closeBox-close" @click="isShowShopDiscounts = false">
-          <img src="../assets/images/menuIcons/x.png">
+          <img src="../../assets/images/menuIcons/x.png">
         </div>
       </div>
       <div class="sideBar-container-preferentialBox-mainWrapper">
@@ -190,9 +199,11 @@
         </div>
       </div>
     </div>
+    <VipInfo :showType="showType" @close="showVipInfo = false" v-if="showVipInfo"></VipInfo>
+    <AddVip :phone="phone" @success="addSuccess" @cancel="addCancel" v-if="showAddVip"></AddVip>
     <div class="sideBar-container-addBox" v-if="addStatus">
       <div class="sideBar-container-addBox-wrapper">
-        <img src="../assets/images/guanbi.png" style="position: absolute;right: 0;top: -50px;" @click="addStatus = false,inputVal = ''">
+        <img src="../../assets/images/guanbi.png" style="position: absolute;right: 0;top: -50px;" @click="addStatus = false,inputVal = ''">
         <div class="lineToClose"></div>
         <div class="sideBar-container-addBox-wrapper-header">
           <div class="sideBar-container-addBox-wrapper-header-wall"></div>
@@ -241,7 +252,6 @@
         </div>
       </div>
     </div>
-    
     <div>
       <mu-dialog class="mydailog" :open="skudialog" title="商品信息">
         <i class="iconfont icon-guanbi closeSku" @click="skudialog=false"></i>
@@ -287,15 +297,15 @@
               <i class="iconfont icon-tianjia" @click="changeSkudiaNum(1)"></i>
             </div>
             <div class="skurow-kg" v-if="checkedProduct.productSaleMethod==1">
-               <input type="text" disabled="disabled"  v-if="isS2" v-model="weighNum">
-               <input type="text" v-focus v-else ref="weighValue" @input="weighInput">
-			<span v-if="checkedProduct.measureUnit">{{checkedProduct.measureUnit}}</span>
+              <input type="text" disabled="disabled" v-if="isS2" v-model="weighNum">
+              <input type="text" v-focus v-else ref="weighValue" @input="weighInput">
+              <span v-if="checkedProduct.measureUnit">{{checkedProduct.measureUnit}}</span>
             </div>
           </div>
-					<div>
-						<mu-raised-button class="skuSubmit" label="加入列表" @click="addskuPro" /> 
-						<mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod!=0" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
-					</div>
+          <div>
+            <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuPro" />
+            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清皮':'去皮'" />
+          </div>
         </div>
       </mu-dialog>
     </div>
@@ -323,17 +333,17 @@
             <label>数量</label>
             <div class="skurow-kg">
               <input type="text" v-focus ref="weighValue" @input="weighInput">
-							<span v-if="codeProd.measureUnit">{{codeProd.measureUnit}}</span>
+              <span v-if="codeProd.measureUnit">{{codeProd.measureUnit}}</span>
             </div>
           </div>
-					<div>
-						<mu-raised-button class="skuSubmit" label="加入列表" @click="addskuCodePro" /> 
-						<mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod!=0" @click="plus_goZero" :label="isQupi?'清皮':'去皮'" />
-					</div>
+          <div>
+            <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuCodePro" />
+            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清皮':'去皮'" />
+          </div>
         </div>
       </mu-dialog>
     </div>
-    <qrface @getMenber="getMenber" :is-face="isFace" :url="memberUrl" :member="member" @showqrCode="showqrCode" @closeFace="closeFace" @toFace="toFace" ref="GetMember" @clearMember="clearMember" />
+    <qrface @getMenber="getMenber" @noMenber="noMenber" :is-face="isFace" :url="memberUrl" :member="member" @showqrCode="showqrCode" @closeFace="closeFace" @toFace="toFace" ref="GetMember" @clearMember="clearMember" />
     <div class="loading" v-show="loading">
       <div class="spinner">
         <div class="double-bounce1"></div>
@@ -350,7 +360,7 @@
       </div>
       <div class="section">
         <div v-if="singleList.length<=0" class="enptySingle">
-          <img src="../assets/images/enpty-single.png" />
+          <img src="../../assets/images/enpty-single.png" />
           <p>您还没有挂起订单哦</p>
         </div>
         <ul>
@@ -395,17 +405,36 @@
   </div>
 </template>
 <script>
-import qrface from '@/views/qrface';
+import qrface from '@/views/qrface'
+import VipInfo from './VipInfo'
+import AddVip from './AddVip'
+import { mapGetters } from 'vuex'
+
+import Bus from '@/utils/bus'
 import { setStore, getStore, removeStore, clearStore } from '@/public/single.js';
 import { sendTosecondaryDisplay } from '@/public/sendToSecondaryDisplay.js';
-import { getSellerManager, getShopProductsByAutoId, searchProduct, getStoreCategoryContainProduct, getSKUByBarcode, orderSubmitByCart, getShopProductsSKUsByAutoId, getShopDiscounts, submitDiscount } from '@/api'
+import { getSellerManager, getShopProductsByAutoId, searchProduct, getStoreCategoryContainProduct, getSKUByBarcode, orderSubmitByCart, getShopProductsSKUsByAutoId, getShopDiscounts, getMemberByMemberCard } from '@/api'
 
 var cartUpDateTime = "";
 var cartUpsubmitTime = "";
 var cartUpSetInterval = true;
+
+function compare(pro) {
+  return function(obj1, obj2) {
+    var val1 = obj1[pro];
+    var val2 = obj2[pro];
+    if (val1 > val2) { //正序
+      return 1;
+    } else if (val1 < val2) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+}
 export default {
   name: 'index',
-  components: { "qrface": qrface },
+  components: { qrface, VipInfo, AddVip },
   data() {
     return {
       // new
@@ -420,6 +449,14 @@ export default {
       inputVal: '',
       selBtnValue: '请选择',
       selDiscountItem: '',
+      showVipInfo: false,
+      showType: 0,
+      // vipInfo: this.$store.getters.vipInfo,
+      cardDiscount: '',
+      moneyDiscount: '',
+      phone: '',
+      showAddVip: false,
+      inputType: false,
       // old
       loading: false,
       skudialog: false,
@@ -469,38 +506,42 @@ export default {
       checkedProduct: null,
       memberUrl: "index",
       isFace: false,
-      errorImg: 'this.src="' + require('../assets/images/imgerror.png') + '"',
+      errorImg: 'this.src="' + require('@/assets/images/imgerror.png') + '"',
       buttonDisable: [true, false],
       singleStatus: false,
       singleNumber: 0,
       singleList: [],
       singleOver: '',
       shopId: '',
-			isS2:false,
-			isWeiStable:true,
-			getWeiTime:null,
-			isQupi:false,
+      isS2: false,
+      isWeiStable: true,
+      getWeiTime: null,
+      isQupi: false,
     }
   },
   computed: {
+    ...mapGetters([
+      'selCard',
+      'selCoupon',
+      'selDiscount'
+    ]),
     hasDiscount() {
+      if (!this.$store.getters.userInfo.openDiscounts) this.isShowShopDiscounts = false
       return this.$store.getters.userInfo.openDiscounts
     }
   },
   created: function() {
-		
-    this.$emit("isBack", false);
     this.getUserId();
     this.member = memberData;
-    if (document.getElementById("back-menu")) document.getElementById("back-menu").style.display = "none";
-    if (document.getElementById("menu-nav")) document.getElementById("menu-nav").style.display = "block";
+    // if (document.getElementById("back-menu")) document.getElementById("back-menu").style.display = "none";
+    // if (document.getElementById("menu-nav")) document.getElementById("menu-nav").style.display = "block";
     this.cardId = cardId;
     this.cart = carts;
-		
-		sendTosecondaryDisplay(this.cart,this.member,{
-			total:this.totalAll().total
-		},1,this);
-		
+
+    sendTosecondaryDisplay(this.cart, this.member, {
+      total: this.totalAll().total
+    }, 1, this);
+
     if (carts.length != 0) {
       this.getSkuStock();
     }
@@ -508,33 +549,124 @@ export default {
     var self = this;
     // document.body.addEventListener("keyup", this.bodyKeyUp, false);
 
-		/**初始化双屏设置**/
-		var ua = navigator.userAgent;
-		if(ua.indexOf("S2")!=-1){
-			 this.isS2 = true;
-		}else{
-			 this.isS2 = false;
-		}	
-		function plusReady(){
-			  if(!self.isS2||wWeighDisPlays) return;  
-				var WeighDisPlays = plus.android.importClass("com.WeighDisPlays");
-				var main = plus.android.runtimeMainActivity();
-				wWeighDisPlays = new WeighDisPlays(main);
-				self.isS2 = true;
-				// self.isWeiStable = false;
-		}
-		if(window.plus){
-			plusReady();
-		}else{
-			document.addEventListener("plusready",plusReady,false);
-		}
-		/**初始化双屏设置End**/
+    /**初始化双屏设置**/
+    var ua = navigator.userAgent;
+    if (ua.indexOf("S2") != -1) {
+      this.isS2 = true;
+    } else {
+      this.isS2 = false;
+    }
+
+    function plusReady() {
+      if (!self.isS2 || wWeighDisPlays) return;
+      var WeighDisPlays = plus.android.importClass("com.WeighDisPlays");
+      var main = plus.android.runtimeMainActivity();
+      wWeighDisPlays = new WeighDisPlays(main);
+      self.isS2 = true;
+      // self.isWeiStable = false;
+    }
+    if (window.plus) {
+      plusReady();
+    } else {
+      document.addEventListener("plusready", plusReady, false);
+    }
+    /**初始化双屏设置End**/
   },
   destroyed: function() {
     // document.body.removeEventListener("keyup", this.bodyKeyUp, false);
     cartUpSetInterval = false;
   },
   methods: {
+    formatSelDt(selDiscount) {
+      if (!selDiscount) return '请选择'
+      else return selDiscount.Type === 1 ? selDiscount.Value * 100 / 10 + "折" : '-' + selDiscount.Value + '元'
+    },
+    addSuccess(phone) {
+      this.showAddVip = false
+      getMemberByMemberCard(phone).then(res => {
+        const data = res.data
+        if (data.success) {
+          this.$store.dispatch('SetVipInfo', data.data)
+          this.getMenber(data)
+          this.showVipComponet()
+        }
+      })
+    },
+    noMenber(phone) {
+      this.isShowShopDiscounts = false
+      this.showVipInfo = false
+      this.showAddVip = true
+      this.phone = phone
+    },
+    clearDiscount(type) {
+      if (type === 1) {
+        this.$store.dispatch('SetSelCard', '')
+      } else if (type === 2) {
+        this.$store.dispatch('SetSelCoupon', '')
+      } else {
+        this.$store.dispatch('SetSelDiscount', '')
+      }
+    },
+    clickDiscount(item) {
+      this.$store.dispatch('SetSelDiscount', item)
+      this.isShowShopDiscounts = false
+      // this.selDiscountItem = item
+      // this.selBtnValue = item.Type === 1 ? item.Value * 100 / 10 + "折" : '-' + item.Value + '元'
+    },
+    selVipCard() {
+      if (!this.member) return
+      this.isShowShopDiscounts = false
+      this.showAddVip = false
+      this.showVipInfo = true
+      this.showType = 1
+    },
+    selmoney() {
+      if (!this.member) return
+      this.isShowShopDiscounts = false
+      this.showAddVip = false
+      this.showVipInfo = true
+      this.showType = 2
+    },
+    showVipComponet() {
+      this.isShowShopDiscounts = false
+      this.showAddVip = false
+      this.showVipInfo = true
+      this.showType = 0
+      this.initDiscount()
+    },
+    initDiscount() {
+      const vipInfo = this.$store.getters.vipInfo
+      if (vipInfo.memCard.length > 0) {
+        vipInfo.memCard.sort(compare('discount'))
+        this.$store.dispatch('SetSelCard', vipInfo.memCard[0])
+      }
+      if (vipInfo.coupons.length > 0) {
+        vipInfo.coupons.sort(compare('price'))
+        this.$store.dispatch('SetSelCoupon', vipInfo.coupons[vipInfo.coupons.length - 1])
+      }
+    },
+    selVipDiscount() {
+      this.showAddVip = false
+      this.showVipInfo = false
+      this.isShowShopDiscounts = true
+      getShopDiscounts().then(res => {
+        const data = res.data
+        if (data.success) {
+          this.discountsList = data.data
+        }
+      })
+    },
+    clearMember() {
+      this.showAddVip = false
+      this.showVipInfo = false
+      this.$store.dispatch('SetSelCard', '')
+      this.$store.dispatch('SetSelCoupon', '')
+      this.member = null;
+      memberData = null;
+    },
+    addCancel() {
+      this.showAddVip = false
+    },
     bodyKeyUp(e) {
       var self = this;
       if (e.keyCode == 27) {
@@ -594,18 +726,18 @@ export default {
         }
       }
     },
-		plus_goZero(){
-			
-			  var qupi;
-				for(var i = 0;i<10;i++){ 
-						plus.android.invoke(wWeighDisPlays,"SetTare");
-						qupi = plus.android.getAttribute(wWeighDisPlays,"isQupi");
-						if(qupi!=this.isQupi){
-							  this.isQupi = qupi;
-								break;
-						} 
-				}
-		},
+    plus_goZero() {
+
+      var qupi;
+      for (var i = 0; i < 10; i++) {
+        plus.android.invoke(wWeighDisPlays, "SetTare");
+        qupi = plus.android.getAttribute(wWeighDisPlays, "isQupi");
+        if (qupi != this.isQupi) {
+          this.isQupi = qupi;
+          break;
+        }
+      }
+    },
     //挂单
     cancelled() {
       var member = {}
@@ -631,7 +763,7 @@ export default {
         if (this.singleNumber > 0) {
           this.buttonDisable[1] = false
         }
-      }  
+      }
     },
     //删除某个挂单
     delateSingle(index) {
@@ -732,8 +864,10 @@ export default {
     showqrCode: function() {
       this.$emit("showqrCode");
     },
-    getMenber: function(res) {
-      this.member = res.data.cashierUserMember;
+    getMenber(res) {
+      this.initDiscount()
+      this.member = res.data.cashierUserMember
+      // this.vipInfo = res.data
       if ('cardId' in res) {
         this.cardId = res.cardId;
       }
@@ -743,11 +877,8 @@ export default {
       this.isFace = false;
       memberData = res.data.cashierUserMember;
     },
-    clearMember: function() {
-      this.member = null;
-      memberData = null;
-    },
     GetMemberByCode: function() {
+      this.showAddVip = false
       this.$refs.GetMember.GetMember(this.memberCode);
       this.memberCode = "";
     },
@@ -1044,7 +1175,6 @@ export default {
 
     },
     addCart: function(idx, addnum, proId, isAddCart) {
-			if(addnum == 0) return;
       proId = proId || this.skuSelect.proid;
       var data = this.productObject[proId];
       addnum = addnum || 1;
@@ -1208,7 +1338,7 @@ export default {
         if (response.data.success) {
           subdata = response.data;
           indexData = { member: self.member, checkedProid: self.checkedProid }
-          self.$router.push({ path: '/order', query: { item: self.selDiscountItem } });
+          self.$router.push({ path: '/order', query: { item: self.selDiscount } });
           self.loading = false;
           var ts = "";
           if (response.data.fixedPriceBeyondMaxCount) {
@@ -1328,15 +1458,6 @@ export default {
         }
       }
     },
-    selDiscount() {
-      this.isShowShopDiscounts = true
-      getShopDiscounts().then(res => {
-        const data = res.data
-        if (data.success) {
-          this.discountsList = data.data
-        }
-      })
-    },
     getNumber(arr, isZk) {
       let num1 = 0,
         num2 = 0
@@ -1365,11 +1486,11 @@ export default {
         if (this.inputVal.indexOf('.') >= 0 && val === '.') {
           return
         }
-        if (this.inputVal.indexOf('.') >= 0 && this.inputVal.split(".")[1].length >=2) {
+        if (this.inputVal.indexOf('.') >= 0 && this.inputVal.split(".")[1].length >= 2) {
           return
         }
         const temp = this.inputVal + val
-        if (this.inputType? (temp*1 > 9.9 || temp.length > 3) : temp*1 > 10000 ) {
+        if (this.inputType ? (temp * 1 > 9.9 || temp.length > 3) : temp * 1 > 10000) {
           return
         }
         this.inputVal += val
@@ -1379,20 +1500,16 @@ export default {
       if (!this.inputVal) {
         return
       }
-      if (this.inputVal[this.inputVal.length - 1] === '.' || this.inputVal*1 === 0) {
+      if (this.inputVal[this.inputVal.length - 1] === '.' || this.inputVal * 1 === 0) {
         return
       }
-      this.selDiscountItem = {
+      this.$store.dispatch('SetSelDiscount', {
         Type: this.inputType ? 1 : 2,
         Value: this.inputType ? this.inputVal / 10 : this.inputVal
-      }
-      this.selBtnValue = this.inputType ? this.inputVal + "折" : '-' + this.inputVal + '元'
+      })
       this.addStatus = false
+      this.isShowShopDiscounts = false
       this.inputVal = ''
-    },
-    clickDiscount(item) {
-      this.selDiscountItem = item
-      this.selBtnValue = item.Type === 1 ? item.Value * 100 / 10 + "折" : '-' + item.Value + '元'
     }
   },
   directives: {
@@ -1431,7 +1548,7 @@ export default {
   },
   watch: {
     //是否能挂单
-    
+
     cart: {
       handler(newValue, oldValue) {
         if (this.cart.length > 0 && this.singleNumber < 10) {
@@ -1450,16 +1567,16 @@ export default {
           this.buttonDisable[1] = true;
         }
         cartUpDateTime = new Date() * 1;
-				sendTosecondaryDisplay(this.cart,this.member,{
-					total:this.totalAll().total
-				},1,this);
+        sendTosecondaryDisplay(this.cart, this.member, {
+          total: this.totalAll().total
+        }, 1, this);
       },
       deep: true
     },
-    member:function(){
-      sendTosecondaryDisplay(this.cart,this.member,{
-        	 total:this.totalAll().total
-      },1,this);
+    member: function() {
+      sendTosecondaryDisplay(this.cart, this.member, {
+        total: this.totalAll().total
+      }, 1, this);
     },
     skudialog: function(val) {
       if (val) {
@@ -1474,31 +1591,31 @@ export default {
             }, 200)
             break;
           }
-        }		
-				
-				/**S2称重处理**/
-				
-				if(this.isS2){
-						plus.android.invoke(wWeighDisPlays,"SetOpen");
-						self.getWeiTime = setInterval(function(){
-										try{
-											var val = plus.android.getAttribute(wWeighDisPlays,"mStableWeight");
-											var mStatus = plus.android.getAttribute(wWeighDisPlays,"mStatus");
-											if(self.checkedProduct.measureUnit == "g"){
-												 self.weighNum = val;
-											}else{
-												 self.weighNum = (val/1000).toFixed(3);
-											}
-										}catch(e){
-											alert("error");
-										}
-						},1000);
-				}
-				/**S2称重处理**/
-      }else{
-				if(this.getWeiTime) clearInterval(this.getWeiTime);
-				if(this.isS2) plus.android.invoke(wWeighDisPlays,"SetClose"); 
-			}
+        }
+
+        /**S2称重处理**/
+
+        if (this.isS2) {
+          plus.android.invoke(wWeighDisPlays, "SetOpen");
+          self.getWeiTime = setInterval(function() {
+            try {
+              var val = plus.android.getAttribute(wWeighDisPlays, "mStableWeight");
+              var mStatus = plus.android.getAttribute(wWeighDisPlays, "mStatus");
+              if (self.checkedProduct.measureUnit == "g") {
+                self.weighNum = val;
+              } else {
+                self.weighNum = (val / 1000).toFixed(3);
+              }
+            } catch (e) {
+              alert("error");
+            }
+          }, 1000);
+        }
+        /**S2称重处理**/
+      } else {
+        if (this.getWeiTime) clearInterval(this.getWeiTime);
+        if (this.isS2) plus.android.invoke(wWeighDisPlays, "SetClose");
+      }
     }
   },
   filters: {
@@ -1593,6 +1710,8 @@ export default {
           justify-content: space-between;
           &-left {
             @extend .flex;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            padding: 0 10px;
             & span:nth-child(1) {
               font-size: 18px;
               color: rgba(199, 178, 135, 1);
@@ -1723,11 +1842,10 @@ export default {
       }
       &-discountBox {
         height: 79px;
-        background: #f9f7f3;
-        padding: 0 56px;
+        background: #f9f7f3; // padding: 0 56px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: space-around;
         &-item {
           text-align: center;
           & div:nth-child(1) {
@@ -1760,11 +1878,10 @@ export default {
               margin-left: 6px;
             }
           }
-        }
-        &-item:not(:first-child) {
-          position: relative;
-          left: 30px;
-        }
+        } // &-item:not(:first-child) {
+        //   position: relative;
+        //   left: 30px;
+        // }
       }
       &-footer {
         @extend .flex;
@@ -1921,6 +2038,16 @@ export default {
       bottom: 6px;
       right: 20px;
     }
+  }
+}
+
+.disabled {
+  border: 1px solid rgba(0, 0, 0, 0.3)!important;
+  div {
+    color: rgba(0, 0, 0, 0.3)!important;
+  }
+  i {
+    color: rgba(0, 0, 0, 0.3)!important;
   }
 }
 
