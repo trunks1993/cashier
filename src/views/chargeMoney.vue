@@ -1,75 +1,6 @@
 <template>
   <div class="main-container">
     <qrface @getMenber="getMenber" :is-face="isFace" :url="memberUrl" :member="member" @showqrCode="showqrCode" @closeFace="closeFace" @toFace="toFace" ref="GetMember" @clearMember="clearMember" />
-    <!-- <div class="left order">
-      <div class="left_cont">
-        <div class="memberInfo">
-          <p v-if="member"><span>{{member.member.nick&&member.member.nick!=""?member.member.nick:member.member.userName}}</span><span>{{member.member.cellPhone || ''}}</span>
-            <a class="iconfont icon-shanchu" @click="clearMember"></a>
-          </p>
-          <div class="m-left" @click="toFace" v-if="!member">
-            <span class="iconfont icon-face"></span>
-            <span>人脸识别会员</span>
-          </div>
-          <div class="m-right" v-if="!member">
-            <span class="iconfont icon-huiyuansaomiao"></span>
-            <input type="text" placeholder="输入/扫码" v-model="memberCode" @keydown.enter="GetMemberByCode()">
-          </div>
-        </div>
-        <mu-list v-if="member">
-          <mu-list-item class="list sm" title="会员账号" :afterText="member.member.userName"></mu-list-item>
-          <mu-list-item class="list sm" title="会员昵称" :afterText="member.member.nick || '无'"></mu-list-item>
-          <mu-list-item class="list sm" title="手机号" :afterText="member.member.cellPhone"></mu-list-item>
-          <mu-list-item class="list sm" title="所属门店" :afterText="member.shopName"></mu-list-item>
-          <mu-list-item class="list sm allTotle" title="账户余额" :afterText="member.balance | rmb"></mu-list-item>
-        </mu-list>
-        <div class="noMemberInfo" v-else><img src="../assets/images/noinfo.png" alt=""></div>
-      </div>
-    </div>
-    <div class="right order">
-      <div class="right_cont">
-        <div class="pay">
-          <div class="tab">
-            <ul v-if="payList" :class="payClass">
-              <li :class="{active:payType=='wx'}" v-if="payList.supportWechatScan">
-                <mu-raised-button class="iconfont wx" label="微信" @click="payType='wx'" />
-              </li>
-              <li :class="{active:payType=='zfb'}" v-if="payList.supportAlipayScan">
-                <mu-raised-button class="iconfont zfb" label="支付宝" @click="payType='zfb'" />
-              </li>
-            </ul>
-          </div>
-          <div class="pay_cont">
-            <div class="pay_row">
-              <div class="r-left">
-                <i class="iconfont icon-yucunkuan"></i>储值金额
-              </div>
-              <div class="r-middle">
-                <div class="inputBox">
-                  <label for="yck">￥</label>
-                  <input type="text" ref="chargeVal" @input="chargeValInput" :value="chargeVal">
-                </div>
-              </div>
-            </div>
-            <div class="pay_row">
-              <div class="r-left">
-                <i class="iconfont icon-shishou"></i>到账金额
-              </div>
-              <div class="r-middle">
-                <span class="charge-money" v-if="chargeVal!=''&&chargeVal>0">
-                                          <em>￥{{mathPlus(chargeVal*1,chargeVal*(rule/100)).toFixed(2)}}</em>
-                                          <i v-if="rule>0">充{{chargeVal}}送{{(chargeVal*(rule/100)).toFixed(2)}}</i>
-                                        </span>
-                <span class="charge-rule" v-if="(chargeVal==''||chargeVal<=0)&&rule>0">赠送储值金额的{{rule}}%</span>
-              </div>
-            </div>
-            <div>
-              <mu-raised-button label="确认收款" class="mu-raised-button submitOrder mu-raised-button-full" :class="{disabled:chargeVal==''||chargeVal<=0||!member}" @click="toSub" fullWidth/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div class="main-container-vipPrintWrapper">
       <div class="main-container-vipPrintWrapper-printBox" :style="member ? '':'padding-top: 160px'">
         <template v-if="!member">
@@ -152,6 +83,7 @@
               <span v-if="giftObj.card.doesDiscount">{{giftObj.card.doesFreeShipping ? '、' : ''}}{{giftObj.card.discount}}折</span>
               <span v-if="giftObj.card.doesPointTimes">{{giftObj.card.doesDiscount ? '、' : ''}}{{giftObj.card.pointTimes}}倍积分加速</span>
               <span v-if="giftObj.card.doesGiveCoupon">{{giftObj.card.doesPointTimes ? '，' : ''}}{{giftObj.card.couponCount}}张优惠券</span>
+              <span v-if="giftObj.card.doesGivePoint">{{giftObj.card.doesGiveCoupon ? '，' : ''}}{{giftObj.card.givenPoints}}积分</span>
                 ）
             </div>
           </div>
