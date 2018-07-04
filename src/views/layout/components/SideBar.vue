@@ -1,5 +1,6 @@
 <template>
   <div class="sideBar-container">
+    <MsgBox :type="'warning'" :content="'您为开启预存款储值！'" @iknown="iknown" v-if="showMsgBox"></MsgBox>
     <div class="sideBar-container-mainBox" :class="{hiden: !isSideShow, show: isSideShow}">
       <template v-if="!isSettingBox">
         <div class="sideBar-container-mainBox-header">
@@ -164,7 +165,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Bus from '@/utils/bus'
-import { getShopDiscounts, deleteDiscounts, submitDiscount } from '@/api'
+import { getShopDiscounts, deleteDiscounts, submitDiscount, getShopStoredSet } from '@/api'
 
 export default {
   computed: {
@@ -205,7 +206,8 @@ export default {
       addStatus: false,
       inputType: false,
       discountsList: [],
-      inputVal: ''
+      inputVal: '',
+      showMsgBox: false
     }
   },
   created() {
@@ -220,8 +222,23 @@ export default {
         this.isSettingBox = true
         return
       }
-      this.$router.push(route.name === '交接班' ? {path: route.path, query: {id: 'me'}} : route.path)
-      this.isSideShow = false
+      if (route.meta && route.meta.id === 13003) {
+        getShopStoredSet().then(res => {
+          const data = res.data
+          if (!data.isShopStoredValue) {
+            this.showMsgBox = true
+          } else {
+            this.$router.push(route.name === '交接班' ? { path: route.path, query: { id: 'me' } } : route.path)
+            this.isSideShow = false
+          }
+        })
+      } else {
+        this.$router.push(route.name === '交接班' ? { path: route.path, query: { id: 'me' } } : route.path)
+        this.isSideShow = false
+      }
+    },
+    iknown() {
+      this.showMsgBox = false
     },
     showShopDiscounts() {
       this.isShowShopDiscounts = true
@@ -275,12 +292,12 @@ export default {
           this.$toast('输入格式有误')
           return
         }
-        if (this.inputVal.indexOf('.') >= 0 && this.inputVal.split(".")[1].length >=2) {
+        if (this.inputVal.indexOf('.') >= 0 && this.inputVal.split(".")[1].length >= 2) {
           this.$toast('输入格式有误')
           return
         }
         const temp = this.inputVal + val
-        if (this.inputType? (temp*1 > 9.9 || temp.length > 3) : temp*1 > 10000 ) {
+        if (this.inputType ? (temp * 1 > 9.9 || temp.length > 3) : temp * 1 > 10000) {
           this.$toast('输入格式有误')
           return
         }
@@ -292,7 +309,7 @@ export default {
         this.$toast('不能为空')
         return
       }
-      if (this.inputVal[this.inputVal.length - 1] === '.' || this.inputVal*1 === 0) {
+      if (this.inputVal[this.inputVal.length - 1] === '.' || this.inputVal * 1 === 0) {
         this.$toast('输入格式有误')
         return
       }

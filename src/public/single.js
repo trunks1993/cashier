@@ -1,18 +1,31 @@
 
 var keyShopId;
+var maxTime = 1/6; //小时
+
+import Toast from '@/public/toast.js'
 
 function getStore(shopId){
 	if(shopId){
 		keyShopId = shopId;
 	}
-	var storeList = localStorage.getItem("datalist"+keyShopId) || "[]";
-	console.log(JSON.parse(storeList))
-	return JSON.parse(storeList)
+	var storeList = localStorage.getItem("datalist"+keyShopId) || "[]",
+	    newList = {datelist:[]};
+	storeList = JSON.parse(storeList);
+	for(var i = 0; i<storeList.datelist.length; i++){
+	    var startTime = new Date(storeList.datelist[i].time)*1;
+		var nowTime = new Date()*1;
+		if(nowTime-startTime<maxTime*60*60*1000){
+			  newList.datelist.push(storeList.datelist[i]);
+		}
+	} 
+	var x = storeList.datelist.length-newList.datelist.length;
+	localStorage.setItem("datalist"+shopId,JSON.stringify(newList));
+	return newList;
 }
 
 function setStore(data,time,member,shopId){
 	keyShopId = shopId;
-	var setObj ={};
+	var setObj ={}; 
 	setObj.datelist =[];
 	var detaileList={};
 	detaileList.member =member

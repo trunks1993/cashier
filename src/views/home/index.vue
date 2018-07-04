@@ -352,6 +352,7 @@
         <div class="header">
           <button type="button" @click="singleStatus=false" class="close"><i class="iconfont icon-guanbi"></i></button>
           <div>挂单列表<span>&nbsp;({{singleList.length}}</span>单)</div>
+					<p style="font-size:12px;color:#ccc;position:absolute;text-align: center;bottom:0;width:100%;bottom:-23px;">挂起的订单超过24小时自动删除</p>
           <button type="button" @click="clearSingle" class="clear"><i class="iconfont icon-qingchuhuancun"></i>清空</button>
         </div>
       </div>
@@ -762,6 +763,7 @@ export default {
     getsingle() {
       this.singleStatus = true;
       this.singleList = getStore().datelist;
+      this.cancellNumber();
     },
     //挂单数量
     cancellNumber() {

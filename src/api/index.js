@@ -460,3 +460,10 @@ export function cancelRegister(phone) {
     method: 'get'
   })
 }
+
+export function getShopStoredSet() {
+  return request({
+    url: '/admin/Capital/GetShopStoredSet',
+    method: 'get'
+  })
+}

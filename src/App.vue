@@ -151,10 +151,10 @@ export default {
     }
   },
   beforeCreate() {
-    mockLogin('gmc', '123456').then(res => {
-      const data = res.data
-      document.cookie = 'Himall-SellerManager = ' + data.userId
-    })
+    // mockLogin('swgyd:test', '123456').then(res => {
+    //   const data = res.data
+    //   document.cookie = 'Himall-SellerManager = ' + data.userId
+    // })
   },
   created: function() {
     var self = this;
