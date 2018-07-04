@@ -67,7 +67,7 @@ const menu = {
             commit('SET_ROUTES', newAsyncRouterMap)
             commit('SET_USER', data)
             commit('SET_ISCASHIER', data.isCashBegin)
-            isLogin()
+            // isLogin()
             resolve(newAsyncRouterMap)
 
             //暂时的全局变量

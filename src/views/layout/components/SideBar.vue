@@ -22,10 +22,10 @@
               <div>{{item.children[1].meta.menuName}}</div>
             </div>
           </template>
-          <div class="sideBar-container-mainBox-menuBox-item">
+          <!-- <div class="sideBar-container-mainBox-menuBox-item">
             <img src="../../../assets/images/menuIcons/shezhi.png" @click="isSettingBox = true">
             <div>设置</div>
-          </div>
+          </div> -->
         </div>
       </template>
       <template v-else>
@@ -216,6 +216,10 @@ export default {
   methods: {
     to(route) {
       console.log(route)
+      if (route.meta && route.meta.id === 13011) {
+        this.isSettingBox = true
+        return
+      }
       this.$router.push(route.name === '交接班' ? {path: route.path, query: {id: 'me'}} : route.path)
       this.isSideShow = false
     },

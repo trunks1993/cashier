@@ -185,3 +185,18 @@ export default {
 }
 
 </script>
+<style lang="scss" scoped>
+  .left {
+    height: calc(100% - 72px);
+  }
+  .left_cont {
+    height: 100%;
+  }
+  .turnover_list {
+    height: calc(100% - 308px);
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+</style>

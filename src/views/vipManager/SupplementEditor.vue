@@ -240,6 +240,10 @@ export default {
       this.showDailog = true
     },
     submitSup() {
+      if (!this.supplementData.realName.replace(/(^\s*)|(\s*$)/g, "")) {
+        this.$toast('姓名不能为空')
+        return
+      }
       cashierRegister({
         phone: this.supplementData.phone,
         sex: this.supplementData.sex,

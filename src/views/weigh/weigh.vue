@@ -39,7 +39,7 @@
                         </div>
                    </div>
                    <div class="skurow">
-                        <label>数量</label>
+                        <label>数量<span v-if="checkedProSkuStock>-1">库存:{{checkedProSkuStock}}</span></label>
                         <div class="change" v-if="checkedProduct.productSaleMethod==0">
                             <i class="iconfont icon-shanjian" @click="changeSkudiaNum(-1)"></i>
                               <span>{{skuSelect.num}}</span>
@@ -79,7 +79,7 @@
                         </div>
                    </div>
                    <div class="skurow">
-                        <label>数量</label>
+                        <label>数量<span>库存:{{(codeProd.storeStock-codeProd.safeStock)}}</span></label>
                         <div class="skurow-kg">
                             <input type="text" ref="weighValue" @input="weighInput"><span v-if="codeProd.measureUnit">{{codeProd.measureUnit}}</span>
                         </div>
@@ -307,7 +307,17 @@ export default {
             }
             self.proScroll();
     },1000);
-   },
+  },
+	computed:{
+		checkedProSkuStock(){
+			var sku = this.skuSelect.proid+"_"+this.skuSelect.color+"_"+this.skuSelect.size+"_"+this.skuSelect.version;
+			if(this.checkedStock[sku]){
+					return this.checkedStock[sku].realStock;
+			}else{
+					return -1;
+			}
+		}
+	},
   watch:{
      skudialog:function(val){
          if(val){

@@ -22,8 +22,8 @@
                                     <mu-list-item class="list sm" v-if="successData.totalAll.coupon>0" title="优惠券" :afterText="successData.totalAll.coupon | frmb"></mu-list-item>
                                     <mu-list-item class="list sm" v-if="successData.isIntegral&&successData.integral>0" title="积分" :afterText="successData.integral | frmb"></mu-list-item>
                                     <!-- <mu-list-item class="list sm" v-if="successData.removeSmallChange>0" title="抹零" :afterText="successData.removeSmallChange | frmb"></mu-list-item> -->
-                                    <mu-list-item class="list sm" title="合计" :afterText="allPay | rmb"></mu-list-item>
                                     <mu-list-item v-if="this.$store.getters.userInfo.openDiscounts" class="list sm" :title="!discountObj? '整单优惠' : discountObj.Type === 1 ? '整单折扣' : '整单减价'" :afterText="!discountObj? '无' : discountObj.Type === 1 ? discountObj.Value * 100 / 10 + `折(-￥${fullOrderActivit})` : '-'+ discountObj.Value +'元'"></mu-list-item>
+                                    <mu-list-item class="list sm" title="总金额" :afterText="allPay | rmb"></mu-list-item>
                               </mu-list>
                           </li>
                           <li class="sm">

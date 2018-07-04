@@ -112,25 +112,36 @@
       <span>优惠券({{vipInfo.memCard.length }})</span>
     </div>
     <div class="trade" v-if="showType === 0 || showType === 2">
-      <div class="trade-itemBox" v-for="item in vipInfo.coupons" @click="selectCoupon(item)">
-      	<img src="../../assets/images/vipManager/sel3.png" v-if="item.price === selCoupon.price">
-        <div class="trade-itemBox-left">
-          <div class="trade-itemBox-left-price">
-            <span>￥</span>
-            <span>{{item.price}}</span>
+      <template v-if="vipInfo.coupons.length > 0">
+        <div class="trade-itemBox" v-for="item in vipInfo.coupons" @click="selectCoupon(item)">
+          <img src="../../assets/images/vipManager/sel3.png" v-if="item.price === selCoupon.price">
+          <div class="trade-itemBox-left">
+            <div class="trade-itemBox-left-price">
+              <span>￥</span>
+              <span>{{item.price}}</span>
+            </div>
+            <span class="trade-itemBox-left-shopName">{{item.shopName}}</span>
           </div>
-          <span class="trade-itemBox-left-shopName">{{item.shopName}}</span>
+          <div class="trade-itemBox-right">
+            <div>{{item.activityName}}</div>
+            <div>有效期至{{item.endTimeText}}</div>
+          </div>
         </div>
-        <div class="trade-itemBox-right">
-          <div>{{item.activityName}}</div>
-          <div>有效期至{{item.endTimeText}}</div>
+      </template>
+      <div v-else style="text-align: center;">
+        <div>
+          <img :src="noTick">
         </div>
+        <img :src="zwyh" style="margin-top: 40px;">
       </div>
     </div>
   </div>
 </template>
 <script>
 import xhome from '@/assets/images/vipManager/xhome.png'
+import noTick from '@/assets/images/vipManager/noTick.png'
+import zwyh from '@/assets/images/vipManager/zwyh.png'
+
 import Bus from '@/utils/bus'
 import { mapGetters } from 'vuex'
 
@@ -140,6 +151,8 @@ export default {
     return {
       // 图片
       xhome,
+      noTick,
+      zwyh,
       backgroundLevel: {
         background: `url(${require('@/assets/images/vipManager/levelcard.png')}) no-repeat`
       },
@@ -434,9 +447,9 @@ export default {
     margin-bottom: 24px;
     position: relative;
     img {
-    	position: absolute;
-    	right: 2px;
-    	top: 2px;
+      position: absolute;
+      right: 2px;
+      top: 2px;
     }
     &-left {
       display: inline-block;

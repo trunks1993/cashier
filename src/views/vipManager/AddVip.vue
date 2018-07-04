@@ -1,12 +1,8 @@
 <template>
   <div class="add-container">
+    <MsgBox :type="msgBoxType" :content="msgBoxContent" @iknown="iknown" v-if="showMsgBox"></MsgBox>
     <img src="../../assets/images/vipManager/xhome.png" @click="close" style="position: absolute; right: 20px; top: 20px;">
     <div class="add-container-addBox" v-if="!showQrScanPage">
-      <!-- <div class="add-container-addBox-closeBox">
-        <div class="add-container-addBox-closeBox-close" @click="close">
-          <img src="../../assets/images/menuIcons/x.png">
-        </div>
-      </div> -->
       <div class="add-container-addBox-wrapper">
         <div class="add-container-addBox-wrapper-header">
           <div class="add-container-addBox-wrapper-header-wall"></div>
@@ -62,13 +58,6 @@
         仅手机号开通 >
       </div>
     </div>
-    <div class="add-container-dailog" v-show="hasRegist">
-      <div class="add-container-dailog-mainBox">
-        <img src="../../assets/images/vipManager/warning.png">
-        <div class="add-container-dailog-mainBox-msg">手机号已被注册</div>
-        <div class="add-container-dailog-mainBox-btn" @click="hasRegist = false">我知道了</div>
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -81,7 +70,9 @@ export default {
       showQrScanPage: false,
       qrCodeImg: '',
       interval: '',
-      hasRegist: false
+      showMsgBox: false,
+      msgBoxContent: '',
+      msgBoxType: 'warning'
     }
   },
   methods: {
@@ -115,19 +106,25 @@ export default {
                     if (res == 3 || res == 1) {
                       this.toSupplement(true)
                     } else if (res == 2) {
-                      this.$toast('该微信已绑定手机号，请解绑后重试！')
+                      this.showMsgBox = true
+                      this.msgBoxContent = '该微信已绑定手机号，请解绑后重试！'
                     }
                   })
                 }, 2000)
               }
             })
           } else {
-            this.hasRegist = true
+            this.showMsgBox = true
+            this.msgBoxContent = '手机号已被注册'
           }
         })
       } else {
         this.$toast('请输入正确手机号')
       }
+    },
+    iknown() {
+      window.clearInterval(this.interval)
+      this.showMsgBox = false
     },
     polling() {
       return new Promise((resolve, reject) => {
@@ -300,35 +297,35 @@ export default {
       }
     }
   }
-  &-dailog {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &-mainBox {
-      width: 363px;
-      height: 187px;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      &-msg {
-        margin-top: 18px;
-        line-height: 16px;
-      }
-      &-btn {
-        margin-top: 58px;
-        color: #C7B187;
-        border-bottom: 1px solid #C7B187;
-      }
-    }
-  }
+  // &-dailog {
+  //   position: absolute;
+  //   top: 0;
+  //   bottom: 0;
+  //   right: 0;
+  //   left: 0;
+  //   background: rgba(0, 0, 0, 0.3);
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  //   &-mainBox {
+  //     width: 363px;
+  //     height: 187px;
+  //     background: #fff;
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: center;
+  //     flex-direction: column;
+  //     &-msg {
+  //       margin-top: 18px;
+  //       line-height: 16px;
+  //     }
+  //     &-btn {
+  //       margin-top: 58px;
+  //       color: #C7B187;
+  //       border-bottom: 1px solid #C7B187;
+  //     }
+  //   }
+  // }
 }
 
 </style>

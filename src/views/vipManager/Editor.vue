@@ -74,7 +74,7 @@
           <el-input v-else v-model="vipDetail.realName" clearable size="mini" style="width: 130px"></el-input>
         </div>
         <div class="editor-container-mainBox-rightWrapper-item">
-          <span>微信名</span>
+          <span>昵称</span>
           <span>{{vipDetail.nick}}</span>
         </div>
         <div class="editor-container-mainBox-rightWrapper-item">

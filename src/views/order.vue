@@ -39,7 +39,7 @@
         </div>
         <div class="orderInfo-center-item" v-if="this.$store.getters.userInfo.openDiscounts">
           <div>{{!discountObj? '整单优惠' : discountObj.Type === 1 ? '整单折扣' : '整单减价'}}</div>
-          <span v-if="discountObj">{{discountObj.Type === 1 ? discountObj.Value * 100 / 10 + `折(-￥${fullOrderActivit})` : '-'+ discountObj.Value +'元'}}</span>
+          <span v-if="discountObj">{{discountObj.Type === 1 ? discountObj.Value * 10 + `折(-￥${fullOrderActivit})` : '-'+ discountObj.Value +'元'}}</span>
           <span v-else>无</span>
         </div>
         <div class="orderInfo-center-line"></div>

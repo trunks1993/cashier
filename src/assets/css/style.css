@@ -735,12 +735,10 @@ button:hover{
 }
 .singleList .section{
 	padding: 0 20px;
-	/*position: absolute;*/
     width: 100%;
     overflow: auto;
     padding-bottom: 20px;
-    /*top: 125px;*/
-    /*bottom: 0;*/
+    height: calc(100% - 131px);
     margin-top: 20px;
 }
 .singleList .section li.list{
@@ -889,6 +887,12 @@ button:hover{
 	display: block;width:100%;
 	margin:10px 0;font-size:14px;
 	font-weight:bold;
+	overflow: hidden;
+}
+.skuchange label span{
+	float: right;
+	color:#999;
+	font-weight: 500;
 }
 .skuSubmit.mu-raised-button{
 	display:block;
@@ -1093,13 +1097,13 @@ button:hover{
 	cursor:pointer;
 }
 .pay_guide,.pro_detail{
-	position: absolute;
+	/*position: absolute;*/
     width: 100%;
     height: 100%;
     overflow: auto;
-    top: 0;
-    left: 0;
-    padding-top: 125px;
+    /*top: 0;
+    left: 0;*/
+    /*padding-top: 125px;*/
 }
 .pay_guide ul{
 	width:98%;margin:auto;
@@ -1871,12 +1875,12 @@ button:hover{
 	color:#212121;
 }
 .mu-list.turnover_list{
-	position:absolute;
-	height:100%;
-	width:100%;
-	padding-top:383px;
-	overflow:auto;
-	top:0;
+	/*position:absolute;*/
+	/*height:100%;*/
+	/*width:100%;*/
+	/*padding-top:383px;*/
+	/*overflow:auto;*/
+	/*top:0;*/
 }
 .noturnover{
 	text-align:center;

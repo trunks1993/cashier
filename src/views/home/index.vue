@@ -45,7 +45,7 @@
                   <i class="iconfont icon-tianjia1" @click="upDataCartNum(item.skuid,1)"></i>
                 </div>
                 <input v-if="item.productSaleMethod" class="inputControl" type="text" v-model="item.num" @input="weighListInput(item.skuid,2)">
-                <i class="iconfont icon-lajitong" style="color: rgba(193, 193, 193, 1);" @click="delCart(item.skuid)"></i>
+                <i class="iconfont icon-lajitong" style="color: rgba(193, 193, 193, 1);margin-left: 15px" @click="delCart(item.skuid)"></i>
               </div>
             </div>
             <!-- 无库存 -->
@@ -102,7 +102,7 @@
         <div class="main-container-carWrapper-carBox-footer">
           <div class="main-container-carWrapper-carBox-footer-btnGet" @click="getsingle" :style="buttonDisable[1] ? 'pointer-events: none;border: 1px solid rgba(199,177,135,0.1)' : 'border: 1px solid #c7b187'">
             <span :style="buttonDisable[1] ? 'color: rgba(178,178,178,1);' : ''">取单</span>
-            <span v-if="!buttonDisable[1]">{{singleNumber}}</span>
+            <span v-if="!buttonDisable[1]" style="font-weight: bolder;">{{singleNumber}}</span>
           </div>
           <div class="main-container-carWrapper-carBox-footer-btnPush" @click="cancelled" :style="buttonDisable[0] ? 'pointer-events: none;background: rgba(182,182,182,1)' : ''">
             <span>挂单</span>
@@ -286,8 +286,8 @@
               <mu-raised-button v-for="(item,index) in version" :key="index" :label="item.value" @click="skuchange($event,item.skuId,'version')" :class="classObject(item.skuId,'version')" />
             </div>
           </div>
-          <div class="skurow">
-            <label>数量</label>
+          <div class="skurow"> 
+            <label>数量 <span v-if="checkedProSkuStock>-1">库存:{{checkedProSkuStock}}</span></label>
             <div class="change" v-if="checkedProduct.productSaleMethod==0">
               <i class="iconfont icon-shanjian" @click="changeSkudiaNum(-1)"></i>
               <span>{{skuSelect.num}}</span>
@@ -327,8 +327,8 @@
             </div>
           </div>
           <div class="skurow">
-            <label>数量</label>
-            <div class="skurow-kg">
+            <label>数量<span>库存:{{(codeProd.storeStock-codeProd.safeStock)}}</span></label>
+            <div class="skurow-kg"> 
               <input type="text" v-focus ref="weighValue" @input="weighInput">
               <span v-if="codeProd.measureUnit">{{codeProd.measureUnit}}</span>
             </div>
@@ -525,7 +525,15 @@ export default {
     hasDiscount() {
       if (!this.$store.getters.userInfo.openDiscounts) this.isShowShopDiscounts = false
       return this.$store.getters.userInfo.openDiscounts
-    }
+    },
+		checkedProSkuStock(){
+			var sku = this.skuSelect.proid+"_"+this.skuSelect.color+"_"+this.skuSelect.size+"_"+this.skuSelect.version;
+			if(this.checkedStock[sku]){
+				  return this.checkedStock[sku].realStock;
+			}else{
+				  return -1;
+			}
+		}
   },
   created: function() {
     this.getUserId();
@@ -576,7 +584,7 @@ export default {
   methods: {
     formatSelDt(selDiscount) {
       if (!selDiscount) return '请选择'
-      else return selDiscount.Type === 1 ? selDiscount.Value * 100 / 10 + "折" : '-' + selDiscount.Value + '元'
+      else return selDiscount.Type === 1 ? selDiscount.Value * 10 + "折" : '-' + selDiscount.Value + '元'
     },
     addSuccess(phone) {
       this.showAddVip = false
@@ -738,6 +746,8 @@ export default {
     //挂单
     cancelled() {
       var member = {}
+      this.$store.dispatch('SetSelCoupon', '')
+      this.$store.dispatch('SetSelCard', '')
       if (this.member) {
         member = this.member;
       } else {
@@ -1113,6 +1123,7 @@ export default {
           this.checkedStock[data.skus[i].baseSKU.id] = data.skus[i];
           this.checkedStock[data.skus[i].baseSKU.id].realStock = data.skus[i].stock - data.skus[i].baseSKU.safeStock;
         }
+				console.log(this.checkedStock); 
         if (data.skus.length > 1) {
           this.color = this.productObject[key].color;
           this.spec.spec1 = this.productObject[key].color.length == 0 ? "" : this.productObject[key].color[0].name;
@@ -1820,7 +1831,7 @@ export default {
                 .icon-tianjia1 {
                   width: 24px;
                   height: 24px;
-                  border: 1px solid rgba(214, 214, 214, 1);
+                  // border: 1px solid rgba(214, 214, 214, 1);
                   background: rgba(199, 177, 135, 1);
                   color: #fff;
                   border-radius: 3px;

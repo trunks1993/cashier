@@ -29,7 +29,7 @@
           <span>{{supplementData.phone}}</span>
         </div>
         <div class="add-container-form-content-item">
-          <span class="realName">姓名</span>
+          <span>姓名</span>
           <el-input v-model="supplementData.realName" clearable size="mini" style="width: 130px"></el-input>
         </div>
         <div class="add-container-form-content-item" v-if="isWechatWay">

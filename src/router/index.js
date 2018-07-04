@@ -40,6 +40,21 @@ export const asyncRouterMap = [
     }]
   },
   {
+    path: '/transcation',
+    redirect: '/transcation/index',
+    component: Layout,
+    children: [{
+      path: '/transcation/index',
+      component: trans,
+      name: '设置',
+      meta: {
+        id: 13011,
+        menuName: '设置',
+        imgUrl: require('@/assets/images/menuIcons/shezhi.png')
+      }
+    }]
+  },
+  {
     path: '/chargeMoney',
     redirect: '/chargeMoney/index',
     component: Layout,

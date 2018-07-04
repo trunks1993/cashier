@@ -30,6 +30,9 @@
       <CardAndTrade :cardAndTradeInfo="cardAndTradeInfo" @goBack='goBack' v-if="componentStatus === 2"></CardAndTrade>
       <AddVip @closeAdd="closeAdd" @supplementEditor="supplementEditor" v-if="componentStatus === 3"></AddVip>
       <SupplementEditor :supplementData="supplementData" @goBack='goBack' @success='addSuccess' v-if="componentStatus === 4"></SupplementEditor>
+      <div class="rightWrapper-noVip" v-if="componentStatus === 0">
+        <img :src="novip">
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +42,7 @@ import Editor from './Editor'
 import CardAndTrade from './CardAndTrade'
 import AddVip from './AddVip'
 import SupplementEditor from './SupplementEditor'
-
+import novip from '@/assets/images/vipManager/novip.png'
 export default {
   components: {
     Editor,
@@ -49,6 +52,7 @@ export default {
   },
   data() {
     return {
+      novip,
       vipList: [],
       queryFilterForm: {
         key: '',
@@ -300,6 +304,12 @@ export default {
   width: calc(100% - 498px);
   height: 100%;
   background: #F2F2F2;
+  &-noVip {
+    align-items: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 </style>
