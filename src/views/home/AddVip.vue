@@ -1,12 +1,13 @@
 <template>
   <div class="add-container">
+    <img :src="xhome" style="position: absolute; right: 20px; top: 20px;" @click="close">
     <div class="add-container-qrBox" v-if="!supplementStatus">
       <div class="add-container-qrBox-header">
         <div>{{phone}}</div>
         <div>还不是会员，快速办理，享<img style="margin: 0 10px;" src="../../assets/images/vipManager/vip.png">等级权益</div>
       </div>
       <img style="margin: auto;display: block;margin-top: 40px;" src="../../assets/images/vipManager/line.png">
-      <div style="margin-top: 89px;text-align: center;font-size:18px;">扫码绑定微信开通</div>
+      <div class="add-container-qrBox-qrTitle">扫码绑定微信开通</div>
       <div class="add-container-qrBox-qrWrappper">
         <img :src="'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' + qrCodeImg">
       </div>
@@ -15,9 +16,9 @@
       </div>
     </div>
     <div class="add-container-form" v-else>
-      <div class="add-container-form-header">
+      <!-- <div class="add-container-form-header">
         <img :src="xhome" @click="close">
-      </div>
+      </div> -->
       <div class="add-container-form-content">
         <div class="add-container-form-content-header">
           <div class="add-container-form-content-header-shape"></div>
@@ -119,7 +120,9 @@ export default {
       })
     },
     close() {
-      this.supplementStatus = false
+      cancelRegister(this.phone).then(res => {
+        this.$emit('cancel')
+      })
     },
     toSupplement(isWechatWay) {
       window.clearInterval(this.interval)
@@ -287,6 +290,14 @@ export default {
     }
   }
   &-qrBox {
+    &-qrTitle {
+      margin-top: 89px;
+      text-align: center;
+      font-size:18px;
+      @media screen and(max-width: 1440px) {
+        margin-top: 40px;
+      }
+    }
     &-header {
       width: 346px;
       margin: auto;
@@ -317,6 +328,9 @@ export default {
       color: #C7B187;
       text-align: center;
       margin-top: 100px;
+      @media screen and(max-width: 1440px) {
+        margin-top: 50px;
+      }
     }
   }
   &-dailog {

@@ -136,6 +136,10 @@ export default {
 .editor-container {
   height: 100%;
   padding: 42px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   &-header {
     width: 100%;
     border: 10px solid rgba(0, 0, 0, 0.1);

@@ -1326,32 +1326,32 @@ export default {
       goOrderData = {
         productSKU: productSKU,
         userId: userId,
-        cardId: self.cardId,
-        activityId: self.activityId
+        cardId: self.selCard.cardId || 0,
+        activityId: self.selCoupon.activityId || 0
       }
       orderSubmitByCart(goOrderData).then(function(response) {
-        carts = self.cart;
-        cardId = self.cardId;
+        carts = self.cart
+        cardId = self.cardId
         if (response.data.success) {
-          subdata = response.data;
+          subdata = response.data
           indexData = { member: self.member, checkedProid: self.checkedProid }
-          self.$router.push({ path: '/order', query: { item: self.selDiscount } });
-          self.loading = false;
-          var ts = "";
+          self.$router.push({ path: '/order', query: { item: self.selDiscount } })
+          self.loading = false
+          var ts = ""
           if (response.data.fixedPriceBeyondMaxCount) {
-            ts += "部分商品超过限购数量，恢复原价；";
+            ts += "部分商品超过限购数量，恢复原价；"
           }
           if (response.data.BaskedRebatePrice) {
-            ts += "部分商品价格已根据会员特权调整；";
+            ts += "部分商品价格已根据会员特权调整；"
           }
           if (ts != "") {
-            self.$toast(ts);
+            self.$toast(ts)
           }
         } else {
-          self.$toast(response.data.msg);
-          self.loading = false;
+          self.$toast(response.data.msg)
+          self.loading = false
           if (response.data.msg == "部分商品库存不足") {
-            self.getSkuStock();
+            self.getSkuStock()
           }
         }
       })

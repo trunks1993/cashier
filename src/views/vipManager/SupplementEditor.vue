@@ -273,11 +273,11 @@ export default {
 .supplement-container {
   height: 100%;
   padding: 30px;
-  overflow-y: scroll;
   position: relative;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  // overflow-y: scroll;
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
   &-header {
     position: relative;
     width: 100%;
@@ -434,12 +434,12 @@ export default {
     &-item2 {
       display: inline-block;
       vertical-align: top;
+      margin-right: 30px;
       &-cardContent {
         position: relative;
         padding: 20px 23px;
         width: 272px;
         height: 146px;
-        // background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
         & div:nth-child(1) {
           color: #fff;
           font-size: 20px;
@@ -500,6 +500,9 @@ export default {
   justify-content: space-between;
   margin-top: 100px;
   padding: 0 100px;
+  @media screen and(max-width: 1440px) {
+    margin-top: 20px;
+  }
   &-left {
     width: 270px;
     &-header {
@@ -530,9 +533,15 @@ export default {
     width: 284px;
     &-selBox {
       height: 393px;
+      @media screen and(max-width: 1440px) {
+        height: 340px;
+      }
       margin-top: 27px;
-      overflow-y: scroll;
       padding-left: 10px;
+      overflow-y: scroll;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       &-item {
         background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
         padding: 20px 23px;

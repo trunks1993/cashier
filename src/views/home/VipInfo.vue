@@ -215,7 +215,7 @@ export default {
     width: 440px;
     height: 125px;
     border: 10px solid rgba(0, 0, 0, 0.1);
-    padding: 20px 48px;
+    padding: 20px 0 20px 48px;
     &-name {
       font-size: 20px;
       line-height: 20px;
@@ -251,6 +251,7 @@ export default {
       }
       &-right {
         margin-left: 20px;
+        width: 100%;
         &-capital {
           color: #666666;
           font-size: 16px;
@@ -294,12 +295,12 @@ export default {
   &-item1 {
     display: inline-block;
     vertical-align: top;
+    margin-right: 30px;
     &-cardContent {
       position: relative;
       padding: 20px 23px;
       width: 272px;
       height: 146px;
-      // background: url(../../assets/images/vipManager/levelcard.png) no-repeat;
       & div:nth-child(1) {
         color: #fff;
         font-size: 20px;
@@ -361,12 +362,12 @@ export default {
   &-item2 {
     display: inline-block;
     vertical-align: top;
+    margin-right: 30px;
     &-cardContent {
       position: relative;
       padding: 20px 23px;
       width: 272px;
       height: 146px;
-      // background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
       & div:nth-child(1) {
         color: #fff;
         font-size: 20px;
@@ -381,15 +382,6 @@ export default {
         top: 1px;
         right: 1px;
       }
-      // & div:nth-child(2) {
-      //   width: 24px;
-      //   height: 24px;
-      //   border-radius: 100%;
-      //   border: 1px solid rgba(255, 255, 255, 0.5);
-      //   position: absolute;
-      //   top: 1px;
-      //   right: 1px;
-      // }
       img {
         width: 24px;
         height: 24px;

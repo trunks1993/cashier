@@ -18,6 +18,8 @@ import '@/public/printer.js'
 import '@/public/usbprint.js'
 import VueQriously from 'vue-qriously'
 import ElementUI from 'element-ui'
+import MsgBox from '@/components/MsgBox'
+
 import 'element-ui/lib/theme-chalk/index.css'
 import './styles/element-variables.scss' //自定义颜色
 import '@/styles/index.scss'
@@ -28,6 +30,7 @@ Vue.use(Toast)
 Vue.use(VueQriously)
 Vue.use(tracking)
 Vue.use(ElementUI)
+Vue.use(MsgBox)
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts

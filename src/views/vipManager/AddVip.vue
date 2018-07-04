@@ -1,11 +1,12 @@
 <template>
   <div class="add-container">
+    <img src="../../assets/images/vipManager/xhome.png" @click="close" style="position: absolute; right: 20px; top: 20px;">
     <div class="add-container-addBox" v-if="!showQrScanPage">
-      <div class="add-container-addBox-closeBox">
+      <!-- <div class="add-container-addBox-closeBox">
         <div class="add-container-addBox-closeBox-close" @click="close">
           <img src="../../assets/images/menuIcons/x.png">
         </div>
-      </div>
+      </div> -->
       <div class="add-container-addBox-wrapper">
         <div class="add-container-addBox-wrapper-header">
           <div class="add-container-addBox-wrapper-header-wall"></div>
@@ -53,7 +54,7 @@
         <div>还不是会员，快速办理，享<img style="margin: 0 10px;" src="../../assets/images/vipManager/vip.png">等级权益</div>
       </div>
       <img style="margin: auto;display: block;margin-top: 40px;" src="../../assets/images/vipManager/line.png">
-      <div style="margin-top: 89px;text-align: center;font-size:18px;">扫码绑定微信开通</div>
+      <div class="add-container-qrBox-qrTitle">扫码绑定微信开通</div>
       <div class="add-container-qrBox-qrWrappper">
         <img :src="'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' + qrCodeImg">
       </div>
@@ -158,21 +159,8 @@ export default {
   height: 100%;
   position: relative;
   &-addBox {
-    &-closeBox {
-      padding: 24px 29px 85px 0;
-      position: relative;
-      &-close {
-        width: 35px;
-        height: 35px;
-        border-radius: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        right: 29px;
-      }
-    }
+    position: relative;
+    top: 90px;
     &-wrapper {
       width: 330px;
       margin: auto;
@@ -269,11 +257,19 @@ export default {
     }
   }
   &-qrBox {
+    &-qrTitle {
+      margin-top: 89px;
+      text-align: center;
+      font-size: 18px;
+      @media screen and(max-width: 1440px) {
+        margin-top: 40px;
+      }
+    }
     &-header {
       width: 346px;
       margin: auto;
       text-align: center;
-      margin-top: 50px;
+      padding-top: 50px;
       & div:nth-child(1) {
         color: #C7B187;
         font-size: 18px;
@@ -299,6 +295,9 @@ export default {
       color: #C7B187;
       text-align: center;
       margin-top: 100px;
+      @media screen and(max-width: 1440px) {
+        margin-top: 50px;
+      }
     }
   }
   &-dailog {
