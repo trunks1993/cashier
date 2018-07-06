@@ -463,7 +463,7 @@ export function cancelRegister(phone) {
 
 export function getShopStoredSet() {
   return request({
-    url: '/admin/Capital/GetShopStoredSet',
+    url: '/SellerAdmin/Cashier/GetShopStoredSet',
     method: 'get'
   })
 }

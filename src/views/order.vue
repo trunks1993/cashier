@@ -39,7 +39,7 @@
         </div>
         <div class="orderInfo-center-item" v-if="this.$store.getters.userInfo.openDiscounts">
           <div>{{!discountObj? '整单优惠' : discountObj.Type === 1 ? '整单折扣' : '整单减价'}}</div>
-          <span v-if="discountObj">{{discountObj.Type === 1 ? discountObj.Value * 10 + `折(-￥${fullOrderActivit})` : '-'+ discountObj.Value +'元'}}</span>
+          <span v-if="discountObj">{{discountObj.Type === 1 ? (discountObj.Value * 10).toFixed(1) + `折(-￥${fullOrderActivit})` : '-'+ discountObj.Value +'元'}}</span>
           <span v-else>无</span>
         </div>
         <div class="orderInfo-center-line"></div>
@@ -295,8 +295,9 @@ export default {
 	    const { cash, capital,isIntegral,payType } = this
 			var endMoney = this.payType == "xj"?(this.capital*100+this.cash*100)/100:this.startMoney;
 	    return {
+				integral:this.integral,
 	      startMoney:this.startMoney.toFixed(2),
-	      activities:((this.totalAll.moneyTotal)*1-(this.startMoney)*1).toFixed(2),
+	      activities:((this.totalAll.moneyTotal)*1-(this.startMoney)*1-(this.integral)*1).toFixed(2),
 	      giveChange:this.payType == "xj"?this.giveChange:0,
 	      endMoney:endMoney.toFixed(2)
 	    }
@@ -414,7 +415,8 @@ export default {
             this.capital = subdata.orderModel.capital;
           }
         }
-        this.maxCapital = this.capital;
+				this.capital = this.capital.toFixed(2);
+        this.maxCapital = this.capital; 
       }
       this.priceCalculation();
 

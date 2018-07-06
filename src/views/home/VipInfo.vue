@@ -109,7 +109,7 @@
     </div>
     <div class="card-header" v-if="vipInfo.coupons.length && (showType === 0 || showType === 2)">
       <span></span>
-      <span>优惠券({{vipInfo.memCard.length }})</span>
+      <span>优惠券({{vipInfo.coupons.length }})</span>
     </div>
     <div class="trade" v-if="showType === 0 || showType === 2">
       <template v-if="vipInfo.coupons.length > 0">
@@ -128,7 +128,7 @@
           </div>
         </div>
       </template>
-      <div v-else style="text-align: center;">
+      <div v-if="showType === 2 && vipInfo.coupons.length === 0" style="text-align: center;">
         <div>
           <img :src="noTick">
         </div>
@@ -314,6 +314,11 @@ export default {
       padding: 20px 23px;
       width: 272px;
       height: 146px;
+      background-size: 100% 100%!important;
+      @media screen and(max-width: 1440px) {
+        width: 230px;
+        height: 130px;
+      }
       & div:nth-child(1) {
         color: #fff;
         font-size: 20px;
@@ -381,6 +386,11 @@ export default {
       padding: 20px 23px;
       width: 272px;
       height: 146px;
+      background-size: 100% 100%!important;
+      @media screen and(max-width: 1440px) {
+        width: 230px;
+        height: 130px;
+      }
       & div:nth-child(1) {
         color: #fff;
         font-size: 20px;

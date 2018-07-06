@@ -18,6 +18,7 @@
   </div>
 </template>
 <script>
+import { sendTosecondaryDisplay } from '@/public/sendToSecondaryDisplay.js';
 import { mapGetters } from 'vuex'
 import Bus from '@/utils/bus'
 
@@ -53,6 +54,7 @@ export default {
       if (this.userInfo.isCashBegin && ishaveCashier && this.userInfo.openCashierShift) {
         this.exitDailog = true;
       } else {
+				sendTosecondaryDisplay([], null, null, 0, this);
         this.exitSystem();
       }
     },

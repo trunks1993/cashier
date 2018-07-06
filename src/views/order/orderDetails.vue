@@ -69,7 +69,7 @@
                   </div>
               </div>
               <div class="orderDetailsBtn">
-                  <mu-raised-button v-if="isCashBegin&&(orderDetails.orderStatus==6||orderDetails.orderStatus==2||orderDetails.orderStatus==4)&&orderDetails.newOrderItem.length!=refundNum&&!orderDetails.isOutOfSale" @click="refundDetails" label="发起售后" class="button"/>
+                  <mu-raised-button v-if="IsRefund&&(orderDetails.orderStatus==6||orderDetails.orderStatus==2||orderDetails.orderStatus==4)&&!refundLength(orderDetails.newOrderItem)" @click="refundDetails" label="发起售后" class="button"/>
                   <mu-raised-button label="打印小票" @click="print" class="button"/>
               </div>
               <pcPrinter ref="printer"></pcPrinter>
@@ -88,7 +88,8 @@ export default {
               orderDetails:null,
               refundNum:0,
               refundMoney:0,
-              isCashBegin:this.$store.getters.iscashier
+              isCashBegin:this.$store.getters.iscashier,
+							isOpenCashierShift:this.$store.getters.userInfo.openCashierShift
         }
   },
   created:function(){
@@ -96,9 +97,31 @@ export default {
     this.getShopOrderDetail(this.$route.query.id);
     this.getRefundInfo(this.$route.query.id);
   },
+	computed: {
+		IsRefund() {
+			var ist = false;
+			if(!this.isOpenCashierShift){
+					ist = true;
+			} else{
+				 if(this.isCashBegin){
+						 ist = true;
+				 }
+			}
+			return ist;
+		}
+	},
   mounted () {
   },
   methods:{
+			refundLength: function (obj) {
+					var x = 0;
+					for (var i = 0; i < obj.length; i++) {
+							if (obj[i].refundStatus) {
+									x++;
+							}
+					}
+					return x == obj.length;
+			},
       refundDetails:function(){
            this.$router.push({
               path: '/launchDetails/'+this.$route.query.id,

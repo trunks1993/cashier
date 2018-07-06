@@ -12,7 +12,7 @@
         </div>
         <div class="mainBox-left-item" v-if="supplementData.isWechatWay">
           <span>头像</span>
-          <img :src="supplementData.headimgurl">
+          <img :src="supplementData.photo" width="60px" style="position: absolute;right: 0">
         </div>
         <div class="mainBox-left-item">
           <span>手机号</span>
@@ -24,7 +24,7 @@
         </div>
         <div class="mainBox-left-item" v-if="supplementData.isWechatWay">
           <span>微信名</span>
-          <span>{{supplementData.nickname}}</span>
+          <span>{{supplementData.nickName}}</span>
         </div>
         <div class="mainBox-left-item">
           <span>性别</span>
@@ -35,7 +35,7 @@
         </div>
         <div class="mainBox-left-item">
           <span>生日日期</span>
-          <el-date-picker size="mini" style="width: 130px;" v-model="supplementData.birthDay" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+          <el-date-picker size="mini" style="width: 130px;" v-model="supplementData.birthday" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
           </el-date-picker>
         </div>
       </div>
@@ -171,6 +171,12 @@
         </div>
       </div>
     </div>
+    <div class="loading" v-show="loading" style="left: 0">
+      <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -179,6 +185,7 @@ export default {
   props: ['supplementData'],
   data() {
     return {
+      loading: false,
       cardList: '',
       selCardList: [],
       indexArr1: [],
@@ -240,10 +247,11 @@ export default {
       this.showDailog = true
     },
     submitSup() {
-      if (!this.supplementData.realName.replace(/(^\s*)|(\s*$)/g, "")) {
+      if (!this.supplementData.realName || !this.supplementData.realName.replace(/(^\s*)|(\s*$)/g, "")) {
         this.$toast('姓名不能为空')
         return
       }
+      this.loading = true
       cashierRegister({
         phone: this.supplementData.phone,
         sex: this.supplementData.sex,
@@ -255,8 +263,11 @@ export default {
         })
       }).then(res => {
         const data = res.data
+        this.loading = false
         if (data.success) {
           this.$emit('success')
+        } else {
+          this.$toast(data.msg)
         }
       })
     }
@@ -389,7 +400,11 @@ export default {
         padding: 20px 23px;
         width: 272px;
         height: 146px;
-        // background: url(../../assets/images/vipManager/levelcard.png) no-repeat;
+        background-size: 100% 100%!important;
+        @media screen and(max-width: 1440px) {
+          width: 230px;
+          height: 130px;
+        }
         img {
           position: absolute;
           right: 10px;
@@ -444,6 +459,11 @@ export default {
         padding: 20px 23px;
         width: 272px;
         height: 146px;
+        background-size: 100% 100%!important;
+        @media screen and(max-width: 1440px) {
+          width: 230px;
+          height: 130px;
+        }
         & div:nth-child(1) {
           color: #fff;
           font-size: 20px;
@@ -530,6 +550,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       margin-top: 39px;
+      position: relative;
       padding-left: 10px;
     }
   }

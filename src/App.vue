@@ -151,7 +151,7 @@ export default {
     }
   },
   beforeCreate() {
-    // mockLogin('swgyd:test', '123456').then(res => {
+    // mockLogin('gmc', '123456').then(res => {
     //   const data = res.data
     //   document.cookie = 'Himall-SellerManager = ' + data.userId
     // })

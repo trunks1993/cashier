@@ -2,8 +2,8 @@ import {SaveCashierViceScreen} from '@/api';
 var self = this;
 function sendTosecondaryDisplay(cart,member,payment,status,w){
 
-// 			var ua = navigator.userAgent;
-// 			if(ua.indexOf("S2")==-1) return;
+			var ua = navigator.userAgent;
+			if(ua.indexOf("S2")==-1) return;
   	  var data = {
   	  	  status:status,
   	  	  cart:cart,
@@ -13,9 +13,9 @@ function sendTosecondaryDisplay(cart,member,payment,status,w){
 					shopName:w.$store.getters.userInfo.shopName,
   	  }
 			
-			SaveCashierViceScreen({data:JSON.stringify(data),deviceId:222}).then(function(response) {
-					
-			});
+// 			SaveCashierViceScreen({data:JSON.stringify(data),deviceId:123}).then(function(response) {
+// 					
+// 			});
 			function plusReady(){
 				  var uuid = plus.storage.getItem("uuid");
 					// alert("uuid:"+uuid);

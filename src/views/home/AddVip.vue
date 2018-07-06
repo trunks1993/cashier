@@ -1,10 +1,11 @@
 <template>
   <div class="add-container">
+    <MsgBox :type="msgBoxType" :content="msgBoxContent" @iknown="iknown" v-if="showMsgBox"></MsgBox>
     <img :src="xhome" style="position: absolute; right: 20px; top: 20px;" @click="close">
     <div class="add-container-qrBox" v-if="!supplementStatus">
       <div class="add-container-qrBox-header">
         <div>{{phone}}</div>
-        <div>还不是会员，快速办理，享<img style="margin: 0 10px;" src="../../assets/images/vipManager/vip.png">等级权益</div>
+        <div>还不是会员，快速办理，享<span style="color: #C7B187;">{{cardName}}</span>权益</div>
       </div>
       <img style="margin: auto;display: block;margin-top: 40px;" src="../../assets/images/vipManager/line.png">
       <div class="add-container-qrBox-qrTitle">扫码绑定微信开通</div>
@@ -16,9 +17,6 @@
       </div>
     </div>
     <div class="add-container-form" v-else>
-      <!-- <div class="add-container-form-header">
-        <img :src="xhome" @click="close">
-      </div> -->
       <div class="add-container-form-content">
         <div class="add-container-form-content-header">
           <div class="add-container-form-content-header-shape"></div>
@@ -34,7 +32,7 @@
         </div>
         <div class="add-container-form-content-item" v-if="isWechatWay">
           <span>微信名</span>
-          <span>{{supplementData.nickname}}</span>
+          <span>{{supplementData.nickName}}</span>
         </div>
         <div class="add-container-form-content-item">
           <span>性别</span>
@@ -45,7 +43,7 @@
         </div>
         <div class="add-container-form-content-item">
           <span>生日日期</span>
-          <el-date-picker size="mini" style="width: 130px;" v-model="supplementData.birthDay" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+          <el-date-picker size="mini" style="width: 130px;" v-model="supplementData.birthday" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
           </el-date-picker>
         </div>
         <div class="add-container-form-content-btn">
@@ -61,6 +59,12 @@
         <div class="add-container-dailog-mainBox-btn" @click="hasRegist = false">我知道了</div>
       </div>
     </div>
+    <div class="loading" v-show="loading" style="left: 0">
+      <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -68,16 +72,20 @@ import { qrCode, polling, cashierRegister, getUserInfo, cancelRegister } from '@
 import xhome from '@/assets/images/vipManager/xhome.png'
 
 export default {
-  props: ['phone'],
+  props: ['phone', 'cardName'],
   data() {
     return {
+      loading: false,
       xhome,
       qrCodeImg: '',
       interval: '',
       hasRegist: false,
       supplementStatus: false,
       isWechatWay: false,
-      supplementData: ''
+      supplementData: '',
+      showMsgBox: false,
+      msgBoxContent: '',
+      msgBoxType: 'warning'
     }
   },
   created() {
@@ -98,12 +106,20 @@ export default {
               if (res == 3 || res == 1) {
                 this.toSupplement(true)
               } else if (res == 2) {
-                this.$toast('该微信已绑定手机号，请解绑后重试！')
+                this.showMsgBox = true
+                this.msgBoxContent = '该微信已绑定手机号，请解绑后重试！'
               }
             })
           }, 2000)
         }
       })
+    },
+    iknown() {
+      if (this.interval) {
+        window.clearInterval(this.interval)
+        this.submitDiscount()
+      }
+      this.showMsgBox = false
     },
     polling() {
       return new Promise((resolve, reject) => {
@@ -132,23 +148,23 @@ export default {
           const data = res.data
           if (data.success) {
             this.supplementData = data.data
-            this.supplementData.isWechatWay = isWechatWay
+            // this.supplementData.isWechatWay = isWechatWay
             this.supplementData.phone = this.phone
           }
         })
       } else {
         this.supplementData = {
           phone: this.phone,
-          realName: '',
-          birthDay: '',
           sex: 1
         }
       }
       this.supplementStatus = true
     },
     submitSup() {
+      this.loading = true
       cashierRegister(this.supplementData).then(res => {
         const data = res.data
+        this.loading = false
         if (data.success) {
           this.$emit('success', this.supplementData.phone)
         }
@@ -293,13 +309,13 @@ export default {
     &-qrTitle {
       margin-top: 89px;
       text-align: center;
-      font-size:18px;
+      font-size: 18px;
       @media screen and(max-width: 1440px) {
         margin-top: 40px;
       }
     }
     &-header {
-      width: 346px;
+      width: 370px;
       margin: auto;
       text-align: center;
       margin-top: 50px;

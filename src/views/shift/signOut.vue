@@ -66,6 +66,7 @@
 import pcPrinter from "@/views/pcPrinter"
 import '@/assets/css/assembly.css';
 import '@/assets/css/shift.css';
+import { sendTosecondaryDisplay } from '@/public/sendToSecondaryDisplay.js';
 import { setCacherShiftEnd, getWatchManStatistics } from '@/api'
 export default {
     components:{pcPrinter},
@@ -97,12 +98,12 @@ export default {
                if(autoPrint){
                   self.print();
                }
+				       sendTosecondaryDisplay([], null, null, 0, self);
                setTimeout(function(){
                   window.location.href = "/sellerAdmin/Cashier/LogOut";
                },200)
            }else{
-
-               this.$toast(response.data.msg);
+               self.$toast(response.data.msg);
            }
         });
       },

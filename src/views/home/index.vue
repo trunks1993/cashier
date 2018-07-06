@@ -102,7 +102,7 @@
         <div class="main-container-carWrapper-carBox-footer">
           <div class="main-container-carWrapper-carBox-footer-btnGet" @click="getsingle" :style="buttonDisable[1] ? 'pointer-events: none;border: 1px solid rgba(199,177,135,0.1)' : 'border: 1px solid #c7b187'">
             <span :style="buttonDisable[1] ? 'color: rgba(178,178,178,1);' : ''">取单</span>
-            <span v-if="!buttonDisable[1]" style="font-weight: bolder;">{{singleNumber}}</span>
+            <span style="font-weight: bolder;" :style="buttonDisable[1] ? 'color: rgba(178,178,178,1);' : ''">{{singleNumber}}</span>
           </div>
           <div class="main-container-carWrapper-carBox-footer-btnPush" @click="cancelled" :style="buttonDisable[0] ? 'pointer-events: none;background: rgba(182,182,182,1)' : ''">
             <span>挂单</span>
@@ -143,9 +143,10 @@
           <div class="main-container-productWrapper-productBox-item-content">
             <span>{{item.name}}</span>
             <span>{{item.joinFixedPrice?item.marketPrice:item.salePrice | rmb}}{{item.measureUnit&&item.measureUnit!='' ? '/'+item.measureUnit : ''}}</span>
-            <div style="position: absolute;right: 4px;bottom: 8px;font-size: 12px;">
+            <span>可售库存: {{item.storeStock}}</span>
+            <!-- <div style="position: absolute;right: 4px;bottom: 8px;font-size: 12px;">
               可售库存: {{item.storeStock}}
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -197,7 +198,7 @@
       </div>
     </div>
     <VipInfo :showType="showType" @close="showVipInfo = false" v-if="showVipInfo"></VipInfo>
-    <AddVip :phone="phone" @success="addSuccess" @cancel="addCancel" v-if="showAddVip"></AddVip>
+    <AddVip :phone="phone" :cardName="cardName" @success="addSuccess" @cancel="addCancel" v-if="showAddVip"></AddVip>
     <div class="sideBar-container-addBox" v-if="addStatus">
       <div class="sideBar-container-addBox-wrapper">
         <img src="../../assets/images/guanbi.png" style="position: absolute;right: 0;top: -50px;" @click="addStatus = false,inputVal = ''">
@@ -453,6 +454,7 @@ export default {
       cardDiscount: '',
       moneyDiscount: '',
       phone: '',
+      cardName: '',
       showAddVip: false,
       inputType: false,
       // old
@@ -541,6 +543,7 @@ export default {
     this.member = memberData;
     // if (document.getElementById("back-menu")) document.getElementById("back-menu").style.display = "none";
     // if (document.getElementById("menu-nav")) document.getElementById("menu-nav").style.display = "block";
+		this.cancellNumber();
     this.cardId = cardId;
     this.cart = carts;
 
@@ -585,7 +588,7 @@ export default {
   methods: {
     formatSelDt(selDiscount) {
       if (!selDiscount) return '请选择'
-      else return selDiscount.Type === 1 ? selDiscount.Value * 10 + "折" : '-' + selDiscount.Value + '元'
+      else return selDiscount.Type === 1 ? (selDiscount.Value * 10).toFixed(1) + "折" : '-' + selDiscount.Value + '元'
     },
     addSuccess(phone) {
       this.showAddVip = false
@@ -598,11 +601,12 @@ export default {
         }
       })
     },
-    noMenber(phone) {
+    noMenber(phone, cardName) {
       this.isShowShopDiscounts = false
       this.showVipInfo = false
       this.showAddVip = true
       this.phone = phone
+      this.cardName = cardName
     },
     clearDiscount(type) {
       if (type === 1) {
@@ -667,6 +671,7 @@ export default {
       this.showVipInfo = false
       this.$store.dispatch('SetSelCard', '')
       this.$store.dispatch('SetSelCoupon', '')
+      this.$store.dispatch('SetSelDiscount', '')
       this.member = null;
       memberData = null;
     },
@@ -757,6 +762,7 @@ export default {
       setStore(this.cart, new Date(), member, this.shopId);
       this.member = null;
       this.cart = [];
+			carts = [];
       this.cancellNumber();
     },
     //挂单取单
@@ -769,9 +775,9 @@ export default {
     cancellNumber() {
       if (getStore(this.shopId).datelist) {
         this.singleNumber = getStore(this.shopId).datelist.length;
-        if (this.singleNumber > 0) {
-          this.buttonDisable[1] = false
-        }
+//         if (this.singleNumber > 0) {
+//           this.buttonDisable[1] = false
+//         }
       }
     },
     //删除某个挂单
@@ -857,7 +863,7 @@ export default {
           }
         }
       }).catch(error => {
-        alert(1)
+
       })
     },
     toFace: function() {
@@ -1560,7 +1566,6 @@ export default {
   },
   watch: {
     //是否能挂单
-
     cart: {
       handler(newValue, oldValue) {
         if (this.cart.length > 0 && this.singleNumber < 10) {
@@ -1571,6 +1576,7 @@ export default {
           this.singleOver = "(最多可挂10单)";
         }
         if (this.cart.length > 0) {
+					
           this.buttonDisable[1] = true;
         } else {
           this.buttonDisable[1] = false;
@@ -1883,6 +1889,7 @@ export default {
               width: 100px;
               color: #C7B187!important;
               font-size: 14px;
+              font-weight: bolder;
             }
             i {
               color: #C7B187;
@@ -2183,9 +2190,9 @@ export default {
 .sideBar-container-addBox {
   position: fixed;
   background: rgba(0, 0, 0, 0.4);
-  top: 51px;
+  top: 0;
   right: 0;
-  left: 36%;
+  left: 0;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   bottom: 0;
   z-index: 1010;

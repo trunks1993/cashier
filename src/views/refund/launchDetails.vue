@@ -48,7 +48,7 @@
                                              <i>￥</i>
                                              <input type="text" :value="item.refundAmout"  v-money @change="chanageInputMoney($event,item.skuId)" >
                                         </div>
-                                        <p>最多能退<em>￥{{item.enabledRefundAmount}}</em> <span v-if="item.enabledRefundIntegral">积分{{item.enabledRefundIntegral | rmb}}</span>,可编辑</p>
+                                        <p>最多能退<em>￥{{item.realTotalPrice}}</em> <span v-if="item.enabledRefundIntegral">积分{{item.enabledRefundIntegral | rmb}}</span>,可编辑</p>
                                     </div>
                                </div>
                              </div>
@@ -171,7 +171,7 @@ export default {
         this.newOrderItem[i].num = val;
         el.target.value = val;
         if(this.newOrderItem[i].num == this.newOrderItem[i].maxNum){
-           this.newOrderItem[i].refundAmout = this.newOrderItem[i].enabledRefundAmount;
+           this.newOrderItem[i].refundAmout = this.newOrderItem[i].realTotalPrice;
         }else{
            this.newOrderItem[i].refundAmout = (val*this.newOrderItem[i].realPrice).toFixed(2);
         }
@@ -180,7 +180,7 @@ export default {
         var i = this.returnCheckPro(id);
         var val =el.target.value==""?0:el.target.value;
         if(this.newOrderItem[i].num == this.newOrderItem[i].maxNum){
-           var max = this.newOrderItem[i].enabledRefundAmount;
+           var max = this.newOrderItem[i].realTotalPrice;
         }else{
            var max = (this.newOrderItem[i].num*this.newOrderItem[i].realPrice).toFixed(2);
         }
@@ -242,7 +242,7 @@ export default {
            if(type == 1){
                for(var i = 0;i<this.newOrderItem.length;i++){
                     this.newOrderItem[i].num = this.newOrderItem[i].maxNum;
-                    this.newOrderItem[i].refundAmout = this.newOrderItem[i].enabledRefundAmount;
+                    this.newOrderItem[i].refundAmout = this.newOrderItem[i].realTotalPrice;
                }
            }
            console.log(this.newOrderItem);
@@ -261,8 +261,8 @@ export default {
                         res.data.newOrderItem[i]['checked'] = false;
                      }
                      res.data.newOrderItem[i]['maxNum'] = res.data.newOrderItem[i].num;
-                     res.data.newOrderItem[i]['realPrice'] = (res.data.newOrderItem[i].enabledRefundAmount/res.data.newOrderItem[i].num).toFixed(2);
-                     res.data.newOrderItem[i]['refundAmout'] =res.data.newOrderItem[i].enabledRefundAmount;
+                     res.data.newOrderItem[i]['realPrice'] = (res.data.newOrderItem[i].realTotalPrice/res.data.newOrderItem[i].num).toFixed(2);
+                     res.data.newOrderItem[i]['refundAmout'] =res.data.newOrderItem[i].realTotalPrice;
                      if(res.data.paymentTypeName=="预存款支付"){
                            self.refundWay = "预存款";
                      }else{
@@ -297,7 +297,7 @@ export default {
             if(this.newOrderItem[i].num + add>0&&this.newOrderItem[i].num + add<=this.newOrderItem[i].maxNum){
                this.newOrderItem[i].num = this.newOrderItem[i].num + add;
                if(this.newOrderItem[i].num == this.newOrderItem[i].maxNum){
-                   this.newOrderItem[i].refundAmout = this.newOrderItem[i].enabledRefundAmount;
+                   this.newOrderItem[i].refundAmout = this.newOrderItem[i].realTotalPrice;
                }else{
                    this.newOrderItem[i].refundAmout = (this.newOrderItem[i].realPrice*this.newOrderItem[i].num).toFixed(2);
                }

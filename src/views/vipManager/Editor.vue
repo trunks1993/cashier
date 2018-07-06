@@ -37,7 +37,7 @@
             <img src="../../assets/images/vipManager/vipcard.png">
             <span>优惠券</span>
           </div>
-          <div class="editor-container-mainBox-leftWrapper-inputBtn-arrowbox"><span>{{vipDetail.cardNum}}张</span><img src="../../assets/images/vipManager/arrow.png"></div>
+          <div class="editor-container-mainBox-leftWrapper-inputBtn-arrowbox"><span>{{vipDetail.couponNum}}张</span><img src="../../assets/images/vipManager/arrow.png"></div>
         </div>
         <div class="editor-container-mainBox-leftWrapper-item">
           <div><img src="../../assets/images/vipManager/count.png"><span class="editor-container-mainBox-leftWrapper-item-title">近3个月消费次数</span></div>
@@ -107,8 +107,8 @@ export default {
   methods: {
     editorControl() {
       if (this.isEditor) {
-        if (!this.vipDetail.birthDay || !this.vipDetail.realName) {
-          this.$toast('生日或者姓名不能为空')
+        if (!this.vipDetail.realName) {
+          this.$toast('姓名不能为空')
           return
         } else {
           editMember({

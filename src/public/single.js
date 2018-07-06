@@ -8,18 +8,20 @@ function getStore(shopId){
 	if(shopId){
 		keyShopId = shopId;
 	}
-	var storeList = localStorage.getItem("datalist"+keyShopId) || "[]",
+	var storeList = localStorage.getItem("datalist"+keyShopId) || null,
 	    newList = {datelist:[]};
-	storeList = JSON.parse(storeList);
-	for(var i = 0; i<storeList.datelist.length; i++){
-	    var startTime = new Date(storeList.datelist[i].time)*1;
-		var nowTime = new Date()*1;
-		if(nowTime-startTime<maxTime*60*60*1000){
-			  newList.datelist.push(storeList.datelist[i]);
-		}
-	} 
-	var x = storeList.datelist.length-newList.datelist.length;
-	localStorage.setItem("datalist"+shopId,JSON.stringify(newList));
+	if(storeList){
+		storeList = JSON.parse(storeList);
+		for(var i = 0; i<storeList.datelist.length; i++){
+				var startTime = new Date(storeList.datelist[i].time)*1;
+			var nowTime = new Date()*1;
+			if(nowTime-startTime<maxTime*60*60*1000){
+					newList.datelist.push(storeList.datelist[i]);
+			}
+		} 
+		var x = storeList.datelist.length-newList.datelist.length;
+		localStorage.setItem("datalist"+shopId,JSON.stringify(newList));
+	}
 	return newList;
 }
 

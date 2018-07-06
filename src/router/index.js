@@ -24,63 +24,18 @@ import VipManager from '@/views/vipManager'
 Vue.use(Router)
 
 export const asyncRouterMap = [
-  {
-    path: '/transcation',
-    redirect: '/transcation/index',
+{
+    path: '/weigh',
+    redirect: '/weigh/index',
     component: Layout,
     children: [{
-      path: '/transcation/index',
-      component: trans,
-      name: '交易流水',
+      path: '/weigh/index',
+      component: weigh,
+      name: '称重台',
       meta: {
-        id: 13008,
-        menuName: '交易流水',
-        imgUrl: require('@/assets/images/menuIcons/jiaoyiliushui.png')
-      }
-    }]
-  },
-  {
-    path: '/transcation',
-    redirect: '/transcation/index',
-    component: Layout,
-    children: [{
-      path: '/transcation/index',
-      component: trans,
-      name: '设置',
-      meta: {
-        id: 13011,
-        menuName: '设置',
-        imgUrl: require('@/assets/images/menuIcons/shezhi.png')
-      }
-    }]
-  },
-  {
-    path: '/chargeMoney',
-    redirect: '/chargeMoney/index',
-    component: Layout,
-    children: [{
-      path: '/chargeMoney/index',
-      component: chargeMoney,
-      name: '储值',
-      meta: {
-        id: 13003,
-        menuName: '储值',
-        imgUrl: require('@/assets/images/menuIcons/chuzhi.png')
-      }
-    }]
-  },
-  {
-    path: '/turnover',
-    redirect: '/turnover/index',
-    component: Layout,
-    children: [{
-      path: '/turnover/index',
-      component: turnover,
-      name: '储值流水',
-      meta: {
-        id: 13004,
-        menuName: '储值流水',
-        imgUrl: require('@/assets/images/menuIcons/chuzhiliushui.png')
+        id: 13012,
+        menuName: '称重台',
+        imgUrl: require('@/assets/images/menuIcons/chenzhongtai.png')
       }
     }]
   },
@@ -115,6 +70,36 @@ export const asyncRouterMap = [
     }]
   },
   {
+    path: '/chargeMoney',
+    redirect: '/chargeMoney/index',
+    component: Layout,
+    children: [{
+      path: '/chargeMoney/index',
+      component: chargeMoney,
+      name: '储值',
+      meta: {
+        id: 13003,
+        menuName: '储值',
+        imgUrl: require('@/assets/images/menuIcons/chuzhi.png')
+      }
+    }]
+  },
+  {
+    path: '/turnover',
+    redirect: '/turnover/index',
+    component: Layout,
+    children: [{
+      path: '/turnover/index',
+      component: turnover,
+      name: '储值流水',
+      meta: {
+        id: 13004,
+        menuName: '储值流水',
+        imgUrl: require('@/assets/images/menuIcons/chuzhiliushui.png')
+      }
+    }]
+  },
+  {
     path: '/orderitems',
     redirect: '/orderitems/index',
     component: Layout,
@@ -145,6 +130,36 @@ export const asyncRouterMap = [
     }]
   },
   {
+    path: '/transcation',
+    redirect: '/transcation/index',
+    component: Layout,
+    children: [{
+      path: '/transcation/index',
+      component: trans,
+      name: '交易流水',
+      meta: {
+        id: 13008,
+        menuName: '交易流水',
+        imgUrl: require('@/assets/images/menuIcons/jiaoyiliushui.png')
+      }
+    }]
+  },
+  {
+    path: '/purchasingPerformance',
+    redirect: '/purchasingPerformance/index',
+    component: Layout,
+    children: [{
+      path: '/purchasingPerformance/index',
+      component: PurchasingPerformance,
+      name: '导购业绩',
+      meta: {
+        id: 13009,
+        menuName: '导购业绩',
+        imgUrl: require('@/assets/images/menuIcons/daogouyeji.png')
+      }
+    }]
+  },
+  {
     path: '/signOut',
     redirect: '/signOut/index',
     component: Layout,
@@ -168,32 +183,17 @@ export const asyncRouterMap = [
     }]
   },
   {
-    path: '/purchasingPerformance',
-    redirect: '/purchasingPerformance/index',
+    path: '/transcation',
+    redirect: '/transcation/index',
     component: Layout,
     children: [{
-      path: '/purchasingPerformance/index',
-      component: PurchasingPerformance,
-      name: '导购业绩',
+      path: '/transcation/index',
+      component: trans,
+      name: '设置',
       meta: {
-        id: 13009,
-        menuName: '导购业绩',
-        imgUrl: require('@/assets/images/menuIcons/daogouyeji.png')
-      }
-    }]
-  },
-  {
-    path: '/weigh',
-    redirect: '/weigh/index',
-    component: Layout,
-    children: [{
-      path: '/weigh/index',
-      component: weigh,
-      name: '称重台',
-      meta: {
-        id: 13012,
-        menuName: '称重台',
-        imgUrl: require('@/assets/images/menuIcons/chenzhongtai.png')
+        id: 13011,
+        menuName: '设置',
+        imgUrl: require('@/assets/images/menuIcons/shezhi.png')
       }
     }]
   }

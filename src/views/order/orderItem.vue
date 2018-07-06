@@ -56,7 +56,7 @@
                             <div class="foot">
                                 <span>共{{item.totalQuantity}}件商品 合计：{{item.totalAmount | rmb}}</span>
                                 <mu-raised-button v-if="item.orderStatus!=1" label="打印小票" @click="print(item.orderId)" class="button" />
-                                <mu-raised-button v-if="isCashBegin&&(item.orderStatus==6||item.orderStatus==2||item.orderStatus==4)&&!refundLength(item.newOrderItem)" @click="goRefund(item.orderId,item.isOutOfSale)"
+                                <mu-raised-button v-if="IsRefund&&(item.orderStatus==6||item.orderStatus==2||item.orderStatus==4)&&!refundLength(item.newOrderItem)" @click="goRefund(item.orderId,item.isOutOfSale)"
                                     label="发起售后" class="button" />
                             </div>
                         </div>
@@ -107,7 +107,8 @@
                     HasAfterSale: 0,
                 },
                 loading: false,
-                isCashBegin:this.$store.getters.iscashier
+                isCashBegin:this.$store.getters.iscashier,
+								isOpenCashierShift:this.$store.getters.userInfo.openCashierShift
             }
         },
         created: function () {
@@ -122,6 +123,19 @@
         mounted() {
               this.trigger = this.$refs.filterLoc;
         },
+				computed: {
+					IsRefund() {
+						var ist = false;
+						if(!this.isOpenCashierShift){
+							  ist = true;
+						} else{
+							 if(this.isCashBegin){
+								   ist = true;
+							 }
+						}
+						return ist;
+					}
+				},
         watch: {
             filterItem: {
                 handler: function (val) {

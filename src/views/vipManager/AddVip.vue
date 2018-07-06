@@ -47,7 +47,7 @@
     <div class="add-container-qrBox" v-else>
       <div class="add-container-qrBox-header">
         <div>{{inputVal}}</div>
-        <div>还不是会员，快速办理，享<img style="margin: 0 10px;" src="../../assets/images/vipManager/vip.png">等级权益</div>
+        <div>还不是会员，快速办理，享<span style="color: #C7B187;">{{cardName}}</span>权益</div>
       </div>
       <img style="margin: auto;display: block;margin-top: 40px;" src="../../assets/images/vipManager/line.png">
       <div class="add-container-qrBox-qrTitle">扫码绑定微信开通</div>
@@ -72,7 +72,8 @@ export default {
       interval: '',
       showMsgBox: false,
       msgBoxContent: '',
-      msgBoxType: 'warning'
+      msgBoxType: 'warning',
+      cardName: ''
     }
   },
   methods: {
@@ -91,10 +92,11 @@ export default {
       }
     },
     submitDiscount() {
-      if (this.inputVal.length === 11) {
+      if (/^1[34578]\d{9}$/.test(this.inputVal)) {
         checkMemberPhone(this.inputVal).then(res => {
           const data = res.data
           if (data.success) {
+            this.cardName = data.cardName
             this.showQrScanPage = true
             qrCode(this.inputVal).then(res => {
               const data = res.data
@@ -115,7 +117,7 @@ export default {
             })
           } else {
             this.showMsgBox = true
-            this.msgBoxContent = '手机号已被注册'
+            this.msgBoxContent = data.msg
           }
         })
       } else {
@@ -123,7 +125,10 @@ export default {
       }
     },
     iknown() {
-      window.clearInterval(this.interval)
+      if (this.interval) {
+        window.clearInterval(this.interval)
+        this.submitDiscount()
+      }
       this.showMsgBox = false
     },
     polling() {
@@ -263,7 +268,7 @@ export default {
       }
     }
     &-header {
-      width: 346px;
+      width: 405px;
       margin: auto;
       text-align: center;
       padding-top: 50px;

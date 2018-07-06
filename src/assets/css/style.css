@@ -279,20 +279,20 @@ body{font-family:SF-UI-Display-Medium;}
 }
 
 /*购物车列表*/
-.cartList{
+/*.cartList{
 	position: absolute;
 	width:100%;
 	height:100%;
 	top:0;z-index:1;
 	overflow:auto;
 	padding-bottom:160px;
-}
-.weigh .cartList{
+}*/
+/*.weigh .cartList{
 	bottom: 68px;
   height: auto;
   top: 113px;
 	padding-bottom: 60px;
-}
+}*/
 .weigh .cartList ul{
 	padding-top:0;
 	border-bottom:none;
@@ -707,6 +707,7 @@ button:hover{
     color: #bbbbbb;
     top: 0;
     background: none;
+		z-index: 2;
 }
 .singleList .header button.clear{
 	position: absolute;
@@ -890,9 +891,9 @@ button:hover{
 	overflow: hidden;
 }
 .skuchange label span{
-	float: right;
-	color:#999;
-	font-weight: 500;
+	color: #999;
+    font-weight: 500;
+    margin-left: 10px;
 }
 .skuSubmit.mu-raised-button{
 	display:block;

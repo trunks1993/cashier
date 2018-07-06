@@ -77,10 +77,15 @@ export default {
         if (memberCode != "") {
           requestApi(code).then(function(response) {
             if (!response.data.success) {
-              self.$emit("noMenber", memberCode)
-              // self.$toast(response.data.msg);
-              return;
+              if (self.url !== "chargeMoney" && !/^1[34578]\d{9}$/.test(memberCode)) {
+                self.$toast('请输入合法手机号')
+                return
+              } else {
+                self.$emit("noMenber", memberCode, response.data.cardName)
+              }
+              if (self.url === "chargeMoney") self.$toast(response.data.msg)
             } else {
+              console.log(response.data)
               self.$store.dispatch('SetVipInfo', response.data.data)
               self.$emit("getMenber", response.data)
             }

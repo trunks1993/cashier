@@ -5,6 +5,7 @@ const getters = {
   vipInfo: state => state.cashier.vipInfo,
   selCard: state => state.cashier.selCard,
   selCoupon: state => state.cashier.selCoupon,
-  selDiscount: state => state.cashier.selDiscount
+  selDiscount: state => state.cashier.selDiscount,
+  pcNumber: state => state.menu.pcNumber
 }
 export default getters

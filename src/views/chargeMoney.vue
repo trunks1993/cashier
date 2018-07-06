@@ -79,11 +79,11 @@
             </div>
             <div v-if="giftObj.card">
               2.赠送无门槛会员卡（含
-              <span v-if="giftObj.card.doesFreeShipping">满{{giftObj.card.freeShippingMoney}}元包邮</span>
-              <span v-if="giftObj.card.doesDiscount">{{giftObj.card.doesFreeShipping ? '、' : ''}}{{giftObj.card.discount}}折</span>
-              <span v-if="giftObj.card.doesPointTimes">{{giftObj.card.doesDiscount ? '、' : ''}}{{giftObj.card.pointTimes}}倍积分加速</span>
-              <span v-if="giftObj.card.doesGiveCoupon">{{giftObj.card.doesPointTimes ? '，' : ''}}{{giftObj.card.couponCount}}张优惠券</span>
-              <span v-if="giftObj.card.doesGivePoint">{{giftObj.card.doesGiveCoupon ? '，' : ''}}{{giftObj.card.givenPoints}}积分</span>
+              <span v-if="giftObj.card.doesFreeShipping">满{{giftObj.card.freeShippingMoney}}元包邮;</span>
+              <span v-if="giftObj.card.doesDiscount">{{giftObj.card.discount}}折;</span>
+              <span v-if="giftObj.card.doesPointTimes">{{giftObj.card.pointTimes}}倍积分加速;</span>
+              <span v-if="giftObj.card.doesGiveCoupon">{{giftObj.card.couponCount}}张优惠券;</span>
+              <span v-if="giftObj.card.doesGivePoint">{{giftObj.card.givenPoints}}积分;</span>
                 ）
             </div>
           </div>
@@ -92,13 +92,13 @@
           <div class="main-container-moneySetWrapper-bottonBox-btn" @click="toSub">
             确认收款
           </div>
-          <span v-if="giftObj">温馨提示：充值完毕，平台会通过公众号下发无门槛卡给会员，请会员及时查收</span>
+          <span v-if="giftObj.card">温馨提示：充值完毕，平台会通过公众号下发无门槛卡给会员，请会员及时查收</span>
         </div>
       </template>
     </div>
     <div class="payScanMask" @click="qrfocus" v-show="scan">
       <div class="scan">
-        <i class="iconfont icon-guanbi" @click="scan = false" style="position: absolutetop: 6pxright: 10px"></i>
+        <i class="iconfont icon-guanbi" @click="scan = false" style="position: absolute;top: 6px;right: 10px"></i>
         <span>{{payType=="zfb"?"支付宝":"微信"}}扫一扫</span>
         <div :class="{dong:isDong}"></div>
         <input type="text" id="chargeMoneyInput" @focus="addDong(true)" @blur="addDong(false)" v-model="payCode" @keyup.enter="subOrder">

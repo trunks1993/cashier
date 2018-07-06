@@ -106,6 +106,7 @@ export default {
         if (data.success) {
           this.vipList = data.data.models
           this.total = data.data.total
+          if(this.vipList.length > 0) this.selectVip(this.vipList[0])
         }
       })
     },
@@ -163,8 +164,6 @@ export default {
         this.supplementData = {
           isWechatWay: isWechatWay,
           phone: phone,
-          realName: '',
-          birthDay: '',
           sex: 1
         }
         this.componentStatus = 4

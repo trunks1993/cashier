@@ -1,6 +1,6 @@
 <template>
   <div class="sideBar-container">
-    <MsgBox :type="'warning'" :content="'您为开启预存款储值！'" @iknown="iknown" v-if="showMsgBox"></MsgBox>
+    <msg-box :type="'warning'" :content="'您未开启预存款储值！'" @iknown="iknown" v-if="showMsgBox"></msg-box>
     <div class="sideBar-container-mainBox" :class="{hiden: !isSideShow, show: isSideShow}">
       <template v-if="!isSettingBox">
         <div class="sideBar-container-mainBox-header">
@@ -11,22 +11,18 @@
         <div class="sideBar-container-mainBox-menuBox">
           <div class="sideBar-container-mainBox-menuBox-item">
             <img src="../../../assets/images/menuIcons/shouyin.png" @click="to({path: '/'})">
-            <div>收银</div>
+            <div @click="to({path: '/'})">收银</div>
           </div>
           <template v-for="item in routes" v-if="item.children[0].meta">
             <div class="sideBar-container-mainBox-menuBox-item">
               <img :src="item.children[0].meta.imgUrl" @click="to(item.children[0])">
-              <div>{{item.children[0].meta.menuName}}</div>
+              <div @click="to(item.children[0])">{{item.children[0].meta.menuName}}</div>
             </div>
             <div class="sideBar-container-mainBox-menuBox-item" v-if="item.children[1]">
               <img :src="item.children[1].meta.imgUrl" @click="to(item.children[1])">
-              <div>{{item.children[1].meta.menuName}}</div>
+              <div @click="to(item.children[1])">{{item.children[1].meta.menuName}}</div>
             </div>
           </template>
-          <!-- <div class="sideBar-container-mainBox-menuBox-item">
-            <img src="../../../assets/images/menuIcons/shezhi.png" @click="isSettingBox = true">
-            <div>设置</div>
-          </div> -->
         </div>
       </template>
       <template v-else>
@@ -61,7 +57,7 @@
         </div>
       </template>
     </div>
-    <div class="sideBar-container-preferentialBox" v-show="isShowShopDiscounts">
+    <div class="sideBar-container-preferentialBox" v-show="isShowShopDiscounts && openDiscounts">
       <div class="sideBar-container-preferentialBox-closeBox">
         <div class="sideBar-container-preferentialBox-closeBox-close" @click="isShowShopDiscounts = false">
           <img src="../../../assets/images/menuIcons/x.png">
@@ -160,13 +156,27 @@
     </div>
     <div class="sideBar-container-mark" :style="!isSideShow ? 'display: none' : ''" @click="isSideShow = false">
     </div>
+		
+		
+		<div class="showCodeImg" v-show="showCode" @click="showCode=false">
+			<div class="codeBox">
+				<div class="imgCodeBox">
+					<qriously class="imgCode" id="aa" :value="initQCode" :size="215" />
+				</div>
+				<div style="display:none;">
+					<qriously class="imgCode" id="downaloadImg" :value="initQCode" :size="1000" />
+				</div>
+				<p>请让消费者使用微信扫描该二维码，完成头像上传后即自动完成开卡</p>
+				<button @click="downloadQrcode">下载该二维码</button>
+			</div>
+		</div>
+		
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import Bus from '@/utils/bus'
 import { getShopDiscounts, deleteDiscounts, submitDiscount, getShopStoredSet } from '@/api'
-
 export default {
   computed: {
     ...mapGetters([
@@ -207,19 +217,25 @@ export default {
       inputType: false,
       discountsList: [],
       inputVal: '',
-      showMsgBox: false
+      showMsgBox: false,
+			showCode:false,
+			initQCode:""
     }
   },
   created() {
+		this.getLocalUrl();
     Bus.$on('showSide', res => {
       this.isSideShow = res
     })
   },
   methods: {
     to(route) {
-      console.log(route)
       if (route.meta && route.meta.id === 13011) {
         this.isSettingBox = true
+        return
+      }
+      if (route.meta && route.meta.id === 13014) { 
+       	this.showCode = true;
         return
       }
       if (route.meta && route.meta.id === 13003) {
@@ -236,6 +252,38 @@ export default {
         this.$router.push(route.name === '交接班' ? { path: route.path, query: { id: 'me' } } : route.path)
         this.isSideShow = false
       }
+    },
+    downloadQrcode: function() {
+      var canvas = document.getElementById("downaloadImg").querySelector("canvas")
+      var ctx = canvas.getContext("2d")
+      var imgData = canvas.toDataURL("png")
+      var _fixType = function(type) {
+        type = type.toLowerCase().replace(/jpg/i, 'jpeg')
+        var r = type.match(/png|jpeg|bmp|gif/)[0];
+        return 'image/' + r
+      };
+
+      // 加工image data，替换mime type
+      imgData = imgData.replace(_fixType("png"), 'image/octet-stream');
+
+      var saveFile = function(data, filename) {
+        var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+        save_link.href = data;
+        save_link.download = filename;
+
+        var event = document.createEvent('MouseEvents');
+        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        save_link.dispatchEvent(event);
+      };
+
+      // 下载后的问题名
+      var filename = 'faceqrcode' + (new Date()).getTime() + '.png';
+      // download
+      saveFile(imgData, filename);
+
+    },
+    getLocalUrl: function() {
+      this.initQCode = window.location.href.split('//')[0] + '//' + window.location.href.split('//')[1].split('/')[0] + "/m-weixin/memberface";
     },
     iknown() {
       this.showMsgBox = false
@@ -313,9 +361,13 @@ export default {
         this.$toast('输入格式有误')
         return
       }
+      let num = this.inputVal / 10
+      if (this.inputType) {
+        num = num.toFixed(2)
+      }
       submitDiscount({
         type: this.inputType ? 1 : 2,
-        value: this.inputType ? this.inputVal / 10 : this.inputVal
+        value: this.inputType ? num : this.inputVal
       }).then(res => {
         const data = res.data
         if (data.success) {
@@ -676,6 +728,58 @@ export default {
       }
     }
   }
+}
+
+.showCodeImg {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 99999;
+}
+
+.showCodeImg .codeBox {
+  width: 720px;
+  background: rgba(0, 0, 0, 0.65);
+  text-align: center;
+  text-align: center;
+  padding: 30px;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  margin: auto;
+  margin-top: -218px;
+  left: 0;
+  right: 0;
+}
+
+.showCodeImg .codeBox .imgCodeBox {
+  padding: 7px;
+  border-radius: 10px;
+  display: inline-block;
+  background: #fff;
+}
+
+.showCodeImg * {
+  vertical-align: middle;
+}
+
+.showCodeImg .codeBox p {
+  font-size: 20px;
+  color: #fff;
+  margin-top: 25px;
+}
+
+.showCodeImg .codeBox button {
+  width: 190px;
+  height: 54px;
+  border-radius: 25px;
+  font-size: 20px;
+  color: #fff;
+  background: none;
+  border: 2px solid #c7b187;
+  margin-top: 18px;
 }
 
 </style>

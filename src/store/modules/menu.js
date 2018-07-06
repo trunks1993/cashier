@@ -39,6 +39,7 @@ const menu = {
     routes: [],
     userInfo: '',
     iscashier:false,
+    pcNumber: navigator.userAgent.indexOf("S2")
   },
   mutations: {
     SET_ROUTES: (state, routes) => {
