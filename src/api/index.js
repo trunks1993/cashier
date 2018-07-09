@@ -298,7 +298,7 @@ export function getList(tableQueryParams) {
 }
 export function getSalesAchievements(filterForm) {
   return request({
-    url: '/SellerAdmin/CashierShift/GetList',
+    url: '/SellerAdmin/CashierShift/GetSalesAchievements',
     method: 'post',
     params: filterForm
   })

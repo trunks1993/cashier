@@ -207,7 +207,7 @@
           <div class="sideBar-container-addBox-wrapper-header-wall"></div>
           <span>{{inputType ? '输入整单优惠折扣' : '输入整单优惠金额（元）'}}</span>
         </div>
-        <input type="text" :placeholder="inputType?'请输入折扣':'请输入数字1~10000'" readonly="readonly" v-model="inputVal">
+        <input type="text" :placeholder="inputType?'请输入折扣':'请输入数字1~10000'" @input="inputValue($event.data)" :readonly="pcNumber === -1 ? false : true"  v-model="inputVal">
         <div style="margin-top: 14px;">
           <template v-if="!inputType">
             <div style="color: #999999; font-size: 12px;">注：最大优惠金额不得超过10000元</div>
@@ -523,7 +523,8 @@ export default {
     ...mapGetters([
       'selCard',
       'selCoupon',
-      'selDiscount'
+      'selDiscount',
+      'pcNumber'
     ]),
     hasDiscount() {
       if (!this.$store.getters.userInfo.openDiscounts) this.isShowShopDiscounts = false
@@ -532,7 +533,11 @@ export default {
 		checkedProSkuStock(){
 			var sku = this.skuSelect.proid+"_"+this.skuSelect.color+"_"+this.skuSelect.size+"_"+this.skuSelect.version;
 			if(this.checkedStock[sku]){
-				  return this.checkedStock[sku].realStock;
+        if(this.checkedStock[sku].realStock.toString().indexOf(".")!=-1){
+				     return this.checkedStock[sku].realStock.toFixed(3);
+					}else{
+						 return this.checkedStock[sku].realStock;
+					}
 			}else{
 				  return -1;
 			}
@@ -2032,6 +2037,7 @@ export default {
           }
           & span:nth-child(2) {
             font-size: 14px;
+            line-height: 14px;
             color: rgba(190, 34, 34, 1);
           }
         }

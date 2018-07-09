@@ -316,7 +316,11 @@ export default {
     checkedProSkuStock() {
       var sku = this.skuSelect.proid + "_" + this.skuSelect.color + "_" + this.skuSelect.size + "_" + this.skuSelect.version;
       if (this.checkedStock[sku]) {
-        return this.checkedStock[sku].realStock;
+        if(this.checkedStock[sku].realStock.toString().indexOf(".")!=-1){
+        	return this.checkedStock[sku].realStock.toFixed(3);
+        }else{
+        	return this.checkedStock[sku].realStock;
+        }
       } else {
         return -1;
       }

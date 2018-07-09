@@ -111,7 +111,7 @@
           <div class="sideBar-container-addBox-wrapper-header-wall"></div>
           <span>{{inputType ? '输入整单优惠折扣' : '输入整单优惠金额（元）'}}</span>
         </div>
-        <input type="text" :placeholder="inputType?'请输入折扣':'请输入数字1~10000'" readonly="readonly" v-model="inputVal">
+        <input type="text" :placeholder="inputType?'请输入折扣':'请输入数字1~10000'" :readonly="pcNumber === -1 ? false : true" v-model="inputVal">
         <div style="margin-top: 14px;">
           <template v-if="!inputType">
             <div style="color: #999999; font-size: 12px;">注：最大优惠金额不得超过10000元</div>
@@ -181,7 +181,8 @@ export default {
   computed: {
     ...mapGetters([
       'routes',
-      'userInfo'
+      'userInfo',
+      'pcNumber'
     ]),
     openCashierShift: {
       get() {

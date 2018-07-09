@@ -8,7 +8,7 @@
           <div class="add-container-addBox-wrapper-header-wall"></div>
           <span>请输入办理会员的手机号</span>
         </div>
-        <input type="text" placeholder="输入手机号" readonly="readonly" v-model="inputVal">
+        <input type="text" placeholder="输入手机号" :readonly="pcNumber === -1 ? false : true" v-model="inputVal">
         <div style="margin-top: 14px;">
           <div style="color: #999999; font-size: 12px;">注：最大优惠金额不得超过10000元</div>
         </div>
@@ -41,6 +41,7 @@
               <span>确定</span>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
@@ -62,8 +63,15 @@
 </template>
 <script>
 import { checkMemberPhone, qrCode, polling } from '@/api'
-
+import { mapGetters } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters([
+      'routes',
+      'userInfo',
+      'pcNumber'
+    ])
+  },
   data() {
     return {
       inputVal: '',

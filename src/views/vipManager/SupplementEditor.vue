@@ -31,6 +31,7 @@
           <div>
             <el-radio v-model="supplementData.sex" :label="1">男</el-radio>
             <el-radio v-model="supplementData.sex" :label="2">女</el-radio>
+            <el-radio v-model="supplementData.sex" :label="3">保密</el-radio>
           </div>
         </div>
         <div class="mainBox-left-item">
@@ -255,7 +256,7 @@ export default {
       cashierRegister({
         phone: this.supplementData.phone,
         sex: this.supplementData.sex,
-        nikename: this.supplementData.nikename,
+        nikename: this.supplementData.nickName,
         realname: this.supplementData.realName,
         birthday: this.supplementData.birthDay,
         cardIds: this.selCardList.map(item => {

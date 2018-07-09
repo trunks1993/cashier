@@ -114,7 +114,7 @@
     <div class="trade" v-if="showType === 0 || showType === 2">
       <template v-if="vipInfo.coupons.length > 0">
         <div class="trade-itemBox" v-for="item in vipInfo.coupons" @click="selectCoupon(item)">
-          <img src="../../assets/images/vipManager/sel3.png" v-if="item.price === selCoupon.price">
+          <img src="../../assets/images/vipManager/sel3.png" v-if="item.activityId === selCoupon.activityId">
           <div class="trade-itemBox-left">
             <div class="trade-itemBox-left-price">
               <span>￥</span>
@@ -123,6 +123,7 @@
             <span class="trade-itemBox-left-shopName">{{item.shopName}}</span>
           </div>
           <div class="trade-itemBox-right">
+            <div>(共{{item.count}}张)</div>
             <div>{{item.activityName}}</div>
             <div>有效期至{{item.endTimeText}}</div>
           </div>
@@ -195,9 +196,8 @@ export default {
       // Bus.$emit('cardDiscount', this.selCard)
     },
     selectCoupon(card) {
-      if (this.selCoupon.price === card.price) this.$store.dispatch('SetSelCoupon', '')
+      if (this.selCoupon.activityId === card.activityId) this.$store.dispatch('SetSelCoupon', '')
       else this.$store.dispatch('SetSelCoupon', card)
-      // Bus.$emit('moneyDiscount', this.selCoupon)
     }
   }
 }
@@ -463,6 +463,7 @@ export default {
     }
     &-left {
       display: inline-block;
+      vertical-align: super;
       &-price {
         & span:nth-child(1) {
           font-size: 16px;
@@ -487,13 +488,19 @@ export default {
       & div:nth-child(1) {
         font-size: 14px;
         line-height: 14px;
-        color: #666666;
+        color: #c7b287;
       }
       & div:nth-child(2) {
+        font-size: 14px;
+        line-height: 14px;
+        color: #666666;
+        margin-top: 10px;
+      }
+      & div:nth-child(3) {
         font-size: 12px;
         line-height: 12px;
         color: #666666;
-        margin-top: 12px;
+        margin-top: 10px;
       }
     }
   }

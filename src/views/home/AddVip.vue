@@ -39,6 +39,7 @@
           <div>
             <el-radio v-model="supplementData.sex" :label="1">男</el-radio>
             <el-radio v-model="supplementData.sex" :label="2">女</el-radio>
+            <el-radio v-model="supplementData.sex" :label="3">保密</el-radio>
           </div>
         </div>
         <div class="add-container-form-content-item">
@@ -162,11 +163,19 @@ export default {
     },
     submitSup() {
       this.loading = true
-      cashierRegister(this.supplementData).then(res => {
+      cashierRegister({
+        phone: this.supplementData.phone,
+        sex: this.supplementData.sex,
+        nikename: this.supplementData.nickName,
+        realname: this.supplementData.realName,
+        birthday: this.supplementData.birthDay
+      }).then(res => {
         const data = res.data
         this.loading = false
         if (data.success) {
           this.$emit('success', this.supplementData.phone)
+        } else {
+          this.$toast(data.msg)
         }
       })
     },

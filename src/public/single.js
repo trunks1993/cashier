@@ -1,6 +1,6 @@
 
 var keyShopId;
-var maxTime = 1/6; //小时
+var maxTime = 24; //小时
 
 import Toast from '@/public/toast.js'
 
