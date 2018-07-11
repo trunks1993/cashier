@@ -168,7 +168,6 @@
           </div>
           <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content">
             <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item" style="background: #B10000;" v-for="item in discountsList" v-if="item.Type === 1" @click="clickDiscount(item)">
-              <span></span>
               <span>{{item.Value | formatNumber(true)}}</span>
               <span>.{{item.Value | formatNumber(false)}}</span>
               <span>折</span>
@@ -184,13 +183,11 @@
             <span>整单改价</span>
           </div>
           <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content">
-            <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item" style="background: #AB915F" v-for="item in discountsList" v-if="item.Type === 2" @click="clickDiscount(item)">
-              <span></span>
-              <span></span>
+            <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item2" style="background: #AB915F" v-for="item in discountsList" v-if="item.Type === 2" @click="clickDiscount(item)">
               <span>-{{item.Value}}</span>
               <span>元</span>
             </div>
-            <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item" v-show="getNumber(discountsList, false)" @click="addDiscount(false)">
+            <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item2" v-show="getNumber(discountsList, false)" @click="addDiscount(false)">
               +
             </div>
           </div>
@@ -1526,7 +1523,7 @@ export default {
       //   this.$toast('输入格式有误')
       //   return
       // }
-      const re = this.inputType ? /^(?=0\.[1-9]|[1-9]\.\d).{3}$|^([1-9])$/ : /^[1-9]{0,4}?(\.[0-9]{1,2})?$|^10000$/
+      const re = this.inputType ? /^(?=0\.[1-9]|[1-9]\.\d).{3}$|^([1-9])$/ : /^[1-9][0-9]{0,3}?(\.[0-9]{1,2})?$|^10000$/
       if (re.test(this.inputVal) || (!this.inputType && this.inputVal * 1 === 10000)) {
         this.$store.dispatch('SetSelDiscount', {
           Type: this.inputType ? 1 : 2,
@@ -2130,52 +2127,43 @@ export default {
           text-align: center;
           position: relative;
           vertical-align: bottom;
+          background: rgba(0, 0, 0, 0.1);
+          display: inline-block;
           width: calc((64vw - 316px) / 5);
           height: calc(((64vw - 316px) / 5) * 0.8);
           @media screen and(max-width: 1440px) {
             width: calc((64vw - 265px) / 5);
             height: calc(((64vw - 265px) / 5) * 0.8);
           }
-          background: rgba(0, 0, 0, 0.1);
-          display: inline-block;
-          img {
-            position: absolute;
-            right: -20px;
-            top: -20px;
-          }
-          & span:nth-child(2) {
-            font-size: 100px;
+          & span:nth-child(1) {
             color: #fff;
+            font-size: calc(((64vw - 316px) / 5) * 0.5);
             line-height: calc(((64vw - 316px) / 5) * 0.8);
-            position: relative;
-            top: -8px;
             @media screen and(max-width: 1440px) {
               line-height: calc(((64vw - 265px) / 5) * 0.8);
-              font-size: 60px;
+              font-size: calc(((64vw - 265px) / 5) * 0.5);
+            }
+            font-weight: bold;
+          }
+          & span:nth-child(2) {
+            color: #fff;
+            font-size: calc(((64vw - 316px) / 5) * 0.25);
+            line-height: calc(((64vw - 316px) / 5) * 0.8);
+            @media screen and(max-width: 1440px) {
+              line-height: calc(((64vw - 265px) / 5) * 0.8);
+              font-size: calc(((64vw - 265px) / 5) * 0.25);
             }
             font-weight: bold;
           }
           & span:nth-child(3) {
-            font-size: 66px;
-            line-height: calc(((64vw - 316px) / 5) * 0.8);
-            position: relative;
-            top: -8px;
-            @media screen and(max-width: 1440px) {
-              line-height: calc(((64vw - 265px) / 5) * 0.8);
-              font-size: 30px;
-            }
             color: #fff;
-            font-weight: bold;
-          }
-          & span:nth-child(4) {
             font-size: 16px;
             line-height: calc(((64vw - 316px) / 5) * 0.8);
-            position: relative;
-            top: -8px;
             @media screen and(max-width: 1440px) {
               line-height: calc(((64vw - 265px) / 5) * 0.8);
+              font-size: 12px;
             }
-            color: #fff;
+            font-weight: bold;
           }
         }
         &-item:nth-of-type(n+2) {
@@ -2185,11 +2173,62 @@ export default {
           margin-left: 50px;
         }
         &-item:last-child {
-          font-size: 115px;
           text-align: center;
           color: #fff;
+          font-size: calc(((64vw - 316px) / 5) * 0.5);
           line-height: calc(((64vw - 316px) / 5) * 0.8);
           @media screen and(max-width: 1440px) {
+            font-size: calc(((64vw - 265px) / 5) * 0.5);
+            line-height: calc(((64vw - 265px) / 5) * 0.8);
+          }
+        }
+
+        &-item2 {
+          text-align: center;
+          position: relative;
+          vertical-align: bottom;
+          background: rgba(0, 0, 0, 0.1);
+          display: inline-block;
+          width: calc((64vw - 316px) / 5);
+          height: calc(((64vw - 316px) / 5) * 0.8);
+          @media screen and(max-width: 1440px) {
+            width: calc((64vw - 265px) / 5);
+            height: calc(((64vw - 265px) / 5) * 0.8);
+          }
+           & span:nth-child(1) {
+            color: #fff;
+            font-size: calc(((64vw - 316px) / 5) * 0.19);
+            line-height: calc(((64vw - 316px) / 5) * 0.8);
+            @media screen and(max-width: 1440px) {
+              font-size: calc(((64vw - 265px) / 5) * 0.19);
+              line-height: calc(((64vw - 265px) / 5) * 0.8);
+            }
+            font-weight: bold;
+          }
+          & span:nth-child(2) {
+            color: #fff;
+            font-size: 16px;
+            line-height: calc(((64vw - 316px) / 5) * 0.8);
+            @media screen and(max-width: 1440px) {
+              line-height: calc(((64vw - 265px) / 5) * 0.8);
+              font-size: 12px;
+            }
+            font-weight: bold;
+          }
+        }
+        &-item2:nth-of-type(n+2) {
+          @media screen and(max-width: 1440px) {
+            margin-left: 20px;
+          }
+          margin-left: 50px;
+        }
+        &-item2:last-child {
+          text-align: center;
+          color: #fff;
+          font-size: calc(((64vw - 316px) / 5) * 0.5);
+          line-height: calc(((64vw - 316px) / 5) * 0.8);
+          @media screen and(max-width: 1440px) {
+            font-size: calc(((64vw - 265px) / 5) * 0.5);
             line-height: calc(((64vw - 265px) / 5) * 0.8);
           }
         }
