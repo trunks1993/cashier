@@ -52,7 +52,7 @@
         </template>
       </div>
     </div>
-    <div class="main-container-moneySetWrapper">
+    <div class="main-container-moneySetWrapper" v-if="member">
       <div class="main-container-moneySetWrapper-tabBox" v-if="payList">
         <div class="main-container-moneySetWrapper-tabBox-item" :class="{isActive: payType === 'wx'}" @click="payType = 'wx'" v-if="payList.supportWechatScan">
           <i class="iconfont icon-weixin"></i>
