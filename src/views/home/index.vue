@@ -79,14 +79,14 @@
         <div class="main-container-carWrapper-carBox-discountBox" :style="hasDiscount ? '' : 'padding: 0 50px'">
           <div class="main-container-carWrapper-carBox-discountBox-item">
             <div>会员卡</div>
-            <div class="main-container-carWrapper-carBox-discountBox-item-btnSel" :class="{disabled: !member}">
+            <div class="main-container-carWrapper-carBox-discountBox-item-btnSel" :class="{disabledd: !member}">
               <div @click="selVipCard" :style="selCard ? '' : 'border-right: none;'">{{selCard.discount || '请选择'}}{{selCard ? '折' : ''}}</div>
               <i class="iconfont icon-guanbi" @click="clearDiscount(1)" v-if="selCard"></i>
             </div>
           </div>
           <div class="main-container-carWrapper-carBox-discountBox-item">
             <div>优惠券</div>
-            <div class="main-container-carWrapper-carBox-discountBox-item-btnSel" :class="{disabled: !member}">
+            <div class="main-container-carWrapper-carBox-discountBox-item-btnSel" :class="{disabledd: !member}">
               <div @click="selmoney" :style="selCoupon?'' : 'border-right: none;'">{{selCoupon ? '-￥' : ''}}{{selCoupon.price || '请选择'}}</div>
               <i class="iconfont icon-guanbi" @click="clearDiscount(2)" v-if="selCoupon"></i>
             </div>
@@ -207,7 +207,7 @@
           <div class="sideBar-container-addBox-wrapper-header-wall"></div>
           <span>{{inputType ? '输入整单优惠折扣' : '输入整单优惠金额（元）'}}</span>
         </div>
-        <input type="text" :placeholder="inputType?'请输入折扣':'请输入数字1~10000'" @input="inputValue($event.data)" :readonly="pcNumber === -1 ? false : true"  v-model="inputVal">
+        <input type="text" :placeholder="inputType?'请输入折扣':'请输入数字1~10000'" :readonly="pcNumber === -1 ? false : true" v-model="inputVal">
         <div style="margin-top: 14px;">
           <template v-if="!inputType">
             <div style="color: #999999; font-size: 12px;">注：最大优惠金额不得超过10000元</div>
@@ -259,7 +259,8 @@
             <div class="skuWeigh-info" v-if="checkedProduct">
               <img :src="checkedProduct.imageUrl" :onerror="errorImg">
               <div>
-                <span class="title">{{checkedProduct.name}}</span>
+                <span class="title">{{
+                e}}</span>
                 <span class="weigh" v-if="checkedProduct.skus[0].baseSKU.specification1">
                                     {{checkedProduct.skus[0].baseSKU.specification1}};
                                 </span>
@@ -287,7 +288,7 @@
               <mu-raised-button v-for="(item,index) in version" :key="index" :label="item.value" @click="skuchange($event,item.skuId,'version')" :class="classObject(item.skuId,'version')" />
             </div>
           </div>
-          <div class="skurow"> 
+          <div class="skurow">
             <label>数量 <span v-if="checkedProSkuStock>-1">库存:{{checkedProSkuStock}}</span></label>
             <div class="change" v-if="checkedProduct.productSaleMethod==0">
               <i class="iconfont icon-shanjian" @click="changeSkudiaNum(-1)"></i>
@@ -329,7 +330,7 @@
           </div>
           <div class="skurow">
             <label>数量<span>库存:{{(codeProd.storeStock-codeProd.safeStock)}}</span></label>
-            <div class="skurow-kg"> 
+            <div class="skurow-kg">
               <input type="text" v-focus ref="weighValue" @input="weighInput">
               <span v-if="codeProd.measureUnit">{{codeProd.measureUnit}}</span>
             </div>
@@ -353,7 +354,7 @@
         <div class="header">
           <button type="button" @click="singleStatus=false" class="close"><i class="iconfont icon-guanbi"></i></button>
           <div>挂单列表<span>&nbsp;({{singleList.length}}</span>单)</div>
-					<p style="font-size:12px;color:#ccc;position:absolute;text-align: center;bottom:0;width:100%;bottom:-23px;">挂起的订单超过24小时自动删除</p>
+          <p style="font-size:12px;color:#ccc;position:absolute;text-align: center;bottom:0;width:100%;bottom:-23px;">挂起的订单超过24小时自动删除</p>
           <button type="button" @click="clearSingle" class="clear"><i class="iconfont icon-qingchuhuancun"></i>清空</button>
         </div>
       </div>
@@ -530,25 +531,25 @@ export default {
       if (!this.$store.getters.userInfo.openDiscounts) this.isShowShopDiscounts = false
       return this.$store.getters.userInfo.openDiscounts
     },
-		checkedProSkuStock(){
-			var sku = this.skuSelect.proid+"_"+this.skuSelect.color+"_"+this.skuSelect.size+"_"+this.skuSelect.version;
-			if(this.checkedStock[sku]){
-        if(this.checkedStock[sku].realStock.toString().indexOf(".")!=-1){
-				     return this.checkedStock[sku].realStock.toFixed(3);
-					}else{
-						 return this.checkedStock[sku].realStock;
-					}
-			}else{
-				  return -1;
-			}
-		}
+    checkedProSkuStock() {
+      var sku = this.skuSelect.proid + "_" + this.skuSelect.color + "_" + this.skuSelect.size + "_" + this.skuSelect.version;
+      if (this.checkedStock[sku]) {
+        if (this.checkedStock[sku].realStock.toString().indexOf(".") != -1) {
+          return this.checkedStock[sku].realStock.toFixed(3);
+        } else {
+          return this.checkedStock[sku].realStock;
+        }
+      } else {
+        return -1;
+      }
+    }
   },
   created: function() {
     this.getUserId();
     this.member = memberData;
     // if (document.getElementById("back-menu")) document.getElementById("back-menu").style.display = "none";
     // if (document.getElementById("menu-nav")) document.getElementById("menu-nav").style.display = "block";
-		this.cancellNumber();
+    this.cancellNumber();
     this.cardId = cardId;
     this.cart = carts;
 
@@ -767,7 +768,7 @@ export default {
       setStore(this.cart, new Date(), member, this.shopId);
       this.member = null;
       this.cart = [];
-			carts = [];
+      carts = [];
       this.cancellNumber();
     },
     //挂单取单
@@ -780,9 +781,9 @@ export default {
     cancellNumber() {
       if (getStore(this.shopId).datelist) {
         this.singleNumber = getStore(this.shopId).datelist.length;
-//         if (this.singleNumber > 0) {
-//           this.buttonDisable[1] = false
-//         }
+        //         if (this.singleNumber > 0) {
+        //           this.buttonDisable[1] = false
+        //         }
       }
     },
     //删除某个挂单
@@ -1136,7 +1137,6 @@ export default {
           this.checkedStock[data.skus[i].baseSKU.id] = data.skus[i];
           this.checkedStock[data.skus[i].baseSKU.id].realStock = data.skus[i].stock - data.skus[i].baseSKU.safeStock;
         }
-				console.log(this.checkedStock); 
         if (data.skus.length > 1) {
           this.color = this.productObject[key].color;
           this.spec.spec1 = this.productObject[key].color.length == 0 ? "" : this.productObject[key].color[0].name;
@@ -1498,43 +1498,50 @@ export default {
       } else if (val === 'delete') {
         this.inputVal = this.inputVal.substring(0, this.inputVal.length - 1)
       } else {
-        if (!this.inputVal && (val === '00' || val === '.')) { // 不能00开头
-          return
-        }
-        if (this.inputVal[0] === '0' && this.inputVal.length === 1 && val === '0') {
-          return
-        }
-        if (this.inputVal.indexOf('.') >= 0 && val === '.') {
-          return
-        }
-        if (this.inputVal.indexOf('.') >= 0 && this.inputVal.split(".")[1].length >= 2) {
-          return
-        }
-        const temp = this.inputVal + val
-        if (this.inputType ? (temp * 1 > 9.9 || temp.length > 3) : temp * 1 > 10000) {
-          return
-        }
+        // if (!this.inputVal && (val === '00' || val === '.')) { // 不能00开头
+        //   return
+        // }
+        // if (this.inputVal[0] === '0' && this.inputVal.length === 1 && val === '0') {
+        //   return
+        // }
+        // if (this.inputVal.indexOf('.') >= 0 && val === '.') {
+        //   return
+        // }
+        // if (this.inputVal.indexOf('.') >= 0 && this.inputVal.split(".")[1].length >= 2) {
+        //   return
+        // }
+        // const temp = this.inputVal + val
+        // if (this.inputType ? (temp * 1 > 9.9 || temp.length > 3) : temp * 1 > 10000) {
+        //   return
+        // }
         this.inputVal += val
       }
     },
     submitDiscount() {
-      if (!this.inputVal) {
-        this.$toast('输入不能为空')
-        return
-      }
-      if (this.inputVal[this.inputVal.length - 1] === '.' || this.inputVal * 1 === 0) {
+      // if (!this.inputVal) {
+      //   this.$toast('输入不能为空')
+      //   return
+      // }
+      // if (this.inputVal[this.inputVal.length - 1] === '.' || this.inputVal * 1 === 0) {
+      //   this.$toast('输入格式有误')
+      //   return
+      // }
+      const re = this.inputType ? /^(?=0\.[1-9]|[1-9]\.\d).{3}$|^([1-9])$/ : /^[1-9]{0,4}?(\.[0-9]{1,2})?$|^10000$/
+      if (re.test(this.inputVal) || (!this.inputType && this.inputVal * 1 === 10000)) {
+        this.$store.dispatch('SetSelDiscount', {
+          Type: this.inputType ? 1 : 2,
+          Value: this.inputType ? this.inputVal / 10 : this.inputVal
+        })
+        this.addStatus = false
+        this.isShowShopDiscounts = false
+        this.inputVal = ''
+      } else {
         this.$toast('输入格式有误')
-        return
       }
-      this.$store.dispatch('SetSelDiscount', {
-        Type: this.inputType ? 1 : 2,
-        Value: this.inputType ? this.inputVal / 10 : this.inputVal
-      })
-      this.addStatus = false
-      this.isShowShopDiscounts = false
-      this.inputVal = ''
+
     }
   },
+
   directives: {
     focus: {
       inserted: function(el) {
@@ -1581,7 +1588,7 @@ export default {
           this.singleOver = "(最多可挂10单)";
         }
         if (this.cart.length > 0) {
-					
+
           this.buttonDisable[1] = true;
         } else {
           this.buttonDisable[1] = false;
@@ -1605,7 +1612,6 @@ export default {
       if (val) {
         var self = this;
         for (var i = 0; i < this.checkedProduct.skus.length; i++) {
-          console.log(this.checkedProduct.skus[i].baseSKU.specification1, this.checkedProduct.skus[i].baseSKU.specification2, this.checkedProduct.skus[i].baseSKU.specification3, this.checkedProduct.skus[i].realStock);
           if (this.checkedProduct.skus[i].realStock > 0) {
             setTimeout(function() {
               self.skuSelect.color = self.checkedProduct.skus[i].baseSKU.specification1Id;
@@ -1843,8 +1849,7 @@ export default {
                 }
                 .icon-tianjia1 {
                   width: 24px;
-                  height: 24px;
-                  // border: 1px solid rgba(214, 214, 214, 1);
+                  height: 24px; // border: 1px solid rgba(214, 214, 214, 1);
                   background: rgba(199, 177, 135, 1);
                   color: #fff;
                   border-radius: 3px;
@@ -2066,7 +2071,7 @@ export default {
   }
 }
 
-.disabled {
+.disabledd {
   border: 1px solid rgba(0, 0, 0, 0.3)!important;
   div {
     color: rgba(0, 0, 0, 0.3)!important;
@@ -2257,6 +2262,11 @@ export default {
       font-size: 16px;
       border-radius: 4px;
       margin-top: 20px;
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+        margin: 0;
+      }
     }
     &-keyboard {
       margin-left: 86px;

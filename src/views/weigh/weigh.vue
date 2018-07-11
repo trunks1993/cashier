@@ -331,7 +331,6 @@ export default {
       if (val) {
         var self = this;
         for (var i = 0; i < this.checkedProduct.skus.length; i++) {
-          console.log(this.checkedProduct.skus[i].baseSKU.specification1, this.checkedProduct.skus[i].baseSKU.specification2, this.checkedProduct.skus[i].baseSKU.specification3, this.checkedProduct.skus[i].realStock);
           if (this.checkedProduct.skus[i].realStock > 0) {
             setTimeout(function() {
               self.skuSelect.color = self.checkedProduct.skus[i].baseSKU.specification1Id;

@@ -6,7 +6,7 @@
           <img src="../assets/images/daogou.png">
           <span>导购</span>
         </div>
-        <span>{{focusGuide.name || '暂不关联'}} ></span>
+        <span>{{focusGuide.name || '暂不关联'}} <i class="iconfont icon-jiantou" style="color: #999;font-size: 12px;"></i></span>
       </div>
       <div class="orderInfo-orderDetail" @click="showDetail">
         <div>
@@ -16,14 +16,16 @@
             <span class="orderInfo-orderDetail-cash">{{totalAll.moneyTotal | rmb}}</span>
           </div>
         </div>
-        <div>></div>
+        <div>
+          <i class="iconfont icon-jiantou" style="color: #999;font-size: 12px;"></i>
+        </div>
       </div>
       <div class="orderInfo-center">
         <div>
           <div>
             {{orderIntefral}}积分<span>抵扣{{integral | rmb}}</span>
           </div>
-          <mu-switch v-model="isIntegral" class="switch" />
+          <mu-switch v-model="isIntegral" class="yswitch" />
         </div>
         <div class="orderInfo-center-item" v-show="totalAll.coupon!=0">
           <div>优惠券</div>
@@ -35,17 +37,17 @@
         </div>
         <div class="orderInfo-center-item" v-if="selCard">
           <div>会员卡</div>
-          <span>{{selCard.discount}}折</span>
+          <span style="font-weight: bolder;">{{selCard.discount}}折</span>
         </div>
         <div class="orderInfo-center-item" v-if="this.$store.getters.userInfo.openDiscounts">
           <div>{{!discountObj? '整单优惠' : discountObj.Type === 1 ? '整单折扣' : '整单减价'}}</div>
-          <span v-if="discountObj">{{discountObj.Type === 1 ? (discountObj.Value * 10).toFixed(1) + `折(-￥${fullOrderActivit})` : '-'+ discountObj.Value +'元'}}</span>
+          <span style="font-weight: bolder;" v-if="discountObj">{{discountObj.Type === 1 ? (discountObj.Value * 10).toFixed(1) + `折(-￥${fullOrderActivit})` : '-'+ discountObj.Value +'元'}}</span>
           <span v-else>无</span>
         </div>
         <div class="orderInfo-center-line"></div>
         <div class="orderInfo-center-totalbox">
           <div>总金额</div>
-          <span>{{startMoney | rmb}}</span>
+          <span style="font-weight: bolder;">{{startMoney | rmb}}</span>
         </div>
       </div>
       <div class="orderInfo-peopleInfo">
@@ -254,7 +256,7 @@ export default {
       netReceipts: 0, //实收
       maxRealCash: 0,
       isFirst: true,
-			fullOrderActivit:0,
+      fullOrderActivit: 0,
       errorImg: 'this.src="' + require('../assets/images/imgerror.png') + '"'
     }
   },
@@ -288,20 +290,19 @@ export default {
         returnStr = "应收现金" + this.maxRealCash;
       }
       this.cash = this.maxRealCash;
-      console.log(returnStr)
       return returnStr;
-    }, 
+    },
     toSecondSrceen() {
-	    const { cash, capital,isIntegral,payType } = this
-			var endMoney = this.payType == "xj"?(this.capital*100+this.cash*100)/100:this.startMoney;
-	    return {
-				integral:this.integral,
-	      startMoney:this.startMoney.toFixed(2),
-	      activities:((this.totalAll.moneyTotal)*1-(this.startMoney)*1-(this.integral)*1).toFixed(2),
-	      giveChange:this.payType == "xj"?this.giveChange:0,
-	      endMoney:endMoney.toFixed(2)
-	    }
-	  }
+      const { cash, capital, isIntegral, payType } = this
+      var endMoney = this.payType == "xj" ? (this.capital * 100 + this.cash * 100) / 100 : this.startMoney;
+      return {
+        integral: this.integral,
+        startMoney: this.startMoney.toFixed(2),
+        activities: ((this.totalAll.moneyTotal) * 1 - (this.startMoney) * 1 - (this.integral) * 1).toFixed(2),
+        giveChange: this.payType == "xj" ? this.giveChange : 0,
+        endMoney: endMoney.toFixed(2)
+      }
+    }
   },
   methods: {
     bodyKeyUp(e) {
@@ -389,15 +390,15 @@ export default {
       startMoney = moneyTotal - coupon - activities;
       startMoney = parseFloat(startMoney.toFixed(2));
       if (startMoney < 0) { startMoney = 0 }
-			var prevMoney = startMoney;
-			
+      var prevMoney = startMoney;
+
       //整单优惠 
-      if(this.discountObj) {
+      if (this.discountObj) {
         startMoney = this.discountObj.Type === 1 ? (startMoney * this.discountObj.Value) : (startMoney - this.discountObj.Value)
       }
-			if (startMoney < 0) { startMoney = 0 }
-			this.fullOrderActivit = (prevMoney - startMoney).toFixed(2);
-			
+      if (startMoney < 0) { startMoney = 0 }
+      this.fullOrderActivit = (prevMoney - startMoney).toFixed(2);
+
       //积分
       this.setIntegral(subdata.orderModel.integralChangeRule, subdata.orderModel.orderIntegralExchange, startMoney); // 可用积分
       if (this.isIntegral) {
@@ -405,8 +406,8 @@ export default {
       } else {
         this.startMoney = startMoney;
       }
-      
-     
+
+
       if (subdata.orderModel.openOfflineDepositPay) {
         if (subdata.orderModel.capital > 0) {
           if (subdata.orderModel.capital > this.startMoney) {
@@ -415,8 +416,8 @@ export default {
             this.capital = subdata.orderModel.capital;
           }
         }
-				this.capital = this.capital.toFixed(2);
-        this.maxCapital = this.capital; 
+        this.capital = this.capital.toFixed(2);
+        this.maxCapital = this.capital;
       }
       this.priceCalculation();
 
@@ -546,7 +547,7 @@ export default {
         integral: 0,
         userId: userId,
         ServiceSalesId: this.focusGuide.id,
-        webTotalAmount: webTotalAmount, 
+        webTotalAmount: webTotalAmount,
         orderProducts: [],
         SelectedActivity: [],
         DiscountsType: this.discountObj.Type,
@@ -597,7 +598,7 @@ export default {
       submitOrderAndPay(upData).then(function(response) {
         if (response.data.success) {
           successData = { integral: self.integral, isIntegral: self.isIntegral, startMoney: webTotalAmount, totalAll: self.totalAll, orderCreateTime: response.data.orderCreateTime };
-          self.$router.push({path: '/success', query: {discount: self.discountObj, fullOrderActivit: self.fullOrderActivit}});
+          self.$router.push({ path: '/success', query: { discount: self.discountObj, fullOrderActivit: self.fullOrderActivit } });
         } else {
           self.$toast(response.data.msg);
           setTimeout(function() {
@@ -609,7 +610,7 @@ export default {
             if (response.data.status == 1) {
               self.$router.push('/');
             }
-          }, 400)   
+          }, 400)
         }
         self.payCode = "";
         self.loading = false;
@@ -622,7 +623,7 @@ export default {
     numberOnly: function(vv) {
       if (vv != '' && vv.substr(0, 1) == '.') {
         vv = "";
-      } 
+      }
       vv = vv.replace(/^0*(0\.|[1-9])/, '$1'); //解决 粘贴不生效
       vv = vv.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
       vv = vv.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
@@ -667,11 +668,11 @@ export default {
       this.render();
     },
     toSecondSrceen: {
-	    handler: function(val) {
-	       sendTosecondaryDisplay(carts,memberData,val,2,this);
-	    },
-	    deep: true
-	  }
+      handler: function(val) {
+        sendTosecondaryDisplay(carts, memberData, val, 2, this);
+      },
+      deep: true
+    }
   },
   directives: {
     focus: {
@@ -749,6 +750,7 @@ export default {
     &-title {
       font-size: 16px;
       color: rgba(102, 102, 102, 1);
+      font-weight: bolder;
     }
     &-num {
       font-size: 14px;
@@ -757,6 +759,9 @@ export default {
     &-cash {
       font-size: 14px;
       color: #E00000;
+    }
+    &-count {
+      color: #999;
     }
   }
   &-center {
@@ -777,7 +782,7 @@ export default {
     &-line {
       margin-top: 26px;
       height: 1px;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.1);
     }
     &-totalbox {
       height: 56px;
@@ -795,8 +800,9 @@ export default {
   }
   &-peopleInfo {
     padding: 25px;
-      margin-top: 22px;
-      background: #fff;
+    margin-top: 22px;
+    background: #fff;
+    height: calc(100% - 411px);
     &-title {
       font-size: 14px;
       color: rgba(51, 51, 51, 1);

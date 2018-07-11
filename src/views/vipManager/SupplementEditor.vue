@@ -258,7 +258,7 @@ export default {
         sex: this.supplementData.sex,
         nikename: this.supplementData.nickName,
         realname: this.supplementData.realName,
-        birthday: this.supplementData.birthDay,
+        birthday: this.supplementData.birthday,
         cardIds: this.selCardList.map(item => {
           return item.Id
         })
@@ -356,6 +356,7 @@ export default {
         line-height: 40px;
         text-align: center;
         display: inline-block;
+        margin-left: 30px;
       }
     }
   }
@@ -483,7 +484,6 @@ export default {
           width: 24px;
           height: 24px;
           border-radius: 100%;
-          border: 1px solid rgba(255, 255, 255, 0.5);
           position: absolute;
           top: 1px;
           right: 1px;
@@ -578,6 +578,7 @@ export default {
           color: #fff;
           font-size: 20px;
           line-height: 20px;
+          font-weight: bolder;
         }
       }
       &-item2 {
@@ -590,6 +591,7 @@ export default {
           color: #fff;
           font-size: 20px;
           line-height: 20px;
+          font-weight: bolder;
         }
         & div:nth-child(2) {
           color: #fff;
@@ -623,6 +625,7 @@ export default {
         span {
           color: #c7b187;
           font-size: 14px;
+          font-weight: bolder;
         }
       }
     }

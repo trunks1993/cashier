@@ -168,7 +168,7 @@ export default {
         sex: this.supplementData.sex,
         nikename: this.supplementData.nickName,
         realname: this.supplementData.realName,
-        birthday: this.supplementData.birthDay
+        birthday: this.supplementData.birthday
       }).then(res => {
         const data = res.data
         this.loading = false

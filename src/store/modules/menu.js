@@ -3,7 +3,6 @@ import { asyncRouterMap } from '@/router'
 // const _import = require('@/router/_import_' + process.env.NODE_ENV)
 
 function getRouterMap(routerTemplate) {
-  console.log(routerTemplate)
   let arr3 = asyncRouterMap.filter((item1) => {
     return routerTemplate.findIndex((item2) => {
       return item2.id === item1.children[0].meta.id

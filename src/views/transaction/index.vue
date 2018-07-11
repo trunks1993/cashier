@@ -24,7 +24,7 @@
       </div>
       <div class="filterItem" v-if="filterShopSales && filterShopSales.length > 0">
         <h2 style="position: relative;">导购<span style="font-size: 14px;color: #d7d7d7;display: inline;background: none;margin-left: 10px;">(多选)</span>
-          <i v-if="filterShopSales && filterShopSales.length > 3" style="position: absolute;right: 0;cursor: pointer;color: #cccccc;transform: rotate(90deg);" class="iconfont icon-jiantou" @click="showHide"></i>
+          <i v-if="filterShopSales && filterShopSales.length > 3" :style="'position: absolute;right: 0;cursor: pointer;color: #cccccc;' + (!isHide ? 'transform: rotate(-90deg);' : 'transform: rotate(90deg);')" class="iconfont icon-jiantou" @click="showHide"></i>
         </h2>
         <transition name="fade">
           <div class="item" v-show="!isHide">
@@ -35,7 +35,7 @@
       </div>
       <div class="filterItem" v-if="filterCashier && filterCashier.length > 0">
         <h2 style="position: relative;">收银员<span style="font-size: 14px;color: #d7d7d7;display: inline;background: none;margin-left: 10px;">(多选)</span>
-        <i v-if="filterCashier && filterCashier.length > 3" style="position: absolute;right: 0;cursor: pointer;color: #cccccc;transform: rotate(90deg);" class="iconfont icon-jiantou" @click="showCashierHide"></i>
+        <i v-if="filterCashier && filterCashier.length > 3" :style="'position: absolute;right: 0;cursor: pointer;color: #cccccc;' + (!isCashierHide ? 'transform: rotate(-90deg);' : 'transform: rotate(90deg);')" class="iconfont icon-jiantou" @click="showCashierHide"></i>
         </h2>
         <transition name="fade">
         <div class="item" v-show="!isCashierHide">

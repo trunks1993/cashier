@@ -156,21 +156,18 @@
     </div>
     <div class="sideBar-container-mark" :style="!isSideShow ? 'display: none' : ''" @click="isSideShow = false">
     </div>
-		
-		
-		<div class="showCodeImg" v-show="showCode" @click="showCode=false">
-			<div class="codeBox">
-				<div class="imgCodeBox">
-					<qriously class="imgCode" id="aa" :value="initQCode" :size="215" />
-				</div>
-				<div style="display:none;">
-					<qriously class="imgCode" id="downaloadImg" :value="initQCode" :size="1000" />
-				</div>
-				<p>请让消费者使用微信扫描该二维码，完成头像上传后即自动完成开卡</p>
-				<button @click="downloadQrcode">下载该二维码</button>
-			</div>
-		</div>
-		
+    <div class="showCodeImg" v-show="showCode" @click="showCode=false">
+      <div class="codeBox">
+        <div class="imgCodeBox">
+          <qriously class="imgCode" id="aa" :value="initQCode" :size="215" />
+        </div>
+        <div style="display:none;">
+          <qriously class="imgCode" id="downaloadImg" :value="initQCode" :size="1000" />
+        </div>
+        <p>请让消费者使用微信扫描该二维码，完成头像上传后即自动完成开卡</p>
+        <button @click="downloadQrcode">下载该二维码</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -219,12 +216,12 @@ export default {
       discountsList: [],
       inputVal: '',
       showMsgBox: false,
-			showCode:false,
-			initQCode:""
+      showCode: false,
+      initQCode: ""
     }
   },
   created() {
-		this.getLocalUrl();
+    this.getLocalUrl();
     Bus.$on('showSide', res => {
       this.isSideShow = res
     })
@@ -235,8 +232,8 @@ export default {
         this.isSettingBox = true
         return
       }
-      if (route.meta && route.meta.id === 13014) { 
-       	this.showCode = true;
+      if (route.meta && route.meta.id === 13014) {
+        this.showCode = true;
         return
       }
       if (route.meta && route.meta.id === 13003) {
@@ -329,57 +326,62 @@ export default {
       } else if (val === 'delete') {
         this.inputVal = this.inputVal.substring(0, this.inputVal.length - 1)
       } else {
-        if (!this.inputVal && (val === '00' || val === '.')) { // 不能00开头
-          this.$toast('输入格式有误')
-          return
-        }
-        if (this.inputVal[0] === '0' && this.inputVal.length === 1 && val === '0') {
-          this.$toast('输入格式有误')
-          return
-        }
-        if (this.inputVal.indexOf('.') >= 0 && val === '.') {
-          this.$toast('输入格式有误')
-          return
-        }
-        if (this.inputVal.indexOf('.') >= 0 && this.inputVal.split(".")[1].length >= 2) {
-          this.$toast('输入格式有误')
-          return
-        }
-        const temp = this.inputVal + val
-        if (this.inputType ? (temp * 1 > 9.9 || temp.length > 3) : temp * 1 > 10000) {
-          this.$toast('输入格式有误')
-          return
-        }
+        // if (!this.inputVal && (val === '00' || val === '.')) { // 不能00开头
+        //   this.$toast('输入格式有误')
+        //   return
+        // }
+        // if (this.inputVal[0] === '0' && this.inputVal.length === 1 && val === '0') {
+        //   this.$toast('输入格式有误')
+        //   return
+        // }
+        // if (this.inputVal.indexOf('.') >= 0 && val === '.') {
+        //   this.$toast('输入格式有误')
+        //   return
+        // }
+        // if (this.inputVal.indexOf('.') >= 0 && this.inputVal.split(".")[1].length >= 2) {
+        //   this.$toast('输入格式有误')
+        //   return
+        // }
+        // const temp = this.inputVal + val
+        // if (this.inputType ? (temp * 1 > 9.9 || temp.length > 3) : temp * 1 > 10000) {
+        //   this.$toast('输入格式有误')
+        //   return
+        // }
         this.inputVal += val
       }
     },
     submitDiscount() {
       if (!this.inputVal) {
-        this.$toast('不能为空')
+        this.$toast('输入不能为空')
         return
       }
       if (this.inputVal[this.inputVal.length - 1] === '.' || this.inputVal * 1 === 0) {
         this.$toast('输入格式有误')
         return
       }
-      let num = this.inputVal / 10
-      if (this.inputType) {
-        num = num.toFixed(2)
-      }
-      submitDiscount({
-        type: this.inputType ? 1 : 2,
-        value: this.inputType ? num : this.inputVal
-      }).then(res => {
-        const data = res.data
-        if (data.success) {
-          this.$toast('添加成功')
-          this.addStatus = false
-          this.inputVal = ''
-          this.showShopDiscounts()
-        } else {
-          this.$toast(data.msg)
+      const re = this.inputType ? /^(?=0\.[1-9]|[1-9]\.\d).{3}$|^([1-9])$/ : /^[1-9]{0,4}?(\.[0-9]{1,2})?$|^10000$/
+      if (re.test(this.inputVal) || (!this.inputType && this.inputVal * 1 === 10000)) {
+        let num = this.inputVal / 10
+        if (this.inputType) {
+          num = num.toFixed(2)
         }
-      })
+        submitDiscount({
+          type: this.inputType ? 1 : 2,
+          value: this.inputType ? num : this.inputVal
+        }).then(res => {
+          const data = res.data
+          if (data.success) {
+            this.$toast('添加成功')
+            this.addStatus = false
+            this.inputVal = ''
+            this.showShopDiscounts()
+          } else {
+            this.$toast(data.msg)
+          }
+        })
+      } else {
+        this.$toast('输入格式有误')
+      }
     }
   },
   filters: {
@@ -659,6 +661,11 @@ export default {
       font-size: 16px;
       border-radius: 4px;
       margin-top: 20px;
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+        margin: 0;
+      }
     }
     &-keyboard {
       // display: flex;

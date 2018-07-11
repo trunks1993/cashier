@@ -8,10 +8,10 @@
           <div class="add-container-addBox-wrapper-header-wall"></div>
           <span>请输入办理会员的手机号</span>
         </div>
-        <input type="text" placeholder="输入手机号" :readonly="pcNumber === -1 ? false : true" v-model="inputVal">
-        <div style="margin-top: 14px;">
+        <input type="number" placeholder="输入手机号" :readonly="pcNumber === -1 ? false : true" v-model="inputVal">
+        <!-- <div style="margin-top: 14px;">
           <div style="color: #999999; font-size: 12px;">注：最大优惠金额不得超过10000元</div>
-        </div>
+        </div> -->
         <div class="add-container-addBox-wrapper-keyboard">
           <div class="add-container-addBox-wrapper-keyboard-itembox">
             <div @click="inputValue('1')">1</div>
@@ -190,13 +190,19 @@ export default {
         }
       }
       input {
-        width: 244px;
+        width: 315px;
         height: 48px;
         border: 1px solid rgba(199, 178, 135, 0.7);
         padding: 0 20px;
         font-size: 16px;
         border-radius: 4px;
         margin-top: 20px;
+        background: #f2f2f2;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none !important;
+          margin: 0;
+        }
       }
       &-keyboard {
         margin-top: 50px;

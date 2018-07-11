@@ -4,7 +4,6 @@
       <img src="../../assets/images/vipManager/goback.png" @click="goBack">
       <span>{{cardAndTradeInfo.isCard ? '会员卡' : '优惠券'}}{{cardAndTradeInfo.data.length > 0 ? `(${cardAndTradeInfo.data.length})` : ''}}</span>
     </div>
-
     <div class="card" v-if="cardAndTradeInfo.isCard">
       <template v-if="hasCard(true) > 0">
         <div class="card-header">
@@ -96,29 +95,41 @@
         </div>
       </template>
     </div>
-
     <div class="trade" v-else>
-      <div class="trade-itemBox" v-for="item in cardAndTradeInfo.data">
-        <div class="trade-itemBox-left">
-          <div class="trade-itemBox-left-price">
-            <span>￥</span>
-            <span>{{item.Price}}</span>
+      <template v-if="cardAndTradeInfo.data.length > 0">
+        <div class="trade-itemBox" v-for="item in cardAndTradeInfo.data">
+          <div class="trade-itemBox-left">
+            <div class="trade-itemBox-left-price">
+              <span>￥</span>
+              <span>{{item.Price}}</span>
+            </div>
+            <span class="trade-itemBox-left-shopName">{{item.ShopName}}</span>
           </div>
-          <span class="trade-itemBox-left-shopName">{{item.ShopName}}</span>
+          <div class="trade-itemBox-right">
+            <div>{{item.activityName}}</div>
+            <div>有效期至{{item.EndTimeText}}</div>
+          </div>
         </div>
-        <div class="trade-itemBox-right">
-          <div>{{item.activityName}}</div>
-          <div>有效期至{{item.EndTimeText}}</div>
+      </template>
+      <div v-else style="text-align: center;">
+        <div>
+          <img :src="noTick">
         </div>
+        <img :src="zwyh" style="margin-top: 40px;">
       </div>
     </div>
   </div>
 </template>
 <script>
+import noTick from '@/assets/images/vipManager/noTick.png'
+import zwyh from '@/assets/images/vipManager/zwyh.png'
+
 export default {
   props: ['cardAndTradeInfo'],
   data() {
     return {
+      noTick,
+      zwyh,
       indexArr: [],
       backgroundLevel: {
         background: `url(${require('@/assets/images/vipManager/levelcard.png')}) no-repeat`
@@ -203,8 +214,7 @@ export default {
       &-cardContent {
         padding: 20px 23px;
         width: 277px;
-        height: 146px;
-        // background: url(../../assets/images/vipManager/levelcard.png) no-repeat;
+        height: 146px; // background: url(../../assets/images/vipManager/levelcard.png) no-repeat;
         & div:nth-child(1) {
           color: #fff;
           font-size: 20px;
@@ -251,7 +261,6 @@ export default {
         padding: 20px 23px;
         width: 277px;
         height: 146px;
-        // background: url(../../assets/images/vipManager/wumenkan.png) no-repeat;
         & div:nth-child(1) {
           color: #fff;
           font-size: 20px;
@@ -301,7 +310,7 @@ export default {
     display: inline-block;
     align-items: center;
     background: #fff;
-    border-radius:12px;
+    border-radius: 12px;
     padding: 22px 18px 22px 25px;
     margin-right: 24px;
     margin-bottom: 24px;
@@ -321,7 +330,7 @@ export default {
       }
       &-shopName {
         color: #E00000;
-        font-size:14px;
+        font-size: 14px;
         line-height: 14px;
       }
     }

@@ -75,19 +75,20 @@
         </div>
         <div class="editor-container-mainBox-rightWrapper-item">
           <span>昵称</span>
-          <span>{{vipDetail.nick}}</span>
+          <span style="font-weight: bolder;">{{vipDetail.nick}}</span>
         </div>
         <div class="editor-container-mainBox-rightWrapper-item">
           <span>性别</span>
-          <span v-if="!isEditor">{{vipDetail.sex === 1 ? '男' : '女'}}</span>
+          <span v-if="!isEditor">{{vipDetail.sex === 1 ? '男' : vipDetail.sex === 2 ? '女' : '保密'}}</span>
           <div v-else>
             <el-radio v-model="vipDetail.sex" :label="1">男</el-radio>
             <el-radio v-model="vipDetail.sex" :label="2">女</el-radio>
+            <el-radio v-model="vipDetail.sex" :label="3">保密</el-radio>
           </div>
         </div>
         <div class="editor-container-mainBox-rightWrapper-item">
           <span>生日日期</span>
-          <span v-if="!isEditor">{{vipDetail.birthDay}}</span>
+          <span v-if="!isEditor">{{vipDetail.birthDay || '-'}}</span>
           <el-date-picker v-else size="mini" style="width: 130px;" v-model="vipDetail.birthDay" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
           </el-date-picker>
         </div>
@@ -162,6 +163,8 @@ export default {
           color: #333333;
           font-size: 16px;
           line-height: 16px;
+          white-space: nowrap;
+          font-weight: bolder;
         }
         & div:nth-child(2) {
           color: #C7B187;

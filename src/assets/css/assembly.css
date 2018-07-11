@@ -43,7 +43,7 @@
 }
 .mu-raised-button.button .mu-raised-button-label{
 	font-size: 18px;
-	color: #212121!important;
+	/*color: #212121!important;*/
 }
 .mu-raised-button.button.yellow{
 	background: #baa57b;
@@ -61,10 +61,10 @@
 }
 .mu-raised-button.button.yellow.disabled{
     background: #e8e8e8;
-    border-color:#e8e8e8;
+    /*border-color:#e8e8e8;*/
 }
 .mu-raised-button.button.yellow.disabled span{
-	color: #212121 !important;
+	color: #999 !important;
 }
 .changePage .mu-pagination-item.active{
 	background: #c7b187;

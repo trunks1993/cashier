@@ -26,7 +26,7 @@ body{font-family:SF-UI-Display-Medium;}
 	border-color:rgba(0,0,0,.1);
 }
 .mu-raised-button-label{
-	color:#212121!important;
+	/*color:#212121!important;*/
 }
 .list .mu-item-wrapper.hover{
 	background:#e4e9f0;
@@ -1380,6 +1380,9 @@ button:hover{
 	background: #e8e8e8;
     border-color:#e8e8e8;
     color: #212121;
+}
+.mu-raised-button.disabled span {
+	color: #999;
 }
 .successYes .print.mu-raised-button{
 	background:none;

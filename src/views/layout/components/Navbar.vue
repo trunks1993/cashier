@@ -8,7 +8,7 @@
       <i class="iconfont icon-fanhui"></i>
       <span style="margin-left: 10px;">{{userInfo.userName}}</span>
     </div>
-    <div class="navbarContainer-title">{{title}}</div>
+    <div class="navbarContainer-title" @dblclick="fullwindow">{{title}}</div>
     <div class="navbarContainer-close" @click="exitSystemChange">退出</div>
     <mu-dialog dialogClass="m-dialog" :open="exitDailog" title="" @close="closeExitDailog" style="position: absolute;">
       <div class="confirmBegin" style="text-align:center;">您还未交班，是否继续退出？</div>
@@ -25,7 +25,8 @@ import Bus from '@/utils/bus'
 export default {
   data() {
     return {
-      exitDailog: false
+      exitDailog: false,
+      isFullScreen: false
     }
   },
   computed: {
@@ -43,7 +44,7 @@ export default {
     goBack() {
       this.$router.back()
     },
-    exitSystemChange: function() {
+    exitSystemChange() {
       console.log(this.userInfo);
       var ishaveCashier = false;
       for (var i = 0; i < this.userInfo.rights.length; i++) {
@@ -58,13 +59,22 @@ export default {
         this.exitSystem();
       }
     },
-    exitSystem: function() {
+    exitSystem() {
       window.location.href = "/sellerAdmin/Cashier/LogOut"
     },
-    closeExitDailog: function() {
+    fullwindow() {
+      if (this.isFullScreen) {
+        this.isFullScreen = false;
+        document.webkitExitFullscreen()
+      } else {
+        this.isFullScreen = true;
+        document.documentElement.webkitRequestFullScreen();
+      }
+    },
+    closeExitDailog() {
       this.exitDailog = false
     },
-    goSingOut: function() {
+    goSingOut() {
       this.$router.push({
         path: "/signOut",
         query: {
@@ -85,6 +95,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0 25px;
+  position: relative;
+  z-index: 1000;
   &-nameAndTools {
     i,
     span {

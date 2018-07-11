@@ -474,6 +474,7 @@ export default {
           font-size: 24px;
           line-height: 24px;
           color: #E00000;
+          font-weight: bolder;
         }
       }
       &-shopName {

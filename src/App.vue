@@ -1,20 +1,6 @@
 <template>
   <div id="app">
     <div class="chromeTips" v-show="isChrome">为了您能完整且良好的使用收银,建议您使用谷歌浏览器</div>
-    <!-- <header class="appHeader">
-      <a href="javascript:history.back()" v-if="enableBack" class="iconfont icon-fanhui menu-back"></a>
-      <a class="iconfont icon-hanbaocaidan menu-nav" v-else :class="{active:isLeftmenu}" @click="isLeftmenu=!isLeftmenu"></a>
-      <em @dblclick="fullwindow">{{title}}</em>
-      <div class="heder-right">
-        <span class="header-name">
-				<i class="iconfont icon-yonghu"></i>
-				{{userName}}
-      </span>
-        <span @click="exitSystemChange">
-      	<i class="iconfont icon-tuichu"></i>退出
-      </span>
-      </div>
-    </header> -->
     <div class="global-left-menu" :class="{active:isLeftmenu}">
       <div class="mask" @click="isLeftmenu=!isLeftmenu;isHidddenMenu=false;"></div>
       <!--左侧菜单-->
@@ -151,7 +137,7 @@ export default {
     }
   },
   beforeCreate() {
-    // mockLogin('swgyd', '123456').then(res => {
+    // mockLogin('gmc', '123456').then(res => {
     //   const data = res.data
     //   document.cookie = 'Himall-SellerManager = ' + data.userId
     // })
@@ -248,15 +234,6 @@ export default {
     },
     saveCashierShifSetting: function() {
       saveCashierShifSetting({ OpenCashierShift: this.isShift, OpenPrintTicket: this.isAutoShift })
-    },
-    fullwindow: function() {
-      if (this.isFullScreen) {
-        this.isFullScreen = false;
-        document.webkitExitFullscreen()
-      } else {
-        this.isFullScreen = true;
-        document.documentElement.webkitRequestFullScreen();
-      }
     },
     exitSystemChange: function() {
       var ishaveCashier = false;
