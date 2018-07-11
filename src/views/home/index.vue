@@ -1533,7 +1533,7 @@ export default {
       //   this.$toast('输入格式有误')
       //   return
       // }
-      const re = this.inputType ? /^(?=0\.[1-9]|[1-9]\.\d).{3}$|^([1-9])$/ : /^[1-9][0, 9]{0,3}?(\.[0-9]{1,2})?$|^10000$/
+      const re = this.inputType ? /^(?=0\.[1-9]|[1-9]\.\d).{3}$|^([1-9])$/ : /^[1-9][0-9]{0,3}?(\.[0-9]{1,2})?$|^10000$/
       if (re.test(this.inputVal) || (!this.inputType && this.inputVal * 1 === 10000)) {
         this.$store.dispatch('SetSelDiscount', {
           Type: this.inputType ? 1 : 2,
