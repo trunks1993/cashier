@@ -172,7 +172,7 @@
               <span>.{{item.Value | formatNumber(false)}}</span>
               <span>折</span>
             </div>
-            <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item" v-show="getNumber(discountsList, true)" @click="addDiscount(true)">
+            <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item" @click="addDiscount(true)">
               +
             </div>
           </div>
@@ -187,7 +187,7 @@
               <span>-{{item.Value}}</span>
               <span>元</span>
             </div>
-            <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item2" v-show="getNumber(discountsList, false)" @click="addDiscount(false)">
+            <div class="sideBar-container-preferentialBox-mainWrapper-itemBox-content-item2" @click="addDiscount(false)">
               +
             </div>
           </div>
@@ -256,8 +256,7 @@
             <div class="skuWeigh-info" v-if="checkedProduct">
               <img :src="checkedProduct.imageUrl" :onerror="errorImg">
               <div>
-                <span class="title">{{
-                e}}</span>
+                <span class="title">{{checkedProduct.productName}}</span>
                 <span class="weigh" v-if="checkedProduct.skus[0].baseSKU.specification1">
                                     {{checkedProduct.skus[0].baseSKU.specification1}};
                                 </span>
@@ -300,7 +299,7 @@
           </div>
           <div>
             <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuPro" />
-            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清皮':'去皮'" />
+            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
           </div>
         </div>
       </mu-dialog>
@@ -328,13 +327,14 @@
           <div class="skurow">
             <label>数量<span>库存:{{(codeProd.storeStock-codeProd.safeStock)}}</span></label>
             <div class="skurow-kg">
-              <input type="text" v-focus ref="weighValue" @input="weighInput">
+              <input type="text" disabled="disabled" v-if="isS2" v-model="weighNum">
+              <input type="text" v-focus v-else ref="weighValue" @input="weighInput">
               <span v-if="codeProd.measureUnit">{{codeProd.measureUnit}}</span>
             </div>
           </div>
           <div>
             <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuCodePro" />
-            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清皮':'去皮'" />
+            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&codeProd.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
           </div>
         </div>
       </mu-dialog>
@@ -574,6 +574,9 @@ export default {
       var WeighDisPlays = plus.android.importClass("com.WeighDisPlays");
       var main = plus.android.runtimeMainActivity();
       wWeighDisPlays = new WeighDisPlays(main);
+			
+			
+			plus.android.invoke(wWeighDisPlays, "SetOpen");
       self.isS2 = true;
       // self.isWeiStable = false;
     }
@@ -741,16 +744,23 @@ export default {
       }
     },
     plus_goZero() {
-
       var qupi;
-      for (var i = 0; i < 10; i++) {
-        plus.android.invoke(wWeighDisPlays, "SetTare");
-        qupi = plus.android.getAttribute(wWeighDisPlays, "isQupi");
-        if (qupi != this.isQupi) {
-          this.isQupi = qupi;
-          break;
-        }
-      }
+			var i = 0;
+			var self = this;
+			funQupi();
+			function funQupi(){
+					i++;
+				  plus.android.invoke(wWeighDisPlays, "SetTare");
+				  qupi = plus.android.getAttribute(wWeighDisPlays, "isQupi");
+					if (qupi != self.isQupi) {
+						self.isQupi = qupi;
+						return;
+					}
+					if(i>=10) return;
+					setTimeout(function(){
+						  funQupi();
+					},50)
+			}		
     },
     //挂单
     cancelled() {
@@ -942,7 +952,7 @@ export default {
         num = 0;
       for (var i = 0; i < this.cart.length; i++) {
         var price = this.cart[i].joinFixedPrice && this.cart[i].num <= this.cart[i].limitBuy ? this.cart[i].marketPrice : this.cart[i].saleprice;
-        total += (parseInt(price * 100) * parseInt(this.cart[i].num * 1000)) / 100000;
+        total +=  (1*price)*(this.cart[i].num*1);
         num += parseFloat(this.cart[i].num);
       }
       return {
@@ -1523,7 +1533,7 @@ export default {
       //   this.$toast('输入格式有误')
       //   return
       // }
-      const re = this.inputType ? /^(?=0\.[1-9]|[1-9]\.\d).{3}$|^([1-9])$/ : /^[1-9][0-9]{0,3}?(\.[0-9]{1,2})?$|^10000$/
+      const re = this.inputType ? /^(?=0\.[1-9]|[1-9]\.\d).{3}$|^([1-9])$/ : /^[1-9][0, 9]{0,3}?(\.[0-9]{1,2})?$|^10000$/
       if (re.test(this.inputVal) || (!this.inputType && this.inputVal * 1 === 10000)) {
         this.$store.dispatch('SetSelDiscount', {
           Type: this.inputType ? 1 : 2,
@@ -1605,8 +1615,8 @@ export default {
         total: this.totalAll().total
       }, 1, this);
     },
-    skudialog: function(val) {
-      if (val) {
+    skudialog: function(v) {
+      if (v) {
         var self = this;
         for (var i = 0; i < this.checkedProduct.skus.length; i++) {
           if (this.checkedProduct.skus[i].realStock > 0) {
@@ -1622,7 +1632,6 @@ export default {
         /**S2称重处理**/
 
         if (this.isS2) {
-          plus.android.invoke(wWeighDisPlays, "SetOpen");
           self.getWeiTime = setInterval(function() {
             try {
               var val = plus.android.getAttribute(wWeighDisPlays, "mStableWeight");
@@ -1642,7 +1651,33 @@ export default {
         if (this.getWeiTime) clearInterval(this.getWeiTime);
         if (this.isS2) plus.android.invoke(wWeighDisPlays, "SetClose");
       }
-    }
+    },
+		codedialog:function(v){
+			
+				if (v) {
+					var self = this;
+					/**S2称重处理**/
+					if (this.isS2) {
+						self.getWeiTime = setInterval(function() {
+							try {
+								var val = plus.android.getAttribute(wWeighDisPlays, "mStableWeight");
+								var mStatus = plus.android.getAttribute(wWeighDisPlays, "mStatus");
+								if (self.checkedProduct.measureUnit == "g") {
+									self.weighNum = val;
+								} else {
+									self.weighNum = (val / 1000).toFixed(3);
+								} 
+							} catch (e) {
+								alert(JSON.stringify(e));
+							}
+						}, 1000);
+					}
+					/**S2称重处理**/
+				} else {
+					if (this.getWeiTime) clearInterval(this.getWeiTime);
+					if (this.isS2) plus.android.invoke(wWeighDisPlays, "SetClose");
+				}
+		}
   },
   filters: {
     rmb: function(value) {
@@ -1950,6 +1985,7 @@ export default {
     width: 64%;
     padding: 30px 30px 0 30px;
     position: relative;
+    background: #f1f1f1;
     &-qrInput {
       @extend .flex;
       width: 362px;
@@ -1960,7 +1996,7 @@ export default {
       input {
         margin-left: 10px;
         width: 162px;
-        background: #f5f7fa;
+        background: #f1f1f1;
       }
     }
     &-tabWrapper {
@@ -1975,7 +2011,7 @@ export default {
       z-index: 2;
       &-tabBox {
         width: calc(100% - 50px);
-        background: rgb(245, 247, 250);
+        background: #f1f1f1;
         box-shadow: 0px 25px 10px -20px rgba(0, 0, 0, 0.1);
         &-item {
           display: inline-block;
@@ -2123,44 +2159,44 @@ export default {
       }
       &-content {
         margin-top: 32px;
-        &-item {
+         &-item {
           text-align: center;
           position: relative;
           vertical-align: bottom;
           background: rgba(0, 0, 0, 0.1);
           display: inline-block;
-          width: calc((64vw - 316px) / 5);
-          height: calc(((64vw - 316px) / 5) * 0.8);
+          width: calc((64vw - 316px) / 6);
+          height: calc(((64vw - 316px) / 6) * 0.8);
           @media screen and(max-width: 1440px) {
-            width: calc((64vw - 265px) / 5);
-            height: calc(((64vw - 265px) / 5) * 0.8);
+            width: calc((64vw - 265px) / 6);
+            height: calc(((64vw - 265px) / 6) * 0.8);
           }
           & span:nth-child(1) {
             color: #fff;
-            font-size: calc(((64vw - 316px) / 5) * 0.5);
-            line-height: calc(((64vw - 316px) / 5) * 0.8);
+            font-size: calc(((64vw - 316px) / 6) * 0.5);
+            line-height: calc(((64vw - 316px) / 6) * 0.8);
             @media screen and(max-width: 1440px) {
-              line-height: calc(((64vw - 265px) / 5) * 0.8);
-              font-size: calc(((64vw - 265px) / 5) * 0.5);
+              line-height: calc(((64vw - 265px) / 6) * 0.8);
+              font-size: calc(((64vw - 265px) / 6) * 0.5);
             }
             font-weight: bold;
           }
           & span:nth-child(2) {
             color: #fff;
-            font-size: calc(((64vw - 316px) / 5) * 0.25);
-            line-height: calc(((64vw - 316px) / 5) * 0.8);
+            font-size: calc(((64vw - 316px) / 6) * 0.25);
+            line-height: calc(((64vw - 316px) / 6) * 0.8);
             @media screen and(max-width: 1440px) {
-              line-height: calc(((64vw - 265px) / 5) * 0.8);
-              font-size: calc(((64vw - 265px) / 5) * 0.25);
+              line-height: calc(((64vw - 265px) / 6) * 0.8);
+              font-size: calc(((64vw - 265px) / 6) * 0.25);
             }
             font-weight: bold;
           }
           & span:nth-child(3) {
             color: #fff;
             font-size: 16px;
-            line-height: calc(((64vw - 316px) / 5) * 0.8);
+            line-height: calc(((64vw - 316px) / 6) * 0.8);
             @media screen and(max-width: 1440px) {
-              line-height: calc(((64vw - 265px) / 5) * 0.8);
+              line-height: calc(((64vw - 265px) / 6) * 0.8);
               font-size: 12px;
             }
             font-weight: bold;
@@ -2170,47 +2206,46 @@ export default {
           @media screen and(max-width: 1440px) {
             margin-left: 20px;
           }
-          margin-left: 50px;
+          margin-left: 40px;
         }
         &-item:last-child {
           text-align: center;
           color: #fff;
-          font-size: calc(((64vw - 316px) / 5) * 0.5);
-          line-height: calc(((64vw - 316px) / 5) * 0.8);
+          font-size: calc(((64vw - 316px) / 6) * 0.5);
+          line-height: calc(((64vw - 316px) / 6) * 0.8);
           @media screen and(max-width: 1440px) {
-            font-size: calc(((64vw - 265px) / 5) * 0.5);
-            line-height: calc(((64vw - 265px) / 5) * 0.8);
+            font-size: calc(((64vw - 265px) / 6) * 0.5);
+            line-height: calc(((64vw - 265px) / 6) * 0.8);
           }
         }
-
         &-item2 {
           text-align: center;
           position: relative;
           vertical-align: bottom;
           background: rgba(0, 0, 0, 0.1);
           display: inline-block;
-          width: calc((64vw - 316px) / 5);
-          height: calc(((64vw - 316px) / 5) * 0.8);
+          width: calc((64vw - 316px) / 6);
+          height: calc(((64vw - 316px) / 6) * 0.8);
           @media screen and(max-width: 1440px) {
-            width: calc((64vw - 265px) / 5);
-            height: calc(((64vw - 265px) / 5) * 0.8);
+            width: calc((64vw - 265px) / 6);
+            height: calc(((64vw - 265px) / 6) * 0.8);
           }
            & span:nth-child(1) {
             color: #fff;
-            font-size: calc(((64vw - 316px) / 5) * 0.19);
-            line-height: calc(((64vw - 316px) / 5) * 0.8);
+            font-size: calc(((64vw - 316px) / 6) * 0.19);
+            line-height: calc(((64vw - 316px) / 6) * 0.8);
             @media screen and(max-width: 1440px) {
-              font-size: calc(((64vw - 265px) / 5) * 0.19);
-              line-height: calc(((64vw - 265px) / 5) * 0.8);
+              font-size: calc(((64vw - 265px) / 6) * 0.19);
+              line-height: calc(((64vw - 265px) / 6) * 0.8);
             }
             font-weight: bold;
           }
           & span:nth-child(2) {
             color: #fff;
             font-size: 16px;
-            line-height: calc(((64vw - 316px) / 5) * 0.8);
+            line-height: calc(((64vw - 316px) / 6) * 0.8);
             @media screen and(max-width: 1440px) {
-              line-height: calc(((64vw - 265px) / 5) * 0.8);
+              line-height: calc(((64vw - 265px) / 6) * 0.8);
               font-size: 12px;
             }
             font-weight: bold;
@@ -2220,16 +2255,16 @@ export default {
           @media screen and(max-width: 1440px) {
             margin-left: 20px;
           }
-          margin-left: 50px;
+          margin-left: 40px;
         }
         &-item2:last-child {
           text-align: center;
           color: #fff;
-          font-size: calc(((64vw - 316px) / 5) * 0.5);
-          line-height: calc(((64vw - 316px) / 5) * 0.8);
+          font-size: calc(((64vw - 316px) / 6) * 0.5);
+          line-height: calc(((64vw - 316px) / 6) * 0.8);
           @media screen and(max-width: 1440px) {
-            font-size: calc(((64vw - 265px) / 5) * 0.5);
-            line-height: calc(((64vw - 265px) / 5) * 0.8);
+            font-size: calc(((64vw - 265px) / 6) * 0.5);
+            line-height: calc(((64vw - 265px) / 6) * 0.8);
           }
         }
       }

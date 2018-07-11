@@ -365,10 +365,12 @@ export default {
           activities += this.activities[j].discountAmount;
         }
         if (this.activities[j].activeType == "Rebate") {
-          this.activitiesNofisrt.push(this.activities[j]);
+           this.activitiesNofisrt.push(this.activities[j]);
         }
         if (this.activities[j].activeType == "PlatformCoupon" || this.activities[j].activeType == "ShopCoupon") {
-          coupon = this.activities[j].discountAmount;
+           if(this.activities[j].selected){
+					     coupon = this.activities[j].discountAmount;
+					 } 
         }
         if (this.activities[j].activeType == "FullDelivery" && this.activities[j].gifts.length > 0) {
           for (var n = 0; n < this.activities[j].gifts.length; n++) {
@@ -416,7 +418,7 @@ export default {
             this.capital = subdata.orderModel.capital;
           }
         }
-        this.capital = this.capital.toFixed(2);
+        if(this.capital) this.capital = this.capital.toFixed(2);
         this.maxCapital = this.capital;
       }
       this.priceCalculation();

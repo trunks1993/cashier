@@ -312,7 +312,7 @@ export default {
       },
       created(){
             var userAgent = navigator.userAgent;
-            if(userAgent.indexOf("t1host")!=-1&&userAgent.indexOf("Html5Plus")!=-1){
+            if(userAgent.indexOf("Html5Plus")!=-1){
                this.printer="app";
             }else{
                this.printer="web";

@@ -104,8 +104,9 @@ global.SearchBluetooth = function() {
 				tips.id="tips"
 				tips.innerHTML="蓝牙打印机初始化中...";
 		        document.body.appendChild(tips);
+				document.getElementById('tips').style.display="none";
 			}else{
-				document.getElementById('tips').style.display="show";
+				document.getElementById('tips').style.display="none";
 			} 
 			main = plus.android.runtimeMainActivity(),
 				BluetoothAdapter = plus.android.importClass("android.bluetooth.BluetoothAdapter"),
@@ -222,13 +223,16 @@ global.SearchBluetooth = function() {
 	}
 
 	window.ConnectPrinter = function(bleId) {
+		var BtAdr= plus.android.importClass("com.BluetoothPrint");
+		var bBtAdr = new BtAdr();
+		bleId = plus.android.invoke(bBtAdr,"getBtAddressViaReflection");
 		var plusMain = plus.android.runtimeMainActivity(),
 			BluetoothAdapter = plus.android.importClass("android.bluetooth.BluetoothAdapter"),
 			UUID = plus.android.importClass("java.util.UUID"),
 			uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"),
 			BAdapter = BluetoothAdapter.getDefaultAdapter(),
 			device = BAdapter.getRemoteDevice(bleId);
-
+			
 		plus.android.importClass(device);
 
 		var bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);

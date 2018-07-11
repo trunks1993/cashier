@@ -16,7 +16,7 @@ const cashier = {
       state.selCoupon = selCoupon
     },
     SET_SELDISCOUNT: (state, selDiscount) => {
-      state.selDiscount = selDiscount
+      state.selDiscount = selDiscount;
     }
   },
   actions: {

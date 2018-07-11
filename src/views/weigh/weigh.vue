@@ -53,7 +53,7 @@
           </div>
           <div>
             <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuPro" />
-            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
+            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
           </div>
         </div>
       </mu-dialog>
@@ -80,12 +80,14 @@
           <div class="skurow">
             <label>数量<span>库存:{{(codeProd.storeStock-codeProd.safeStock)}}</span></label>
             <div class="skurow-kg">
-              <input type="text" ref="weighValue" @input="weighInput"><span v-if="codeProd.measureUnit">{{codeProd.measureUnit}}</span>
+              <input type="text" disabled="disabled" v-if="isS2" v-model="weighNum">
+              <input type="text" v-focus v-else ref="weighValue" @input="weighInput">
+							<span v-if="codeProd.measureUnit">{{codeProd.measureUnit}}</span>
             </div>
           </div>
           <div>
             <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuCodePro" />
-            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
+            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
           </div>
         </div>
       </mu-dialog>
@@ -344,7 +346,6 @@ export default {
 
         /**S2称重处理**/
         if (this.isS2) {
-          plus.android.invoke(wWeighDisPlays, "SetOpen");
           self.getWeiTime = setInterval(function() {
             try {
               var val = plus.android.getAttribute(wWeighDisPlays, "mStableWeight");
@@ -357,14 +358,39 @@ export default {
             } catch (e) {
               alert("error");
             }
-          }, 1000);
+          }, 700);
         }
         /**S2称重处理**/
       } else {
         if (this.getWeiTime) clearInterval(this.getWeiTime);
         this.inputfocus = false;
       }
-    }
+    },
+		codedialog:function(v){
+				if (v) {
+					var self = this;
+					/**S2称重处理**/
+					if (this.isS2) {
+						self.getWeiTime = setInterval(function() {
+							try {
+								var val = plus.android.getAttribute(wWeighDisPlays, "mStableWeight");
+								var mStatus = plus.android.getAttribute(wWeighDisPlays, "mStatus");
+								if (self.codedialog.measureUnit == "g") {
+									self.weighNum = val;
+								} else {
+									self.weighNum = (val / 1000).toFixed(3);
+								} 
+							} catch (e) {
+								alert(JSON.stringify(e));
+							}
+						}, 700);
+					}
+					/**S2称重处理**/
+				} else {
+					if (this.getWeiTime) clearInterval(this.getWeiTime);
+					if (this.isS2) plus.android.invoke(wWeighDisPlays, "SetClose");
+				}
+		}
   },
   methods: {
     testPrint() {
@@ -382,15 +408,23 @@ export default {
       }
     },
     plus_goZero() {
-      var qupi;
-      for (var i = 0; i < 10; i++) {
-        plus.android.invoke(wWeighDisPlays, "SetTare");
-        qupi = plus.android.getAttribute(wWeighDisPlays, "isQupi");
-        if (qupi != this.isQupi) {
-          this.isQupi = qupi;
-          break;
-        }
-      }
+			 var qupi;
+			 var i = 0;
+			 var self = this;
+			 funQupi();
+			 function funQupi(){
+					i++;
+					plus.android.invoke(wWeighDisPlays, "SetTare");
+					qupi = plus.android.getAttribute(wWeighDisPlays, "isQupi");
+					if (qupi != self.isQupi) {
+						self.isQupi = qupi;
+						return;
+					}
+					if(i>=10) return;
+					setTimeout(function(){
+							funQupi();
+					},50)
+			 }		
     },
     bodyKeyUp(e) {
       var self = this;

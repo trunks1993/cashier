@@ -24,6 +24,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './styles/element-variables.scss' //自定义颜色
 import '@/styles/index.scss'
 import '@/permission' // 权限
+import _ from 'lodash'
 
 Vue.use(MuseUI)
 Vue.use(Toast)
@@ -34,6 +35,7 @@ Vue.use(MsgBox)
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
+Vue.prototype.$_ = _
 
 new Vue({
   el: '#app',

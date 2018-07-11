@@ -37,7 +37,7 @@ const menu = {
   state: {
     routes: [],
     userInfo: '',
-    iscashier:false,
+    iscashier: false,
     pcNumber: navigator.userAgent.indexOf("S2")
   },
   mutations: {
@@ -95,7 +95,7 @@ const menu = {
       })
     },
     setIsCashier({ commit }){
-        commit('SET_ISCASHIER',true)
+        commit('SET_ISCASHIER', true)
     }
   }
 }

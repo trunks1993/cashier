@@ -108,7 +108,7 @@
                 },
                 loading: false,
                 isCashBegin:this.$store.getters.iscashier,
-								isOpenCashierShift:this.$store.getters.userInfo.openCashierShift
+				isOpenCashierShift:this.$store.getters.userInfo.openCashierShift
             }
         },
         created: function () {

@@ -14,6 +14,7 @@
     "echarts": "^4.1.0",
     "element-ui": "^2.4.0",
     "jsbarcode": "^3.9.0",
+    "lodash": "^4.17.10",
     "muse-ui": "^2.1.0",
     "vue": "^2.5.2",
     "vue-qriously": "^1.1.1",

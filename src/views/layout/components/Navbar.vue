@@ -31,7 +31,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userInfo'
+      'userInfo',
+      'iscashier'
     ]),
     title() {
       return this.$route.name
@@ -52,14 +53,14 @@ export default {
           ishaveCashier = true;
         }
       }
-      if (this.userInfo.isCashBegin && ishaveCashier && this.userInfo.openCashierShift) {
+      if (this.iscashier && ishaveCashier && this.userInfo.openCashierShift) {
         this.exitDailog = true;
       } else {
-				sendTosecondaryDisplay([], null, null, 0, this);
         this.exitSystem();
       }
     },
     exitSystem() {
+			sendTosecondaryDisplay([], null, null, 0, this);
       window.location.href = "/sellerAdmin/Cashier/LogOut"
     },
     fullwindow() {

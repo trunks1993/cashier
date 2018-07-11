@@ -57,7 +57,7 @@ export default {
       queryFilterForm: {
         key: '',
         pageNo: 1,
-        pageSize: 8
+        pageSize: 10
       },
       total: 0,
       selectVipId: -1,
@@ -107,10 +107,13 @@ export default {
           this.vipList = data.data.models
           this.total = data.data.total
           if(this.vipList.length > 0) this.selectVip(this.vipList[0])
+        } else {
+          this.$toast(data.msg)
         }
       })
     },
     search() {
+      this.queryFilterForm.pageNo = 1
       this.getVipList()
     },
     selectVip(item) {
@@ -171,6 +174,7 @@ export default {
     },
     addSuccess() {
       this.componentStatus = 0
+      this.queryFilterForm.pageNo = 1
       this.getVipList()
     }
   }

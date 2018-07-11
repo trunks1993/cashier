@@ -137,7 +137,7 @@ export default {
     }
   },
   beforeCreate() {
-    // mockLogin('gmc', '123456').then(res => {
+    // mockLogin('gmc2', '654321').then(res => {
     //   const data = res.data
     //   document.cookie = 'Himall-SellerManager = ' + data.userId
     // })

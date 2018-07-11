@@ -237,14 +237,16 @@ export default {
       else this.selCardListTemp.push(card)
     },
     submitSecl() {
-      this.selCardList = this.selCardListTemp
+      // this.selCardList = this.selCardListTemp
+      this.selCardList = this.$_.clone(this.selCardListTemp)
       this.showDailog = false
     },
     cancelSel() {
       this.showDailog = false
     },
     openSelDailog() {
-      this.selCardListTemp = this.selCardList
+      // this.selCardListTemp = this.selCardList
+      this.selCardListTemp = this.$_.clone(this.selCardList)
       this.showDailog = true
     },
     submitSup() {
