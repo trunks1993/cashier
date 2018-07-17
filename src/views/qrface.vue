@@ -3,7 +3,7 @@
     <div class="FacePhoto" v-show="isFace">
       <div class="photo" id="videoBox">
         <p>请让消费者面部对准摄像头</p>
-        <!-- <video id="video" width="600" height="330" preload loop muted style="position:absolute;top:-1000px;left:-1000px;"></video> -->
+         <!--<video id="video" width="600" height="330" preload loop muted style="position:absolute;top:-1000px;left:-1000px;"></video> -->
         <canvas id="showCanvas" width="594" height="324"></canvas>
         <button @click="closeFace">取消识别</button>
       </div>
@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+import Bus from "@/utils/bus"
 import { getMembersByScanCode, getMemberByMemberCard, getMemberByImageForRecharge, getMemberByImage } from '@/api'
 export default {
   name: 'qrface',
@@ -66,7 +67,7 @@ export default {
   },
   methods: {
     showqrCode: function() {
-      this.$emit("showqrCode");
+			Bus.$emit("showQrcode");
       this.Isnotface = false;
     },
     GetMember: function(memberCode) {
@@ -85,7 +86,6 @@ export default {
               }
               if (self.url === "chargeMoney") self.$toast(response.data.msg)
             } else {
-              console.log(response.data)
               self.$store.dispatch('SetVipInfo', response.data.data)
               self.$emit("getMenber", response.data)
             }
@@ -105,10 +105,13 @@ export default {
       var mediaStreamTrack;
       var video = document.createElement("video");
       video.id = "video";
+			video.autoplay = "autoplay";
+			video.loop = "loop";
+			video.muted = "muted";
       document.getElementById("videoBox").appendChild(video);
       if (navigator.getUserMedia) {
         navigator.getUserMedia({ video: true }, function(stream) {
-          video.src = window.webkitURL.createObjectURL(stream);
+          video.src = window.URL.createObjectURL(stream);
           video.play();
           self.IsfistFace = false;
           self.isFace = true;
@@ -117,7 +120,7 @@ export default {
         });
       } else if (navigator.webkitGetUserMedia) {
         navigator.webkitGetUserMedia({ video: true }, function(stream) {
-          video.src = window.webkitURL.createObjectURL(stream);
+          video.src = window.URL.createObjectURL(stream);
           video.play();
           self.IsfistFace = false;
           self.isFace = true;
@@ -134,55 +137,63 @@ export default {
         tracker.setStepSize(2);
         tracker.setEdgesDensity(0.1);
         self.trackerObj = tracking.track('#video', tracker, { camera: true });
-        console.log(tracking)
         tracker.on('track', function(event) {
-          if (self.isFace) {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(video, 0, 0, 594, 324);
-            event.data.forEach(function(rect) {
-              if (self.faceStart) {
-                getMemberByImage();
-              }
-              context.strokeStyle = '#12f312';
-              context.lineWidth = 5;
-              context.strokeRect(rect.x - 25, rect.y - 25, rect.width + 50, rect.height + 50);
-            });
-          }
+						if (self.isFace) {
+							try{
+								context.clearRect(0, 0, canvas.width, canvas.height);
+								context.drawImage(video, 0, 0, 594, 324);
+								console.log("faceStart1:"+self.faceStart)
+								event.data.forEach(function(rect) {
+									if (self.faceStart) {
+										getMemberByImage2();
+									}
+									context.strokeStyle = '#12f312';
+									context.lineWidth = 5;
+									context.strokeRect(rect.x - 25, rect.y - 25, rect.width + 50, rect.height + 50);
+								});
+							}catch(e){
+								console.log(e);
+							}
+						}
         });
       }
 
 
 
-      function getMemberByImage() {
-
-        const requestApi = self.url == "chargeMoney" ? getMemberByImageForRecharge : getMemberByImage
-        self.faceStart = false;
-        var minicanvas = document.createElement("canvas");
-        var minictx = minicanvas.getContext('2d');
-        minicanvas.width = 300;
-        minicanvas.height = 165;
-        minictx.drawImage(video, 0, 0, 300, 165);
-        var img = minicanvas.toDataURL("image/png", 0.5);
-        self.faceImg = minicanvas.toDataURL("image/png", 0.5);
-        requestApi({ img: img.split(",")[1] }).then(function(response) {
-          if (response.data.success) {
-            if (self.url == "chargeMoney") {
-              var rdata = response.data.data.member;
-            } else {
-              var rdata = response.data.data;
-            }
-            var name = rdata.nick && rdata.nick != "" ? rdata.nick : rdata.userName;
-            self.$toast("会员 " + name + ",您好!");
-            self.$emit("getMenber", response.data);
-          } else {
-            if (response.data.type == "hasface") {
-              self.Isnotface = true;
-              self.$emit("closeFace");
-            } else {
-              self.faceStart = true;
-            }
-          }
-        })
+      function getMemberByImage2() {
+				try{
+						const requestApi = self.url == "chargeMoney" ? getMemberByImageForRecharge : getMemberByImage
+						self.faceStart = false;
+						var minicanvas = document.createElement("canvas");
+						var minictx = minicanvas.getContext('2d');
+						minicanvas.width = 300;
+						minicanvas.height = 165;
+						minictx.drawImage(video, 0, 0, 300, 165);
+						var img = minicanvas.toDataURL("image/png", 0.5);
+						self.faceImg = minicanvas.toDataURL("image/png", 0.5);
+						requestApi({ img: img.split(",")[1] }).then(function(response) {
+							if (response.data.success) {
+								if (self.url == "chargeMoney") {
+									var rdata = response.data.data.member;
+								} else {
+									var rdata = response.data.data;
+                  self.$store.dispatch('SetVipInfo', response.data.data)
+								}
+								var name = rdata.cashierUserMember.nick && rdata.cashierUserMember.nick != "" ? rdata.cashierUserMember.nick : rdata.cashierUserMember.userName;
+								self.$toast("会员 " + name + ",您好!");
+								self.$emit("getMenber", response.data);
+							} else {
+								if (response.data.type == "hasface") {
+									self.Isnotface = true;
+									self.$emit("closeFace");
+								} else {
+									self.faceStart = true;
+								}
+							}
+						})
+				}catch(e){
+					 console.log(e);
+				}
       }
     },
   }

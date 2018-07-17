@@ -88,7 +88,7 @@ export default {
               orderDetails:null,
               refundNum:0,
               refundMoney:0,
-              isCashBegin:this.$store.getters.isCashBegin,
+              isCashBegin:this.$store.getters.iscashier,
 							isOpenCashierShift:this.$store.getters.userInfo.openCashierShift
         }
   },

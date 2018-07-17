@@ -1,6 +1,6 @@
 <template>
   <div class="add-container">
-    <MsgBox :type="msgBoxType" :content="msgBoxContent" @iknown="iknown" v-if="showMsgBox"></MsgBox>
+    <!-- <MsgBox :type="msgBoxType" :content="msgBoxContent" @iknown="iknown" v-if="showMsgBox"></MsgBox> -->
     <img src="../../assets/images/vipManager/xhome.png" @click="close" style="position: absolute; right: 20px; top: 20px;">
     <div class="add-container-addBox" v-if="!showQrScanPage">
       <div class="add-container-addBox-wrapper">
@@ -41,7 +41,6 @@
               <span>确定</span>
             </div>
           </div>
-          
         </div>
       </div>
     </div>
@@ -78,9 +77,9 @@ export default {
       showQrScanPage: false,
       qrCodeImg: '',
       interval: '',
-      showMsgBox: false,
-      msgBoxContent: '',
-      msgBoxType: 'warning',
+      // showMsgBox: false,
+      // msgBoxContent: '',
+      // msgBoxType: 'warning',
       cardName: ''
     }
   },
@@ -116,16 +115,22 @@ export default {
                     if (res == 3 || res == 1) {
                       this.toSupplement(true)
                     } else if (res == 2) {
-                      this.showMsgBox = true
-                      this.msgBoxContent = '该微信已绑定手机号，请解绑后重试！'
+                      // this.showMsgBox = true
+                      // this.msgBoxContent = '该微信已绑定手机号，请解绑后重试！'
+                      this.$msgBox('warning', '该微信已绑定手机号，请解绑后重试！', () => {
+                        this.iknown()
+                      })
                     }
                   })
                 }, 2000)
               }
             })
           } else {
-            this.showMsgBox = true
-            this.msgBoxContent = data.msg
+            // this.showMsgBox = true
+            // this.msgBoxContent = data.msg
+            this.$msgBox('warning', data.msg, () => {
+              this.iknown()
+            })
           }
         })
       } else {
@@ -137,7 +142,7 @@ export default {
         window.clearInterval(this.interval)
         this.submitDiscount()
       }
-      this.showMsgBox = false
+      // this.showMsgBox = false
     },
     polling() {
       return new Promise((resolve, reject) => {
@@ -315,8 +320,7 @@ export default {
         margin-top: 50px;
       }
     }
-  }
-  // &-dailog {
+  } // &-dailog {
   //   position: absolute;
   //   top: 0;
   //   bottom: 0;

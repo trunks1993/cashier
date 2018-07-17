@@ -299,7 +299,7 @@
           </div>
           <div>
             <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuPro" />
-            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
+            <!--<mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />-->
           </div>
         </div>
       </mu-dialog>
@@ -334,7 +334,7 @@
           </div>
           <div>
             <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuCodePro" />
-            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&codeProd.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
+            <!--<mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&codeProd.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />-->
           </div>
         </div>
       </mu-dialog>
@@ -410,7 +410,7 @@ import { mapGetters } from 'vuex'
 import Bus from '@/utils/bus'
 import { setStore, getStore, removeStore, clearStore } from '@/public/single.js';
 import { sendTosecondaryDisplay } from '@/public/sendToSecondaryDisplay.js';
-import { getSellerManager, getShopProductsByAutoId, searchProduct, getStoreCategoryContainProduct, getSKUByBarcode, orderSubmitByCart, getShopProductsSKUsByAutoId, getShopDiscounts, getMemberByMemberCard } from '@/api'
+import { getSellerManager, getShopProductsByAutoId, searchProduct, getStoreCategoryContainProduct, getSKUByBarcode, orderSubmitByCart, getShopProductsSKUsByAutoId, getShopDiscounts, getMemberByMemberCard, getMemberById } from '@/api'
 
 var cartUpDateTime = "";
 var cartUpsubmitTime = "";
@@ -544,8 +544,6 @@ export default {
   created: function() {
     this.getUserId();
     this.member = memberData;
-    // if (document.getElementById("back-menu")) document.getElementById("back-menu").style.display = "none";
-    // if (document.getElementById("menu-nav")) document.getElementById("menu-nav").style.display = "block";
     this.cancellNumber();
     this.cardId = cardId;
     this.cart = carts;
@@ -562,8 +560,8 @@ export default {
     // document.body.addEventListener("keyup", this.bodyKeyUp, false);
 
     /**初始化双屏设置**/
-    var ua = navigator.userAgent;
-    if (ua.indexOf("S2") != -1) {
+    var userAgent = navigator.userAgent;
+    if (userAgent.indexOf("S2") != -1) {
       this.isS2 = true;
     } else {
       this.isS2 = false;
@@ -586,6 +584,16 @@ export default {
       document.addEventListener("plusready", plusReady, false);
     }
     /**初始化双屏设置End**/
+
+    usbPrint.init()
+    if (userAgent.indexOf("t1host") != -1 && userAgent.indexOf("Html5Plus") != -1) {
+      document.addEventListener("plusready", function() {
+        var savedBleId = localStorage.getItem("bleId")
+        if (!savedBleId) {
+          SearchBluetooth.Init()
+        }
+      })
+    }
   },
   destroyed: function() {
     // document.body.removeEventListener("keyup", this.bodyKeyUp, false);
@@ -767,6 +775,7 @@ export default {
       var member = {}
       this.$store.dispatch('SetSelCoupon', '')
       this.$store.dispatch('SetSelCard', '')
+      this.$store.dispatch('SetSelDiscount', '')
       if (this.member) {
         member = this.member;
       } else {
@@ -818,6 +827,13 @@ export default {
         that.member = null;
       } else {
         that.member = menber;
+        getMemberById(menber.id).then(res => {
+          const data = res.data
+          if (data.success) {
+            this.$store.dispatch('SetVipInfo', data.data)
+            this.showVipComponet()
+          }
+        })
       }
       for (var i = 0; i <= oldList.length - 1; i++) {
         sku.push(oldList[i].skuid)
@@ -827,7 +843,7 @@ export default {
       this.delateSingle(index);
       this.singleStatus = false;
       getShopProductsByAutoId(sku).then(function(res) {
-        console.log(res)
+        // console.log(res)
         if (res.data.success) {
           for (var i = 0; i <= oldList.length - 1; i++) {
             for (var j = 0; j <= oldList.length - 1; j++) {
@@ -836,7 +852,7 @@ export default {
                 oldList[i].limitBuy = res.data.data[j].limitBuy;
                 oldList[i].marketPrice = res.data.data[j].shopSku.maxPrice;
                 oldList[i].storeStock = res.data.data[j].shopSku.stock;
-                console.log(oldList[i].proName + "---storeStock:" + oldList[i].storeStock)
+                // console.log(oldList[i].proName + "---storeStock:" + oldList[i].storeStock)
                 if (oldList[i].storeStock - oldList[i].safeStock > 0) {
                   oldList[i].isStock = true;
                 } else {
@@ -847,7 +863,7 @@ export default {
           }
           //  console.log(that.member);
           that.cart = oldList;
-          console.log(that.cart)
+          // console.log(that.cart)
         }
       })
     },
@@ -879,7 +895,7 @@ export default {
 
       })
     },
-    toFace: function() {
+    toFace() {
       this.isFace = true;
     },
     clearCart() {
@@ -986,7 +1002,7 @@ export default {
         for (var i = 0; i < response.data.length; i++) {
           self.typeList.push({ id: response.data[i].id, name: response.data[i].name });
         }
-        self.checkType = response.data[0].id;
+        if(response.data.length > 0) self.checkType = response.data[0].id;
         self.GetProductList();
       });
     },
@@ -1632,19 +1648,20 @@ export default {
         /**S2称重处理**/
 
         if (this.isS2) {
-          self.getWeiTime = setInterval(function() {
-            try {
-              var val = plus.android.getAttribute(wWeighDisPlays, "mStableWeight");
-              var mStatus = plus.android.getAttribute(wWeighDisPlays, "mStatus");
-              if (self.checkedProduct.measureUnit == "g") {
-                self.weighNum = val;
-              } else {
-                self.weighNum = (val / 1000).toFixed(3);
-              }
-            } catch (e) {
-              alert("error");
-            }
-          }, 1000);
+						 self.getWeiTime = setInterval(function() {
+							try {
+								var val = plus.android.getAttribute(wWeighDisPlays, "mStableWeight");
+								var mStatus = plus.android.getAttribute(wWeighDisPlays, "mStatus");
+								
+								if (self.checkedProduct.measureUnit == "g") {
+									self.weighNum = val;
+								} else {
+									self.weighNum = (val/1000).toFixed(3);
+								}
+							} catch (e) {
+								alert("error");
+							}
+						 }, 500);
         }
         /**S2称重处理**/
       } else {
@@ -1670,7 +1687,7 @@ export default {
 							} catch (e) {
 								alert(JSON.stringify(e));
 							}
-						}, 1000);
+						}, 500);
 					}
 					/**S2称重处理**/
 				} else {

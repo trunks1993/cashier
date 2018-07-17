@@ -224,6 +224,9 @@ export default {
     Bus.$on('showSide', res => {
       this.isSideShow = res
     })
+		Bus.$on('showQrcode', () => {
+			this.showCode = true
+		})
   },
   methods: {
     to(route) {

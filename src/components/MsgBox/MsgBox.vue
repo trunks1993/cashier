@@ -1,26 +1,50 @@
 <template>
-  <div class="msgBox-container">
-    <div class="msgBox-container-mainBox">
-      <img :src="type === 'warning' ? warning : success">
-      <div class="msgBox-container-mainBox-msg">{{content || '警告'}}</div>
-      <div class="msgBox-container-mainBox-btn" @click="iknown">我知道了</div>
+  <transition name='fade'>
+    <div class="msgBox-container">
+      <div class="msgBox-container-mainBox">
+        <img :src="type === 'warning' ? warning : success">
+        <div class="msgBox-container-mainBox-msg">{{content || '警告'}}</div>
+        <div class="msgBox-container-mainBox-btn" @click="iknown">我知道了</div>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 <script>
 import warning from './images/warning.png'
 import success from './images/success.png'
 export default {
-  props: ['type', 'content'],
   data() {
     return {
       warning,
-      success
+      success,
+      content: '',
+      type: '',
+      duration: 3000,
+      visible: false,
+      callBack: ''
     }
   },
+  mounted() {
+    // this.setTimer() // 挂载的时候就开始计时，3000ms后消失
+  },
   methods: {
+    // setTimer() {
+    //   setTimeout(() => {
+    //     // this.close() // 3000ms之后调用关闭方法
+    //   }, this.duration)
+    // },
     iknown() {
-      this.$emit('iknown')
+      this.close()
+      this.callBack()
+    },
+    close() {
+      this.visible = false
+      // setTimeout(() => {
+      //   this.$destroy(true)
+      //   this.$el.parentNode.removeChild(this.$el) // 从DOM里将这个组件移除
+      // }, 500)
+      this.$destroy(true)
+      this.$el.parentNode.removeChild(this.$el) // 从DOM里将这个组件移除
     }
   }
 }

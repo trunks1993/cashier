@@ -5,7 +5,7 @@ export function mockLogin(username, password) {
   return request({
     url: '/SellerAdmin/Login/LoginForCashier',
     method: 'post',
-    params: {
+    data: {
       username: username,
       password: password
     }
@@ -44,7 +44,7 @@ export function chargeScanPay(data) {
   return request({
     url: '/SellerAdmin/Cashier/ChargeScanPay',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
@@ -52,7 +52,7 @@ export function chargeSubmit(data) {
   return request({
     url: '/SellerAdmin/Cashier/ChargeSubmit',
     method: 'post',
-    params: data
+    data: data
   })
 }
 export function getChargeGift(money, userId) {
@@ -103,7 +103,12 @@ export function getShopProductsSKUsByAutoId(autoIds) {
     method: 'get'
   })
 }
-
+export function getMemberById(id) {
+  return request({
+    url: '/SellerAdmin/Cashier/GetMemberById?id=' + id,
+    method: 'get'
+  })
+}
 // order
 export function getShopSales() {
   return request({
@@ -169,7 +174,7 @@ export function getMemberByImageForRecharge(data) {
   return request({
     url: '/SellerAdmin/Cashier/GetMemberByImageForRecharge',
     method: 'post',
-    params: data,
+    data: data,
     headers: { 'X-Requested-With': 'XMLHttpRequest' }
   })
 }
@@ -177,7 +182,7 @@ export function getMemberByImage(data) {
   return request({
     url: '/SellerAdmin/Cashier/getMemberByImage',
     method: 'post',
-    params: data,
+    data: data,
     headers: { 'X-Requested-With': 'XMLHttpRequest' }
   })
 }
@@ -220,7 +225,7 @@ export function setCacherShiftBegin(data) {
   return request({
     url: '/SellerAdmin/CashierShift/setCacherShiftBegin',
     method: 'post',
-    params: data,
+    data: data,
     headers: { 'X-Requested-With': 'XMLHttpRequest' }
   })
 }
@@ -230,7 +235,7 @@ export function queryCashierShiftList(data) {
   return request({
     url: '/SellerAdmin/CashierShift/QueryCashierShiftList',
     method: 'post',
-    params: data,
+    data: data,
     headers: { 'X-Requested-With': 'XMLHttpRequest' }
   })
 }
@@ -286,21 +291,21 @@ export function getStatistics(filterForm) {
   return request({
     url: '/SellerAdmin/CashierShift/GetStatistics',
     method: 'post',
-    params: filterForm
+    data: filterForm
   })
 }
 export function getList(tableQueryParams) {
   return request({
     url: '/SellerAdmin/CashierShift/GetList',
     method: 'post',
-    params: tableQueryParams
+    data: tableQueryParams
   })
 }
 export function getSalesAchievements(filterForm) {
   return request({
     url: '/SellerAdmin/CashierShift/GetSalesAchievements',
     method: 'post',
-    params: filterForm
+    data: filterForm
   })
 }
 
@@ -335,7 +340,7 @@ export function insertWeighingTag(data) {
     url: '/SellerAdmin/Cashier/InsertWeighingTag',
     method: 'post',
     headers: { 'X-Requested-With': 'XMLHttpRequest' },
-    params: data
+    data: data
   })
 }
 
@@ -358,7 +363,7 @@ export function submitDiscount(data) {
   return request({
     url: '/SellerAdmin/CashierDiscounts/Add',
     method: 'post',
-    params: data
+    data: data
   })
 }
 

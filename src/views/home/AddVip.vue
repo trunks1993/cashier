@@ -1,6 +1,6 @@
 <template>
   <div class="add-container">
-    <MsgBox :type="msgBoxType" :content="msgBoxContent" @iknown="iknown" v-if="showMsgBox"></MsgBox>
+    <!-- <MsgBox :type="msgBoxType" :content="msgBoxContent" @iknown="iknown" v-if="showMsgBox"></MsgBox> -->
     <img :src="xhome" style="position: absolute; right: 20px; top: 20px;" @click="close">
     <div class="add-container-qrBox" v-if="!supplementStatus">
       <div class="add-container-qrBox-header">
@@ -107,8 +107,11 @@ export default {
               if (res == 3 || res == 1) {
                 this.toSupplement(true)
               } else if (res == 2) {
-                this.showMsgBox = true
-                this.msgBoxContent = '该微信已绑定手机号，请解绑后重试！'
+                // this.showMsgBox = true
+                this.$msgBox('warning', '该微信已绑定手机号，请解绑后重试！', () => {
+                  this.iknown()
+                })
+                // this.msgBoxContent = ''
               }
             })
           }, 2000)

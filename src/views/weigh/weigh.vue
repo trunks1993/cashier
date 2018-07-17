@@ -53,7 +53,7 @@
           </div>
           <div>
             <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuPro" />
-            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
+            <!--<mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />-->
           </div>
         </div>
       </mu-dialog>
@@ -87,7 +87,7 @@
           </div>
           <div>
             <mu-raised-button class="skuSubmit" label="加入列表" @click="addskuCodePro" />
-            <mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />
+            <!--<mu-raised-button class="skuSubmit qupiBtn" v-if="isS2&&checkedProduct.productSaleMethod==1" @click="plus_goZero" :label="isQupi?'清零':'去皮'" />-->
           </div>
         </div>
       </mu-dialog>
@@ -350,10 +350,11 @@ export default {
             try {
               var val = plus.android.getAttribute(wWeighDisPlays, "mStableWeight");
               var mStatus = plus.android.getAttribute(wWeighDisPlays, "mStatus");
+							
               if (self.checkedProduct.measureUnit == "g") {
                 self.weighNum = val;
               } else {
-                self.weighNum = (val / 1000).toFixed(3);
+                self.weighNum = (val/1000).toFixed(3);
               }
             } catch (e) {
               alert("error");
@@ -538,7 +539,7 @@ export default {
         for (var i = 0; i < response.data.length; i++) {
           self.typeList.push({ id: response.data[i].id, name: response.data[i].name });
         }
-        self.checkType = response.data[0].id;
+        if(response.data.length > 0) self.checkType = response.data[0].id;
         self.GetProductList();
       });
     },

@@ -1998,6 +1998,8 @@ button:hover{
 	height: 100%;
 	position: absolute;
 	z-index: 99999;
+	left:0;
+	top:0;
 	background: rgba(0,0,0,0.6);
 }
 .notface >div{
@@ -2035,5 +2037,6 @@ button:hover{
 }
 .notface button:last-child{
 	background: #c7b187;
+	color: #fff;
 }
 

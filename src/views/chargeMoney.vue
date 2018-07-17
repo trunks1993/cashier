@@ -52,49 +52,52 @@
         </template>
       </div>
     </div>
-    <div class="main-container-moneySetWrapper" v-if="member">
-      <div class="main-container-moneySetWrapper-tabBox" v-if="payList">
-        <div class="main-container-moneySetWrapper-tabBox-item" :class="{isActive: payType === 'wx'}" @click="payType = 'wx'" v-if="payList.supportWechatScan">
-          <i class="iconfont icon-weixin"></i>
-          <span>微信</span>
-        </div>
-        <div class="main-container-moneySetWrapper-tabBox-item" :style="payList.supportWechatScan ? 'margin-left: 90px;' : ''" :class="{isActive: payType === 'zfb'}" @click="payType = 'zfb'" v-if="payList.supportAlipayScan">
-          <i class="iconfont icon-zhifubao"></i>
-          <span>支付宝</span>
-        </div>
-      </div>
-      <div class="main-container-moneySetWrapper-inputBox">
-        <span>储值金额（元）</span>
-        <input type="text" :disabled="!member" @input="chargeValInput" ref="chargeVal" v-model="chargeVal" @keyup="inputKeyUp">
-        <div v-if="!member" style="color: red; margin-top: 8px;">请输入会员信息再充值</div>
-      </div>
-      <template v-if="member && chargeVal > 0">
-        <div class="main-container-moneySetWrapper-contentBox">
-          <div class="main-container-moneySetWrapper-contentBox-money">
-            <span>到账金额：</span><span v-if="!inputLoading">￥{{chargeVal * 1 + (giftObj.giftAmount || 0)}}</span><span v-else>正在计算...</span>
+    <div class="main-container-moneySetWrapper" :class="{flex: !member}">
+      <template v-if="member">  
+        <div class="main-container-moneySetWrapper-tabBox" v-if="payList">
+          <div class="main-container-moneySetWrapper-tabBox-item" :class="{isActive: payType === 'wx'}" @click="payType = 'wx'" v-if="payList.supportWechatScan">
+            <i class="iconfont icon-weixin"></i>
+            <span>微信</span>
           </div>
-          <div class="main-container-moneySetWrapper-contentBox-detail" v-if="giftObj">
-            <div>
-              1.赠送{{giftObj.giftAmount}}元储值金额
+          <div class="main-container-moneySetWrapper-tabBox-item" :style="payList.supportWechatScan ? 'margin-left: 90px;' : ''" :class="{isActive: payType === 'zfb'}" @click="payType = 'zfb'" v-if="payList.supportAlipayScan">
+            <i class="iconfont icon-zhifubao"></i>
+            <span>支付宝</span>
+          </div>
+        </div>
+        <div class="main-container-moneySetWrapper-inputBox">
+          <span>储值金额（元）</span>
+          <input type="text" :disabled="!member" @input="chargeValInput" ref="chargeVal" v-model="chargeVal" @keyup="inputKeyUp">
+          <div v-if="!member" style="color: red; margin-top: 8px;">请输入会员信息再充值</div>
+        </div>
+        <template v-if="member && chargeVal > 0">
+          <div class="main-container-moneySetWrapper-contentBox">
+            <div class="main-container-moneySetWrapper-contentBox-money">
+              <span>到账金额：</span><span v-if="!inputLoading">￥{{chargeVal * 1 + (giftObj.giftAmount || 0)}}</span><span v-else>正在计算...</span>
             </div>
-            <div v-if="giftObj.card">
-              2.赠送无门槛会员卡（含
-              <span v-if="giftObj.card.doesFreeShipping">满{{giftObj.card.freeShippingMoney}}元包邮;</span>
-              <span v-if="giftObj.card.doesDiscount">{{giftObj.card.discount}}折;</span>
-              <span v-if="giftObj.card.doesPointTimes">{{giftObj.card.pointTimes}}倍积分加速;</span>
-              <span v-if="giftObj.card.doesGiveCoupon">{{giftObj.card.couponCount}}张优惠券;</span>
-              <span v-if="giftObj.card.doesGivePoint">{{giftObj.card.givenPoints}}积分;</span>
-                ）
+            <div class="main-container-moneySetWrapper-contentBox-detail" v-if="giftObj">
+              <div>
+                1.赠送{{giftObj.giftAmount}}元储值金额
+              </div>
+              <div v-if="giftObj.card">
+                2.赠送无门槛会员卡（含
+                <span v-if="giftObj.card.doesFreeShipping">满{{giftObj.card.freeShippingMoney}}元包邮;</span>
+                <span v-if="giftObj.card.doesDiscount">{{giftObj.card.discount}}折;</span>
+                <span v-if="giftObj.card.doesPointTimes">{{giftObj.card.pointTimes}}倍积分加速;</span>
+                <span v-if="giftObj.card.doesGiveCoupon">{{giftObj.card.couponCount}}张优惠券;</span>
+                <span v-if="giftObj.card.doesGivePoint">{{giftObj.card.givenPoints}}积分;</span>
+                  ）
+              </div>
             </div>
           </div>
-        </div>
-        <div class="main-container-moneySetWrapper-bottonBox">
-          <div class="main-container-moneySetWrapper-bottonBox-btn" @click="toSub">
-            确认收款
+          <div class="main-container-moneySetWrapper-bottonBox">
+            <div class="main-container-moneySetWrapper-bottonBox-btn" @click="toSub">
+              确认收款
+            </div>
+            <span v-if="giftObj.card">温馨提示：充值完毕，平台会通过公众号下发无门槛卡给会员，请会员及时查收</span>
           </div>
-          <span v-if="giftObj.card">温馨提示：充值完毕，平台会通过公众号下发无门槛卡给会员，请会员及时查收</span>
-        </div>
+        </template>
       </template>
+      <img :src="noChargeAw" v-else>
     </div>
     <div class="payScanMask" @click="qrfocus" v-show="scan">
       <div class="scan">
@@ -116,13 +119,14 @@
 <script>
 import qrface from '@/views/qrface'
 import { getShopStoredValueAndPay, chargeScanPay, chargeSubmit, getChargeGift } from '@/api'
-
+import noChargeAw from '@/assets/images/noChargeAw.png'
 export default {
   name: 'chargeMoney',
   components: { "qrface": qrface },
   data() {
     return {
       // new
+      noChargeAw,
       backgroundObj: {
         backgroundImage: `url(${require('@/assets/images/headImg1.png')})`,
         width: '100%',

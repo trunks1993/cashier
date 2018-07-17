@@ -3,7 +3,7 @@
     <div class="orderInfo">
       <div class="orderInfo-header" @click="getGuide">
         <div class="orderInfo-header-left">
-          <img src="../assets/images/daogou.png">
+          <img :src="daogou">
           <span>导购</span>
         </div>
         <span>{{focusGuide.name || '暂不关联'}} <i class="iconfont icon-jiantou" style="color: #999;font-size: 12px;"></i></span>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="orderInfo-center">
-        <div>
+        <div v-if="orderIntefral != 0">
           <div>
             {{orderIntefral}}积分<span>抵扣{{integral | rmb}}</span>
           </div>
@@ -70,45 +70,46 @@
         </div>
       </div>
     </div>
-    <div class="right order">
-      <div class="right_cont">
-        <div class="pay" v-show="!isShowGuide&&!isShowDetail">
-          <div class="tab">
-            <ul id="payCheckList" :class="payClass">
-              <li :class="{active:payType=='xj'}" v-if="orderModel.offlinePayEnable">
-                <mu-raised-button class="iconfont xj" label="现金" @click="payType='xj'" />
-              </li>
-              <li :class="{active:payType=='wx'}" v-if="orderModel.supportWechatScan">
-                <mu-raised-button class="iconfont wx" label="微信" @click="payType='wx'" />
-              </li>
-              <li :class="{active:payType=='zfb'}" v-if="orderModel.supportAlipayScan">
-                <mu-raised-button class="iconfont zfb" label="支付宝" @click="payType='zfb'" />
-              </li>
-            </ul>
+    <div class="orderPay">
+      <template v-if="!isShowGuide&&!isShowDetail">  
+        <div class="orderPay-tabs">
+          <div class="orderPay-tabs-item" v-if="orderModel.offlinePayEnable" :class="{active:payType=='xj'}" @click="payType='xj'">
+            <img :src="xj">
+            现金
           </div>
-          <div class="pay_cont">
-            <div class="pay_row">
-              <div class="r-left">
-                <i class="iconfont icon-yingshou"></i>
-                <span>应收</span>
-              </div>
-              <div class="r-middle">
-                <p>{{this.startMoney | rmb}}</p>
+          <div class="orderPay-tabs-item" v-if="orderModel.supportWechatScan" :class="{active:payType=='wx'}" @click="payType='wx'">
+            <img :src="wx">
+            微信
+          </div>
+          <div class="orderPay-tabs-item" v-if="orderModel.supportAlipayScan" :class="{active:payType=='zfb'}" @click="payType='zfb'">
+            <img :src="zfb">
+            支付宝
+          </div>
+        </div>
+        <div class="orderPay-main">
+          <div class="orderPay-main-item">
+            <div class="orderPay-main-item-left">
+              <i class="iconfont icon-yingshou"></i>
+              <span>应收</span>
+            </div>
+            <div class="orderPay-main-item-right">
+              <span>{{this.startMoney | rmb}}</span>
+            </div>
+          </div>
+          <div class="orderPay-main-item" v-if="orderModel.openOfflineDepositPay&&maxCapital>0">
+            <div class="r-left">
+              <i class="iconfont icon-yucunkuan"></i> 预存款
+            </div>
+            <div class="r-middle">
+              <div class="inputBox">
+                <label for="yck">￥</label>
+                <input type="text" id="yck" ref="capitalVal" @input="capitalInput" :value="capital">
+                <em>最大金额{{maxCapital}}</em>
               </div>
             </div>
-            <div class="pay_row" v-if="orderModel.openOfflineDepositPay&&maxCapital>0">
-              <div class="r-left">
-                <i class="iconfont icon-yucunkuan"></i> 预存款
-              </div>
-              <div class="r-middle">
-                <div class="inputBox">
-                  <label for="yck">￥</label>
-                  <input type="text" id="yck" ref="capitalVal" @input="capitalInput" :value="capital">
-                  <em>最大金额{{maxCapital}}</em>
-                </div>
-              </div>
-            </div>
-            <div class="pay_row" v-if="payType=='xj'">
+          </div>
+          <template v-if="payType === 'xj'">
+            <div class="orderPay-main-item">
               <div class="r-left">
                 <i class="iconfont icon-xianjinshuru"></i> 现金
               </div>
@@ -120,7 +121,7 @@
                 </div>
               </div>
             </div>
-            <div class="pay_row" v-if="payType!='xj'">
+            <div class="orderPay-main-item">
               <div class="r-left">
                 <i class="iconfont icon-shishou"></i> 实收
               </div>
@@ -131,7 +132,7 @@
                 </p>
               </div>
             </div>
-            <div class="pay_row" v-if="payType=='xj'">
+            <div class="orderPay-main-item">
               <div class="r-left">
                 <i class="iconfont icon-shishou"></i> 找零
               </div>
@@ -143,55 +144,56 @@
                 </p>
               </div>
             </div>
-            <div>
-              <mu-raised-button label="确认收款" :class="{disabled:payType=='xj'&&giveChange<0}" class="submitOrder" @click="toSub(payType=='xj'&&giveChange<0)" fullWidth/>
-            </div>
+          </template>
+          <div class="orderPay-main-item">
+            <!-- <mu-raised-button label="确认收款" :class="{disabled:payType=='xj'&&giveChange<0}" class="submitOrder" @click="toSub(payType=='xj'&&giveChange<0)" fullWidth/> -->
+            <div class="orderPay-main-item-btn" @click="toSub(payType === 'xj'&& giveChange < 0)">确认收款</div>
           </div>
         </div>
-        <div class="pay_header" v-show="isShowGuide||isShowDetail"> <i class="iconfont icon-guanbi" @click="isShowGuide=isShowDetail=false"></i> {{headerTitle}}</div>
-        <div class="pay_guide" v-show="isShowGuide">
-          <ul>
-            <li v-for='item in guideList' :class="{active:focusGuide.id==item.id}">
-              <mu-raised-button @click="changeGuide(item.id,item.realName)" :label="item.realName" />
-            </li>
-          </ul>
-        </div>
-        <div class="pro_detail" v-show="isShowDetail">
-          <div class="detail_in">
-            <div class="activities" v-if="activitiesNofisrt.length>0">
-              <ul>
-                <li v-for="(item,i) in activitiesNofisrt" :class="{border:((i+1)/3<=1)&&activitiesNofisrt.length>3}">
-                  <div v-if="item.activeType=='Rebate'">
-                    <h2>{{item.memberCards[0].cardName}}</h2>
-                    <p>
-                      <span v-if="item.memberCards[0].doesDiscount">{{item.memberCards[0].discount}}折</span>
-                      <span v-if="item.memberCards[0].doesPointTimes">{{item.memberCards[0].pointTimes}}倍积分</span>
-                    </p>
-                  </div>
-                  <div v-else>
-                    <h2>{{item.activityName}}</h2>
-                    <p v-if="item.activeType=='gift'">{{item.discountAmount}}</p>
-                    <p v-else>-￥{{item.discountAmount}}</p>
-                  </div>
-                </li>
-                <li v-for="n in activitiesNofisrt.length%3==0?0:3-activitiesNofisrt.length%3"></li>
-              </ul>
-            </div>
-            <div class="pro_list">
-              <h2>商品详情 <em>{{totalAll.moneyTotal | rmb}}</em> </h2>
-              <ul>
-                <li v-for="item in productList">
-                  <img :src="item.imagePath" :onerror="errorImg">
-                  <div>
-                    <h3>{{item.productName}}</h3>
-                    <p><span v-for="itemin in item.specifications">{{itemin}};</span></p>
-                    <h4>{{item.salePrice | rmb}}<span v-if="item.measureUnit&&item.measureUnit!=''">/{{item.measureUnit}}</span> <i>x{{item.buyNum}}</i></h4>
-                  </div>
-                </li>
-              </ul>
-              <div class="gift" v-for="item in gift">
-                {{item.giftName}}
-              </div>
+      </template>
+      <div class="pay_header" v-show="isShowGuide||isShowDetail"><i class="iconfont icon-guanbi" @click="isShowGuide=isShowDetail=false"></i>{{headerTitle}}</div>
+      <div class="pay_guide" v-show="isShowGuide">
+        <ul>
+          <li v-for='item in guideList' :class="{active:focusGuide.id==item.id}">
+            <mu-raised-button @click="changeGuide(item.id,item.realName)" :label="item.realName" />
+          </li>
+        </ul>
+      </div>
+      <div class="pro_detail" v-show="isShowDetail">
+        <div class="detail_in">
+          <div class="activities" v-if="activitiesNofisrt.length>0">
+            <ul>
+              <li v-for="(item,i) in activitiesNofisrt" :class="{border:((i+1)/3<=1)&&activitiesNofisrt.length>3}">
+                <div v-if="item.activeType=='Rebate'">
+                  <h2>{{item.memberCards[0].cardName}}</h2>
+                  <p>
+                    <span v-if="item.memberCards[0].doesDiscount">{{item.memberCards[0].discount}}折</span>
+                    <span v-if="item.memberCards[0].doesPointTimes">{{item.memberCards[0].pointTimes}}倍积分</span>
+                  </p>
+                </div>
+                <div v-else>
+                  <h2>{{item.activityName}}</h2>
+                  <p v-if="item.activeType=='gift'">{{item.discountAmount}}</p>
+                  <p v-else>-￥{{item.discountAmount}}</p>
+                </div>
+              </li>
+              <li v-for="n in activitiesNofisrt.length%3==0?0:3-activitiesNofisrt.length%3"></li>
+            </ul>
+          </div>
+          <div class="pro_list">
+            <h2>商品详情 <em>{{totalAll.moneyTotal | rmb}}</em> </h2>
+            <ul>
+              <li v-for="item in productList">
+                <img :src="item.imagePath" :onerror="errorImg">
+                <div>
+                  <h3>{{item.productName}}</h3>
+                  <p><span v-for="itemin in item.specifications">{{itemin}};</span></p>
+                  <h4>{{item.salePrice | rmb}}<span v-if="item.measureUnit&&item.measureUnit!=''">/{{item.measureUnit}}</span> <i>x{{item.buyNum}}</i></h4>
+                </div>
+              </li>
+            </ul>
+            <div class="gift" v-for="item in gift">
+              {{item.giftName}}
             </div>
           </div>
         </div>
@@ -218,11 +220,18 @@
 import { sendTosecondaryDisplay } from '@/public/sendToSecondaryDisplay.js';
 import { orderSubmitByCart, getShopSales, submitOrderAndPay } from '@/api'
 import { mapGetters } from 'vuex'
-
+import daogou from '@/assets/images/daogou.png'
+import xj from '@/assets/images/xj.png'
+import wx from '@/assets/images/wx.png'
+import zfb from '@/assets/images/zfb.png'
 export default {
   name: 'order',
   data() {
     return {
+      daogou,
+      xj,
+      wx,
+      zfb,
       discountObj: '',
       isIntegral: false,
       isShowGuide: false,
@@ -257,17 +266,13 @@ export default {
       maxRealCash: 0,
       isFirst: true,
       fullOrderActivit: 0,
-      errorImg: 'this.src="' + require('../assets/images/imgerror.png') + '"'
+      errorImg: 'this.src="' + require('@/assets/images/imgerror.png') + '"'
     }
   },
   created() {
     this.discountObj = this.$route.query.item
-    this.$emit("changeTitle", "确认订单");
-    this.$emit("isBack", true);
-    this.render();
-    this.getPayLength();
-    var self = this;
-    // document.body.addEventListener("keyup", this.bodyKeyUp, false);
+    this.render()
+    this.getPayLength()
   },
   computed: {
     ...mapGetters([
@@ -713,12 +718,15 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.active {
+  border-color: #C7B287!important;
+}
 .main-container {
   display: flex;
 }
 
 .orderInfo {
-  width: 29.2%;
+  width: 498px;
   height: 100%;
   background: rgba(242, 242, 242, 1);
   overflow-y: scroll;
@@ -818,5 +826,42 @@ export default {
     }
   }
 }
-
+.orderPay {
+  width: calc(100% - 498px);
+  height: 100%;
+  background: #f2f2f2;
+  &-tabs {
+    width: 80%;
+    height: 100px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+    &-item {
+      width: 88px;
+      border-bottom: 4px solid #f2f2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        margin-right: 8px;
+      }
+    }
+    &-item:nth-child(2) {
+        margin-left: 100px;
+    }
+    &-item:nth-child(3) {
+        margin-left: 100px;
+    }
+  }
+  &-main {
+    width: 300px;
+    margin: auto;
+    margin-top: 95px;
+    &-item {
+      
+    }
+  }
+}
 </style>
