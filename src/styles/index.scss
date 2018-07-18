@@ -9,3 +9,26 @@
 .main-container {
   height: 100%;
 }
+
+// 全局switch样式
+.yswitch .mu-switch-thumb{
+  top: 5px;
+  left: 3px;
+  width: 23px;
+  height: 23px;
+}
+.yswitch .mu-switch-track{
+  height: 25px;
+}
+.yswitch .mu-switch-container{
+  width: 54px;
+}
+.yswitch.mu-switch input[type=checkbox]:checked+.mu-switch-wrapper .mu-switch-thumb {
+    background-color: #ffffff;
+    color: #ffffff;
+    -webkit-transform: translate3d(18px,0,0);
+    transform: translate3d(26px,0,0);
+}
+.yswitch.mu-switch input[type=checkbox]:checked+.mu-switch-wrapper .mu-switch-track {
+    background-color: #baa57b;
+}
