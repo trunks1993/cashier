@@ -71,19 +71,16 @@
       </div>
     </div>
     <div class="orderPay">
-      <template v-if="!isShowGuide&&!isShowDetail">  
+      <template v-if="!isShowGuide&&!isShowDetail">
         <div class="orderPay-tabs">
           <div class="orderPay-tabs-item" v-if="orderModel.offlinePayEnable" :class="{active:payType=='xj'}" @click="payType='xj'">
-            <img :src="xj">
-            现金
+            <img :src="xj"> 现金
           </div>
           <div class="orderPay-tabs-item" v-if="orderModel.supportWechatScan" :class="{active:payType=='wx'}" @click="payType='wx'">
-            <img :src="wx">
-            微信
+            <img :src="wx"> 微信
           </div>
           <div class="orderPay-tabs-item" v-if="orderModel.supportAlipayScan" :class="{active:payType=='zfb'}" @click="payType='zfb'">
-            <img :src="zfb">
-            支付宝
+            <img :src="zfb"> 支付宝
           </div>
         </div>
         <div class="orderPay-main">
@@ -97,56 +94,38 @@
             </div>
           </div>
           <div class="orderPay-main-item" v-if="orderModel.openOfflineDepositPay&&maxCapital>0">
-            <div class="r-left">
-              <i class="iconfont icon-yucunkuan"></i> 预存款
+            <div class="orderPay-main-item-left">
+              预存款支付
             </div>
-            <div class="r-middle">
-              <div class="inputBox">
-                <label for="yck">￥</label>
-                <input type="text" id="yck" ref="capitalVal" @input="capitalInput" :value="capital">
-                <em>最大金额{{maxCapital}}</em>
-              </div>
+            <div class="orderPay-main-item-right">
+              <div class="orderPay-main-item-right-yuan">￥</div>
+              <input type="text" id="yck" ref="capitalVal" @input="capitalInput" :value="capital">
+              <div class="orderPay-main-item-right-detail">最大可用金额<span style="color:#D18484">￥{{maxCapital}}</span></div>
             </div>
           </div>
           <template v-if="payType === 'xj'">
             <div class="orderPay-main-item">
-              <div class="r-left">
-                <i class="iconfont icon-xianjinshuru"></i> 现金
+              <div class="orderPay-main-item-left">
+                现金支付
               </div>
-              <div class="r-middle">
-                <div class="inputBox">
-                  <label for="xj">￥</label>
-                  <input type="text" id="xj" style="width:180px;" ref="cashVal" @input="cashInput" :value="cash">
-                  <em style="width:225px;float:right;margin-right:20px;">{{realCash}}</em>
-                </div>
+              <div class="orderPay-main-item-right">
+                <div class="orderPay-main-item-right-yuan">￥</div>
+                <input type="text" id="xj" ref="cashVal" @input="cashInput" :value="cash">
+                <div class="orderPay-main-item-right-detail" v-html="realCash"></div>
               </div>
             </div>
             <div class="orderPay-main-item">
-              <div class="r-left">
-                <i class="iconfont icon-shishou"></i> 实收
-              </div>
-              <div class="r-middle">
-                <p>
-                  {{netReceipts | rmb}}
-                  <span class="removeSmallChange" v-show='removeSmallChange>0'>(抹零:{{removeSmallChange}})</span>
-                </p>
-              </div>
+              <div class="orderPay-main-item-left">实收</div>
+              <div class="orderPay-main-item-right">
+                {{netReceipts | rmb}}
+                <span class="removeSmallChange" v-show='removeSmallChange>0'>(抹零:{{removeSmallChange}})</span></div>
             </div>
             <div class="orderPay-main-item">
-              <div class="r-left">
-                <i class="iconfont icon-shishou"></i> 找零
-              </div>
-              <div class="r-middle">
-                <p>
-                  <!-- {{math(cash,math(startMoney,capital)) | rmb}} -->
-                  {{giveChange | rmb}}
-                  <!-- <span class="removeSmallChange" v-show='removeSmallChange>0'>(抹零:{{removeSmallChange}})</span> -->
-                </p>
-              </div>
+              <div class="orderPay-main-item-left">需找零</div>
+              <div class="orderPay-main-item-right">{{giveChange | rmb}}</div>
             </div>
           </template>
           <div class="orderPay-main-item">
-            <!-- <mu-raised-button label="确认收款" :class="{disabled:payType=='xj'&&giveChange<0}" class="submitOrder" @click="toSub(payType=='xj'&&giveChange<0)" fullWidth/> -->
             <div class="orderPay-main-item-btn" @click="toSub(payType === 'xj'&& giveChange < 0)">确认收款</div>
           </div>
         </div>
@@ -154,7 +133,7 @@
       <div class="pay_header" v-show="isShowGuide||isShowDetail"><i class="iconfont icon-guanbi" @click="isShowGuide=isShowDetail=false"></i>{{headerTitle}}</div>
       <div class="pay_guide" v-show="isShowGuide">
         <ul>
-          <li v-for='item in guideList' :class="{active:focusGuide.id==item.id}">
+          <li v-for='item in guideList' :class="{active:focusGuide.id === item.id}">
             <mu-raised-button @click="changeGuide(item.id,item.realName)" :label="item.realName" />
           </li>
         </ul>
@@ -282,17 +261,17 @@ export default {
       var returnStr = "";
       if (subdata.orderModel.removeSmallChange == 2) {
         this.maxRealCash = this.math(this.startMoney, this.capital).toFixed(1);
-        returnStr = "四舍五入后应收现金" + this.math(this.startMoney, this.capital).toFixed(1);
+        returnStr = `四舍五入后应收现金<span style="color:#D18484">￥` + this.math(this.startMoney, this.capital).toFixed(1) + `</span>`
       } else
       if (subdata.orderModel.removeSmallChange == 1) {
         var rm = this.startMoney - this.capital;
         var RemoveSmall = this.math(rm, (Math.floor(rm * 10) / 10)).toFixed(2);
         RemoveSmall = RemoveSmall >= 0.1 ? 0 : RemoveSmall;
         this.maxRealCash = this.math(this.math(this.startMoney, this.capital), RemoveSmall).toFixed(1);
-        returnStr = "抹零后应收现金" + this.maxRealCash;
+        returnStr = `抹零后应收现金<span style="color:#D18484">￥` + this.maxRealCash + `</span>`
       } else {
         this.maxRealCash = this.math(this.startMoney, this.capital).toFixed(2);
-        returnStr = "应收现金" + this.maxRealCash;
+        returnStr = `应收现金<span style="color:#D18484">￥` + this.maxRealCash + `</span>`
       }
       this.cash = this.maxRealCash;
       return returnStr;
@@ -370,12 +349,12 @@ export default {
           activities += this.activities[j].discountAmount;
         }
         if (this.activities[j].activeType == "Rebate") {
-           this.activitiesNofisrt.push(this.activities[j]);
+          this.activitiesNofisrt.push(this.activities[j]);
         }
         if (this.activities[j].activeType == "PlatformCoupon" || this.activities[j].activeType == "ShopCoupon") {
-           if(this.activities[j].selected){
-					     coupon = this.activities[j].discountAmount;
-					 } 
+          if (this.activities[j].selected) {
+            coupon = this.activities[j].discountAmount;
+          }
         }
         if (this.activities[j].activeType == "FullDelivery" && this.activities[j].gifts.length > 0) {
           for (var n = 0; n < this.activities[j].gifts.length; n++) {
@@ -423,7 +402,7 @@ export default {
             this.capital = subdata.orderModel.capital;
           }
         }
-        if(this.capital) this.capital = this.capital.toFixed(2);
+        if (this.capital) this.capital = this.capital.toFixed(2);
         this.maxCapital = this.capital;
       }
       this.priceCalculation();
@@ -721,6 +700,7 @@ export default {
 .active {
   border-color: #C7B287!important;
 }
+
 .main-container {
   display: flex;
 }
@@ -826,6 +806,7 @@ export default {
     }
   }
 }
+
 .orderPay {
   width: calc(100% - 498px);
   height: 100%;
@@ -833,7 +814,7 @@ export default {
   &-tabs {
     width: 80%;
     height: 100px;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     margin: auto;
     display: flex;
     justify-content: center;
@@ -849,19 +830,79 @@ export default {
       }
     }
     &-item:nth-child(2) {
-        margin-left: 100px;
+      margin-left: 100px;
     }
     &-item:nth-child(3) {
-        margin-left: 100px;
+      margin-left: 100px;
     }
   }
   &-main {
     width: 300px;
     margin: auto;
-    margin-top: 95px;
+    margin-top: 50px;
     &-item {
-      
+      width: 100%;
+      &-left {
+        display: inline-block;
+        width: 86px;
+        font-size: 14px;
+        color: #666666;
+        i {
+          line-height: 18px;
+          color: #C7B287;
+        }
+        span {
+          font-size: 18px;
+          font-weight: bold;
+        }
+      }
+      &-right {
+        display: inline-block;
+        line-height: 18px;
+        font-size: 18px;
+        font-weight: bolder;
+        position: relative;
+        width: calc(100% - 91px);
+        &-yuan {
+          position: absolute;
+          line-height: 39px;
+          left: 10px;
+          font-size: 16px;
+          font-weight: 500;
+        }
+        &-detail {
+          position: absolute;
+          font-size: 12px;
+          color: #999999;
+          font-weight: lighter;
+          left: 10px;
+        }
+        input {
+          padding-left: 26px;
+          width: 100%;
+          height: 39px;
+          background: #f2f2f2;
+          border: 1px solid rgba(199, 178, 135, 0.4);
+          border-radius: 4px;
+          font-size: 16px;
+          font-weight: 500;
+        }
+      }
+      &-btn {
+        height: 39px;
+        background: #C7B287;
+        border-radius: 4px;
+        color: #fff;
+        line-height: 39px;
+        text-align: center;
+        font-size: 16px;
+        margin-top: 77px;
+      }
+    }
+    &-item:not(:first-child):not(:last-child) {
+      margin-top: 60px;
     }
   }
 }
+
 </style>
