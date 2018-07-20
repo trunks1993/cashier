@@ -89,26 +89,40 @@ export default {
               refundNum:0,
               refundMoney:0,
               isCashBegin:this.$store.getters.iscashier,
+              userInfo:this.$store.getters.userInfo,
 							isOpenCashierShift:this.$store.getters.userInfo.openCashierShift
         }
   },
   created:function(){
+		
     this.$emit("isBack",true);
     this.getShopOrderDetail(this.$route.query.id);
     this.getRefundInfo(this.$route.query.id);
   },
 	computed: {
-		IsRefund() {
-			var ist = false;
-			if(!this.isOpenCashierShift){
-					ist = true;
-			} else{
-				 if(this.isCashBegin){
-						 ist = true;
-				 }
+			IsRefund() {
+				var isHasJjb = false;
+				for(var i=0;i<this.userInfo.rights.length;i++){
+						if(this.userInfo.rights[i].name=="交接班"){
+								isHasJjb = true;
+								break;
+						}
+				}
+				var ist = false;
+				if(isHasJjb){
+						if(!this.isOpenCashierShift){
+								ist = true;
+						} else{
+							if(this.isCashBegin){
+									ist = true;
+							}
+						}
+				}else{
+						ist = true;
+				}
+				
+				return ist;
 			}
-			return ist;
-		}
 	},
   mounted () {
   },

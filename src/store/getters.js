@@ -6,6 +6,7 @@ const getters = {
   selCard: state => state.cashier.selCard,
   selCoupon: state => state.cashier.selCoupon,
   selDiscount: state => state.cashier.selDiscount,
-  pcNumber: state => state.menu.pcNumber
+  pcNumber: state => state.menu.pcNumber,
+  tempDataList: state => state.mpTemp.tempDataList
 }
 export default getters

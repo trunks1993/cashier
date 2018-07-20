@@ -206,7 +206,7 @@
   </div>
 </template>
 <script>
-import '@/assets/css/assembly.css'
+// import '@/assets/css/assembly.css'
 import '@/assets/css/orderItems.css'
 import { getDateSearchCondition, getTransShopSales, getOrderWay, getCashier, getCashierType, getStatistics, getList } from '@/api'
 const compare = function(obj1, obj2) {

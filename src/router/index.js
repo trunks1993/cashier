@@ -277,6 +277,19 @@ const constantRouterMap = [{
       component: resolve => require(['@/views/shift/setCacherShiftBegin'], resolve),
       name: '设置期初'
     }]
+  },
+  {
+    path: '/mpTemplateSetting',
+    component: resolve => require(['@/views/layout'], resolve),
+    children: [{
+      path: '/mpTemplateSetting/index',
+      component: resolve => require(['@/views/mpTemplateSetting'], resolve),
+      name: '小程序后台测试',
+      meta: {
+        menuName: '小程序',
+        imgUrl: require('@/assets/images/menuIcons/shouyin.png')
+      }
+    }]
   }
 ]
 

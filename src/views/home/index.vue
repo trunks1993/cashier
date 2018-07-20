@@ -585,7 +585,7 @@ export default {
     }
     /**初始化双屏设置End**/
 
-    usbPrint.init()
+    // usbPrint.init()
     if (userAgent.indexOf("t1host") != -1 && userAgent.indexOf("Html5Plus") != -1) {
       document.addEventListener("plusready", function() {
         var savedBleId = localStorage.getItem("bleId")

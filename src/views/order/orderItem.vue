@@ -82,7 +82,7 @@
 <script>
 
     import pcPrinter from "@/views/pcPrinter"
-    import '@/assets/css/assembly.css'
+    // import '@/assets/css/assembly.css'
     import '@/assets/css/orderItems.css'
     import { getShopOrder } from '@/api'
     
@@ -108,7 +108,8 @@
                 },
                 loading: false,
                 isCashBegin:this.$store.getters.iscashier,
-				isOpenCashierShift:this.$store.getters.userInfo.openCashierShift
+                userInfo:this.$store.getters.userInfo,
+				        isOpenCashierShift:this.$store.getters.userInfo.openCashierShift
             }
         },
         created: function () {
@@ -125,14 +126,26 @@
         },
 				computed: {
 					IsRefund() {
-						var ist = false;
-						if(!this.isOpenCashierShift){
-							  ist = true;
-						} else{
-							 if(this.isCashBegin){
-								   ist = true;
-							 }
+						var isHasJjb = false;
+						for(var i=0;i<this.userInfo.rights.length;i++){
+							  if(this.userInfo.rights[i].name=="交接班"){
+									  isHasJjb = true;
+										break;
+								}
 						}
+						var ist = false;
+						if(isHasJjb){
+								if(!this.isOpenCashierShift){
+										ist = true;
+								} else{
+									if(this.isCashBegin){
+											ist = true;
+									}
+								}
+						}else{
+							  ist = true;
+						}
+						
 						return ist;
 					}
 				},

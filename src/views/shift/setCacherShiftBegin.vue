@@ -11,7 +11,7 @@
      </div>
 </template>
 <script>
-import '@/assets/css/assembly.css';
+// import '@/assets/css/assembly.css';
 import '@/assets/css/shift.css';
 import { setCacherShiftBegin } from '@/api'
 export default {

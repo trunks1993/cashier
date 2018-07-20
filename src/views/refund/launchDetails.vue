@@ -104,7 +104,7 @@
 </template>
 <script>
 import '@/assets/css/orderItems.css'
-import '@/assets/css/assembly.css'
+// import '@/assets/css/assembly.css'
 import { postRefundApply, getRefundReasons, getShopOrderDetail } from '@/api'
 export default {
   data(){

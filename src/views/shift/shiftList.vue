@@ -35,7 +35,7 @@
      </div>
 </template>
 <script>  
-import '@/assets/css/assembly.css';
+// import '@/assets/css/assembly.css';
 import '@/assets/css/shift.css';
 import { queryCashierShiftList } from '@/api'
 export default {

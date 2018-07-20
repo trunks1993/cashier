@@ -64,7 +64,7 @@
 </template>
 <script>
 import pcPrinter from "@/views/pcPrinter"
-import '@/assets/css/assembly.css';
+// import '@/assets/css/assembly.css';
 import '@/assets/css/shift.css';
 import { sendTosecondaryDisplay } from '@/public/sendToSecondaryDisplay.js';
 import { setCacherShiftEnd, getWatchManStatistics } from '@/api'

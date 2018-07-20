@@ -6,6 +6,7 @@ router.beforeEach((to, from, next) => {
   	store.dispatch('GenerateRoutes').then(res => {
   		router.addRoutes(res)
   		next({ ...to })
+  		usbPrint.init()
   	})
   } else {
   	next()
